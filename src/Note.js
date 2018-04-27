@@ -1,4 +1,5 @@
-import Rect from './Rect.js';
+import Rect from './Rect';
+import { verticalIndex } from './Staff';
 
 export const height = 64;
 export const lineHeight = height / 4;
@@ -12,40 +13,19 @@ const noteStroke = 2;
 const ascendingChromaticScale =
   ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
+// NoteSequence class?
+
 export default class Note {
   // nope position is relative to other notes
   // also maybe pass context to ctor
   constructor(name, position) {
-    let note = name.slice(0, -1);
     this.octave = parseInt(name.slice(-1));
+    let note = name.slice(0, -1);
     this.noteIndex = ascendingChromaticScale.indexOf(note);
 
     this.x = notePad + (position * (noteDistance + notePad));
-    // TODO
-    switch(this.name()) {
-      case "F5": this.y = 0;
-        break;
-      case "E5": this.y = lineHeight * 0 + (lineHeight / 2);
-        break;
-      case "D5": this.y = lineHeight * 1;
-        break;
-      case "C5": this.y = lineHeight * 1 + (lineHeight / 2);
-        break;
-      case "B4": this.y = lineHeight * 2;
-        break;
-      case "A4": this.y = lineHeight * 2 + (lineHeight / 2);
-        break;
-      case "G4": this.y = lineHeight * 3;
-        break;
-      case "F4": this.y = lineHeight * 3 + (lineHeight / 2);
-        break;
-      case "E4": this.y = lineHeight * 4;
-        break;
-      case "D4": this.y = lineHeight * 4 + (lineHeight / 2);
-        break;
-      case "C4": this.y = lineHeight * 5;
-        break;
-    }
+    this.y = verticalIndex(this.name()) * lineHeight / 2;
+
     this.rotation = 0;
     this.isSelected = false;
     this.rect = new Rect(this.x, this.y, noteWidth, noteHeight);
