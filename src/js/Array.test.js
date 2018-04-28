@@ -19,9 +19,9 @@ describe('Array next', () => {
       expect(threeElementArray.prev(1)).toEqual(0);
     });
 
-    it('returns end when at 0', () => {
+    it('returns end index when at 0', () => {
       const threeElementArray = [0, 0, 0];
-      expect(threeElementArray.prev(0)).toEqual(3);
+      expect(threeElementArray.prev(0)).toEqual(2);
     });
   });
 })

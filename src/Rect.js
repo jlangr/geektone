@@ -1,9 +1,9 @@
 export default class Rect {
-  constructor(centerX, centerY, xRadius, yRadius) {
-    this.startX = centerX - xRadius;
-    this.startY = centerY - yRadius;
-    this.endX = centerX + xRadius;
-    this.endY = centerY + yRadius;
+  constructor(centerX, centerY, width, height) {
+    this.startX = centerX - width;
+    this.startY = centerY - height;
+    this.endX = centerX + width;
+    this.endY = centerY + height;
   }
 
   contains(point) {

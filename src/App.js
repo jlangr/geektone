@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Tone from 'tone';
-import logo from './logo.svg';
-import Rect from './Rect';
 import Note, { height, lineHeight } from './Note';
 import './App.css';
-import Trig from './Trig';
 
   // F ---
   // E
@@ -19,7 +16,6 @@ import Trig from './Trig';
   // D
   // C (---)
 
-const eighthNote = '8n';
 const width = 1200;
 
 class App extends Component {
@@ -110,7 +106,8 @@ class App extends Component {
 
   drawStaff(context) {
     context.beginPath();
-    this.line(context, 0, 0, 0, height, 7);
+    const beginningStaffWidth = 7;
+    this.line(context, 0, 0, 0, height, beginningStaffWidth);
     for (let i = 0, currentY = 0; i < 5; i++) {
       this.line(context, 0, currentY, width, currentY);
       currentY += lineHeight;

@@ -19,7 +19,7 @@ export default class Note {
   // nope position is relative to other notes
   // also maybe pass context to ctor
   constructor(name, position) {
-    this.octave = parseInt(name.slice(-1));
+    this.octave = parseInt(name.slice(-1), 10);
     let note = name.slice(0, -1);
     this.noteIndex = ascendingChromaticScale.indexOf(note);
 
@@ -58,11 +58,9 @@ export default class Note {
     if (this.name() === 'C8')
       return;
 
-    this.noteIndex++;
-    if (this.noteIndex === ascendingChromaticScale.length) {
-      this.noteIndex = 0;
-      this.octave++;
-    }
+    if (this.noteIndex + 1 === ascendingChromaticScale.length) this.octave++;
+    this.noteIndex = ascendingChromaticScale.next(this.noteIndex);
+    // redundant
     this.y -= lineHeight / 2;
   }
 
@@ -70,11 +68,8 @@ export default class Note {
     if (this.octave === 1 && this.noteIndex === 0)
       return;
 
-    this.noteIndex--;
-    if (this.noteIndex < 0) {
-      this.noteIndex = ascendingChromaticScale.length - 1;
-      this.octave--;
-    }
+    if (this.noteIndex === 0) this.octave--;
+    this.noteIndex = ascendingChromaticScale.prev(this.noteIndex);
     this.y += lineHeight / 2;
   }
 

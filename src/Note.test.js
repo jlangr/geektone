@@ -1,4 +1,5 @@
-import Note from './Note.js';
+import Note from './Note';
+import './js/ArrayProtos';
 
 describe('note increment/decrement', () => {
   it('bumps up a half note', () => {

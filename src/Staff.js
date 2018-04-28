@@ -11,6 +11,7 @@ export const verticalIndex = noteName => {
       case "E4": return 8;
       case "D4": return 9;
       case "C4": return 10;
-      default: return -1;
+      default: break;
     };
-};
+    return -1;
+  };
