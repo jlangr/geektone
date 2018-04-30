@@ -38,3 +38,22 @@ describe('note increment/decrement', () => {
     expect(note.name()).toEqual("C8");
   });
 })
+
+describe('a note selection', () => {
+  it('is false by default', () => {
+    const note = new Note("C4");
+
+    expect(note.isSelected).toBeFalsy();
+
+  });
+
+  it('is true when click is a hit', () => {
+    const note = new Note("D4", 0);
+    const draw = jest.fn();
+    note.setListener({ draw: draw });
+
+    note.clickOn({ x: note.x, y: note.y });
+
+    expect(draw).toHaveBeenCalledWith(note);
+  });
+});

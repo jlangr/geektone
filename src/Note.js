@@ -19,6 +19,9 @@ export default class Note {
   // nope position is relative to other notes
   // also maybe pass context to ctor
   constructor(name, position) {
+    this.listener = {};
+    this.listener.draw = () => {};
+
     if (name === '') {
       this.noteIndex = -1;
       this.octave = -1;
@@ -34,6 +37,8 @@ export default class Note {
       this.isSelected = false;
       this.rect = new Rect(this.x, this.y, noteWidth, noteHeight);
     }
+    // console.log('note ', name);
+    // console.log('note position', this.x, this.y);
   }
 
   click(context, mousePosition) {
@@ -41,6 +46,17 @@ export default class Note {
 
     this.isSelected = !this.isSelected;
     this.drawOn(context);
+  }
+
+  setListener(l) {
+    this.listener = l;
+  }
+
+  clickOn(mousePosition) {
+    if (!this.isHit(mousePosition)) return;
+
+    this.isSelected = !this.isSelected;
+    this.listener.draw(this);
   }
 
   select() {

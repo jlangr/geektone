@@ -7,4 +7,12 @@ export default class NoteSequence {
   add(note) {
     this.notes.push(note);
   }
+
+  allNotes() {
+    return this.notes;
+  }
+
+  selectedNote() {
+    return null;
+  }
 }

@@ -21,10 +21,6 @@ const width = 1200;
 class App extends Component {
   constructor() {
     super();
-    // this.notes = [];
-    // this.notes.push(new Note("E4", 0));
-    // this.notes.push(new Note("F4", 1));
-    // this.notes.push(new Note("G4", 2));
     this.state = {
       currentNote: -1,
       notes: [new Note("E4", 0), new Note("F4", 1), new Note("G4", 2)]
@@ -68,21 +64,18 @@ class App extends Component {
         this.state.notes[this.state.currentNote].incrementHalf();
         this.state.notes[this.state.currentNote].incrementHalf();
         break;
-      case "ArrowDown": {
+      case "ArrowDown":
         this.state.notes[this.state.currentNote].decrementHalf();
         this.state.notes[this.state.currentNote].decrementHalf();
         break;
-      }
-      case "ArrowRight": {
+      case "ArrowRight":
         this.state.notes[this.state.currentNote++].deselect();
         this.state.notes[this.state.currentNote].select();
         break;
-      }
-      case "ArrowLeft": {
+      case "ArrowLeft":
         this.state.notes[this.state.currentNote--].deselect();
         this.state.notes[this.state.currentNote].select();
         break;
-      }
       default:
         return;
     }
