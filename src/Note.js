@@ -52,11 +52,11 @@ export default class Note {
     this.listener = l;
   }
 
-  clickOn(mousePosition) {
+  clickOn(mousePosition, i, hitFn) {
     if (!this.isHit(mousePosition)) return;
 
     this.isSelected = !this.isSelected;
-    this.listener.draw(this);
+    hitFn(this, i);
   }
 
   select() {

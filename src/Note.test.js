@@ -39,7 +39,7 @@ describe('note increment/decrement', () => {
   });
 })
 
-describe('a note selection', () => {
+describe('is selected', () => {
   it('is false by default', () => {
     const note = new Note("C4");
 
@@ -47,13 +47,24 @@ describe('a note selection', () => {
 
   });
 
-  it('is true when click is a hit', () => {
+  it('is false when click does not hit', () => {
     const note = new Note("D4", 0);
     const draw = jest.fn();
     note.setListener({ draw: draw });
 
-    note.clickOn({ x: note.x, y: note.y });
+    note.clickOn({ x: note.x + 1000, y: note.y });
 
-    expect(draw).toHaveBeenCalledWith(note);
+    expect(note.isSelected).toBeFalsy();
+  //  expect(draw).toHaveBeenCalledWith(note);
+  });
+
+  it('is true when click is a hit', () => {
+    const note = new Note("D4", 0);
+    const hitFn = jest.fn();
+
+    note.clickOn({ x: note.x, y: note.y }, 1, hitFn);
+
+    expect(note.isSelected).toBeTruthy();
+    expect(hitFn).toHaveBeenCalledWith(note, 1);
   });
 });

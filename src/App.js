@@ -18,17 +18,22 @@ import './App.css';
 
 const width = 1200;
 
+const nullSelectable = {
+  select: () => {},
+  deselect: () => {}
+};
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
       currentNote: -1,
+      currNote: nullSelectable,
       notes: [new Note("E4", 0), new Note("F4", 1), new Note("G4", 2)]
     };
   }
 
   componentDidMount() {
-    // next can go in componentWillMount?
     document.getElementById('staff').addEventListener('keyup', this.handleKeyPress.bind(this));
     this.init();
   }
@@ -119,11 +124,25 @@ class App extends Component {
     };
   }
 
+  clickHit(note, i) {
+    if (note.isSelected) {
+      this.state.currentNote = i; // ugh null object pattern please
+      this.state.currNote.deselect();
+      this.state.currNote = note;
+    } else {
+      this.state.currNote = nullSelectable; // ugh null object pattern please
+      this.state.currentNote = -1;
+    }
+    this.draw();
+  }
+
   click(e) {
-    // awful
     const clickPoint = this.mousePosition(this.canvas(), e);
     for (let i = 0; i < this.state.notes.length; i++) {
       const note = this.state.notes[i];
+      note.clickOn(clickPoint, i, this.clickHit.bind(this));
+    }
+    /*
       if (note.isHit(clickPoint)) {
         if (i === this.state.currentNote) {
           note.deselect();
@@ -136,7 +155,7 @@ class App extends Component {
           this.draw();
         }
       }
-    }
+      */
 //      note.click(this.context, this.mousePosition(this.canvas(), e)));
   }
 
