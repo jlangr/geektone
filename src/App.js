@@ -21,11 +21,14 @@ const width = 1200;
 class App extends Component {
   constructor() {
     super();
-    this.notes = [];
-    this.notes.push(new Note("E4", 0));
-    this.notes.push(new Note("F4", 1));
-    this.notes.push(new Note("G4", 2));
-    this.state = { currentNote: -1 };
+    // this.notes = [];
+    // this.notes.push(new Note("E4", 0));
+    // this.notes.push(new Note("F4", 1));
+    // this.notes.push(new Note("G4", 2));
+    this.state = {
+      currentNote: -1,
+      notes: [new Note("E4", 0), new Note("F4", 1), new Note("G4", 2)]
+    };
   }
 
   componentDidMount() {
@@ -62,22 +65,22 @@ class App extends Component {
     if (this.state.currentNote < 0) return;
     switch (e.key) {
       case "ArrowUp":
-        this.notes[this.state.currentNote].incrementHalf();
-        this.notes[this.state.currentNote].incrementHalf();
+        this.state.notes[this.state.currentNote].incrementHalf();
+        this.state.notes[this.state.currentNote].incrementHalf();
         break;
       case "ArrowDown": {
-        this.notes[this.state.currentNote].decrementHalf();
-        this.notes[this.state.currentNote].decrementHalf();
+        this.state.notes[this.state.currentNote].decrementHalf();
+        this.state.notes[this.state.currentNote].decrementHalf();
         break;
       }
       case "ArrowRight": {
-        this.notes[this.state.currentNote++].deselect();
-        this.notes[this.state.currentNote].select();
+        this.state.notes[this.state.currentNote++].deselect();
+        this.state.notes[this.state.currentNote].select();
         break;
       }
       case "ArrowLeft": {
-        this.notes[this.state.currentNote--].deselect();
-        this.notes[this.state.currentNote].select();
+        this.state.notes[this.state.currentNote--].deselect();
+        this.state.notes[this.state.currentNote].select();
         break;
       }
       default:
@@ -93,7 +96,7 @@ class App extends Component {
   }
 
   drawNotes() {
-    this.notes.forEach(note => note.drawOn(this.context));
+    this.state.notes.forEach(note => note.drawOn(this.context));
   }
 
   line(context, xStart, yStart, xEnd, yEnd, weight=1) {
@@ -126,15 +129,15 @@ class App extends Component {
   click(e) {
     // awful
     const clickPoint = this.mousePosition(this.canvas(), e);
-    for (let i = 0; i < this.notes.length; i++) {
-      const note = this.notes[i];
+    for (let i = 0; i < this.state.notes.length; i++) {
+      const note = this.state.notes[i];
       if (note.isHit(clickPoint)) {
         if (i === this.state.currentNote) {
           note.deselect();
           this.state.currentNote = -1; // ugh null object pattern please
           this.draw();
         } else {
-          if (this.state.currentNote >= 0) this.notes[this.currentNote].deselect();
+          if (this.state.currentNote >= 0) this.state.notes[this.state.currentNote].deselect();
           this.state.currentNote = i;
           note.select();
           this.draw();
