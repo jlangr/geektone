@@ -25,7 +25,7 @@ class App extends Component {
     this.notes.push(new Note("E4", 0));
     this.notes.push(new Note("F4", 1));
     this.notes.push(new Note("G4", 2));
-    this.currentNote = -1;
+    this.state = { currentNote: -1 };
   }
 
   componentDidMount() {
@@ -59,25 +59,25 @@ class App extends Component {
   // TODO introduce abstraction for note list
 
   handleKeyPress(e) {
-    if (this.currentNote < 0) return;
+    if (this.state.currentNote < 0) return;
     switch (e.key) {
       case "ArrowUp":
-        this.notes[this.currentNote].incrementHalf();
-        this.notes[this.currentNote].incrementHalf();
+        this.notes[this.state.currentNote].incrementHalf();
+        this.notes[this.state.currentNote].incrementHalf();
         break;
       case "ArrowDown": {
-        this.notes[this.currentNote].decrementHalf();
-        this.notes[this.currentNote].decrementHalf();
+        this.notes[this.state.currentNote].decrementHalf();
+        this.notes[this.state.currentNote].decrementHalf();
         break;
       }
       case "ArrowRight": {
-        this.notes[this.currentNote++].deselect();
-        this.notes[this.currentNote].select();
+        this.notes[this.state.currentNote++].deselect();
+        this.notes[this.state.currentNote].select();
         break;
       }
       case "ArrowLeft": {
-        this.notes[this.currentNote--].deselect();
-        this.notes[this.currentNote].select();
+        this.notes[this.state.currentNote--].deselect();
+        this.notes[this.state.currentNote].select();
         break;
       }
       default:
@@ -129,13 +129,13 @@ class App extends Component {
     for (let i = 0; i < this.notes.length; i++) {
       const note = this.notes[i];
       if (note.isHit(clickPoint)) {
-        if (i === this.currentNote) {
+        if (i === this.state.currentNote) {
           note.deselect();
-          this.currentNote = -1; // ugh null object pattern please
+          this.state.currentNote = -1; // ugh null object pattern please
           this.draw();
         } else {
-          if (this.currentNote >= 0) this.notes[this.currentNote].deselect();
-          this.currentNote = i;
+          if (this.state.currentNote >= 0) this.notes[this.currentNote].deselect();
+          this.state.currentNote = i;
           note.select();
           this.draw();
         }

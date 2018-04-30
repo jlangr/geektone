@@ -19,16 +19,21 @@ export default class Note {
   // nope position is relative to other notes
   // also maybe pass context to ctor
   constructor(name, position) {
-    this.octave = parseInt(name.slice(-1), 10);
-    let note = name.slice(0, -1);
-    this.noteIndex = ascendingChromaticScale.indexOf(note);
+    if (name === '') {
+      this.noteIndex = -1;
+      this.octave = -1;
+    } else {
+      this.octave = parseInt(name.slice(-1), 10);
+      let note = name.slice(0, -1);
+      this.noteIndex = ascendingChromaticScale.indexOf(note);
 
-    this.x = notePad + (position * (noteDistance + notePad));
-    this.y = verticalIndex(this.name()) * lineHeight / 2;
+      this.x = notePad + (position * (noteDistance + notePad));
+      this.y = verticalIndex(this.name()) * lineHeight / 2;
 
-    this.rotation = 0;
-    this.isSelected = false;
-    this.rect = new Rect(this.x, this.y, noteWidth, noteHeight);
+      this.rotation = 0;
+      this.isSelected = false;
+      this.rect = new Rect(this.x, this.y, noteWidth, noteHeight);
+    }
   }
 
   click(context, mousePosition) {
@@ -51,6 +56,7 @@ export default class Note {
   }
 
   name() {
+    if (this.noteIndex === -1) return "";
     return `${ascendingChromaticScale[this.noteIndex]}${this.octave}`;
   }
 
