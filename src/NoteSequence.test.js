@@ -3,9 +3,10 @@ import NoteSequence from './NoteSequence';
 import Note from './Note';
 
 describe('NoteSequnce', () => {
-  const sequence = new NoteSequence();
+  let sequence;
 
   beforeEach(() => {
+    sequence = new NoteSequence();
     sequence.add(new Note('E4', 0));
     sequence.add(new Note('F4', 1));
     sequence.add(new Note('G4', 2));
@@ -72,6 +73,29 @@ describe('NoteSequnce', () => {
       sequence.selectPrev();
 
       expect(sequence.selectedNote().name()).toBe('null');
+    });
+  });
+
+  describe('duplicate note', () => {
+    it('introduces new note following selected', () => {
+      sequence.selectFirst();
+
+      sequence.duplicateNote();
+
+      expect(sequence.allNoteNames()).toEqual(['E4', 'E4', 'F4', 'G4']);
+    });
+
+    // test ith
+
+    it('introduces new note following selected', () => {
+      sequence.selectFirst();
+
+      sequence.duplicateNote();
+
+      const firstNote = sequence.selectIth(0);
+      const newNote = sequence.selectIth(1);
+      expect(firstNote.isSelected).toBeFalsy();
+      expect(newNote.isSelected).toBeTruthy();
     });
   });
 });

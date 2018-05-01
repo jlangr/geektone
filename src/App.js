@@ -5,18 +5,6 @@ import Note, { height, lineHeight } from './Note';
 import NoteSequence from './NoteSequence';
 import './App.css';
 
-  // F ---
-  // E
-  // D ---
-  // C
-  // B ---
-  // A
-  // G ---
-  // F
-  // E ---
-  // D
-  // C (---)
-
 const width = 1200;
 
 const nullSelectable = {
@@ -33,8 +21,6 @@ class App extends Component {
       noteSequence: new NoteSequence()
     };
     this.state.noteSequence.add(new Note('E4'));
-    this.state.noteSequence.add(new Note('F4'));
-    this.state.noteSequence.add(new Note('G4'));
   }
 
   componentDidMount() {
@@ -52,6 +38,10 @@ class App extends Component {
         <Form>
           <Button onClick={() => this.play() }>Play</Button>
           <Button onClick={() => this.stop() }>Stop</Button>
+          <p>left/right arrows: select prev / next note <br />
+          up/down arrows:  move selected note up / down <br />
+          d     duplicate note <br />
+          </p>
         </Form>
       </div>
     );
@@ -63,19 +53,21 @@ class App extends Component {
 
   handleKeyPress(e) {
     if (!this.state.noteSequence.isNoteSelected()) return;
-    const note = this.state.noteSequence.selectedNote();
     switch (e.key) {
       case 'ArrowUp':
-        note.increment();
+        this.state.noteSequence.selectedNote().increment();
         break;
       case 'ArrowDown':
-        note.decrement();
+        this.state.noteSequence.selectedNote().decrement();
         break;
       case 'ArrowRight':
         this.state.noteSequence.selectNext();
         break;
       case 'ArrowLeft':
         this.state.noteSequence.selectPrev();
+        break;
+      case 'd':
+        this.state.noteSequence.duplicateNote();
         break;
       default:
         return;

@@ -1,3 +1,15 @@
+  // F ---
+  // E
+  // D ---
+  // C
+  // B ---
+  // A
+  // G ---
+  // F
+  // E ---
+  // D
+  // C (---)
+
 export const verticalIndex = noteName => {
     switch(noteName) {
       case "F5": return 0;

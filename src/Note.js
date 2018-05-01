@@ -51,8 +51,8 @@ export default class Note {
     this.noteIndex = ascendingWholeNoteScale.prev(this.noteIndex);
   }
 
-  // TODO externalize below:
-  
+  // TODO externalize below ... to Staff?
+
   isHit(mousePosition, position) {
     return new Rect(this.x(position), this.y(), noteWidth, noteHeight)
       .contains(mousePosition);

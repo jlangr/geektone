@@ -1,3 +1,5 @@
+import Note from './Note';
+
 const nullNote = {
   name: () => 'null',
   select: () => {},
@@ -19,6 +21,10 @@ export default class NoteSequence {
     return this.notes;
   }
 
+  allNoteNames() {
+    return this.notes.map(n => n.name());
+  }
+
   // TODO test
   isNoteSelected() {
     return this.currentNote !== -1;
@@ -28,6 +34,10 @@ export default class NoteSequence {
   selectedNote() {
     if (this.currentNote === -1) return nullNote;
     return this.notes[this.currentNote];
+  }
+
+  selectIth(i) {
+    return this.notes[i];
   }
 
   deselectAll() {
@@ -75,5 +85,12 @@ export default class NoteSequence {
     this.selectedNote().deselect();
     this.currentNote = this.notes.prev(this.currentNote);
     this.selectedNote().select();
+  }
+
+  duplicateNote() {
+    const note = this.selectedNote();
+    const copy = new Note(note.name());
+    this.notes.splice(this.currentNote + 1, 0, copy);
+    this.selectNext();
   }
 }
