@@ -48,23 +48,24 @@ describe('is selected', () => {
   });
 
   it('is false when click does not hit', () => {
-    const note = new Note("D4", 0);
-    const draw = jest.fn();
-    note.setListener({ draw: draw });
+    const note = new Note("D4");
+    const hitFn = jest.fn();
 
-    note.clickOn({ x: note.x + 1000, y: note.y });
+    note.clickOn({ x: note.x + 1000, y: note.y }, 1, hitFn);
 
     expect(note.isSelected).toBeFalsy();
-  //  expect(draw).toHaveBeenCalledWith(note);
+    // TODO
+//    expect(hitFn).toNotHaveBeenCalled();
   });
 
   it('is true when click is a hit', () => {
-    const note = new Note("D4", 0);
+    const note = new Note("D4");
     const hitFn = jest.fn();
+    const position = 0;
 
-    note.clickOn({ x: note.x, y: note.y }, 1, hitFn);
+    note.clickOn({ x: note.x(position), y: note.y }, position, hitFn);
 
     expect(note.isSelected).toBeTruthy();
-    expect(hitFn).toHaveBeenCalledWith(note, 1);
+    expect(hitFn).toHaveBeenCalledWith(note, position);
   });
 });

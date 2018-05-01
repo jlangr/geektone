@@ -1,3 +1,4 @@
+import './js/ArrayProtos';
 import NoteSequence from './NoteSequence';
 import Note from './Note';
 
@@ -22,19 +23,55 @@ describe('NoteSequnce', () => {
     it('returns null when no note selected', () => {
       const currentNote = sequence.selectedNote();
 
-      expect(currentNote).toBe(null);
+      expect(currentNote.name()).toEqual('null');
     });
 
     it('returns selected note', () => {
-      
+      sequence.selectFirst();
 
+      expect(sequence.selectedNote().name()).toEqual('E4');
     });
   });
 
-  describe('', () => {
-    it('', () => {
+  describe('next/prev note', () => {
+    it('sets selected to subsequent note', () => {
+      sequence.selectFirst();
+      const first = sequence.selectedNote();
 
+      sequence.selectNext();
+
+      const note = sequence.selectedNote();
+      expect(note.name()).toEqual('F4');
+      expect(note.isSelected).toBeTruthy();
+      expect(first.isSelected).toBeFalsy();
     });
 
+    it('sets selected to previous note', () => {
+      sequence.selectFirst();
+      const first = sequence.selectedNote();
+
+      sequence.selectPrev();
+
+      const note = sequence.selectedNote();
+      expect(note.name()).toEqual('G4');
+      expect(note.isSelected).toBeTruthy();
+      expect(first.isSelected).toBeFalsy();
+    });
+
+    it('sets selected to null if no current selection is empty', () => {
+      sequence.deselectAll();
+
+      sequence.selectNext();
+
+      expect(sequence.selectedNote().name()).toBe('null');
+    });
+
+    it('prev sets selected to null if no current selection is empty', () => {
+      sequence.deselectAll();
+
+      sequence.selectPrev();
+
+      expect(sequence.selectedNote().name()).toBe('null');
+    });
   });
 });

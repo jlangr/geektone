@@ -1,3 +1,10 @@
+const nullNote = {
+  name: () => 'null',
+  select: () => {},
+  deselect: () => {},
+  isSelected: false
+};
+
 export default class NoteSequence {
   constructor() {
     this.notes = [];
@@ -12,7 +19,64 @@ export default class NoteSequence {
     return this.notes;
   }
 
+  // TODO test
+  isNoteSelected() {
+    return this.currentNote !== -1;
+  }
+
+  // TODO rename to current note
   selectedNote() {
-    return null;
+    if (this.currentNote === -1) return nullNote;
+    return this.notes[this.currentNote];
+  }
+
+  deselectAll() {
+    this.currentNote = -1;
+  }
+
+  selectFirst() {
+    this.currentNote = 0;
+  }
+
+  note(position) {
+    return this.notes[position];
+  }
+
+  isSelected(position) {
+    return this.note(position).isSelected;
+  }
+
+  // F'ing tabs & spaces
+
+  // untested
+  click(position) {
+    console.log('click on note', position, this.note(position).name());
+    if (this.isSelected(position)) {
+      this.note(position).deselect();
+      this.currentNote = -1;
+    }
+    else {
+      this.selectedNote().deselect();
+      this.note(position).select();
+      this.currentNote = position;
+    }
+  }
+
+  isClickOnThisNote(position) {
+    return this.currentNote === position;
+  }
+
+  selectNext() {
+    console.log('deselecting', this.selectedNote().name());
+    this.selectedNote().deselect();
+    this.currentNote = this.notes.next(this.currentNote);
+    console.log('selecting', this.selectedNote().name());
+    this.selectedNote().select();
+  }
+
+  selectPrev() {
+    this.selectedNote().deselect();
+    this.currentNote = this.notes.prev(this.currentNote);
+    this.selectedNote().select();
   }
 }

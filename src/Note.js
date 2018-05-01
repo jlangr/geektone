@@ -13,15 +13,10 @@ const noteStroke = 2;
 const ascendingChromaticScale =
   ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-// NoteSequence class?
-
 export default class Note {
   // nope position is relative to other notes
   // also maybe pass context to ctor
-  constructor(name, position) {
-    this.listener = {};
-    this.listener.draw = () => {};
-
+  constructor(name) {
     if (name === '') {
       this.noteIndex = -1;
       this.octave = -1;
@@ -30,33 +25,22 @@ export default class Note {
       let note = name.slice(0, -1);
       this.noteIndex = ascendingChromaticScale.indexOf(note);
 
-      this.x = notePad + (position * (noteDistance + notePad));
       this.y = verticalIndex(this.name()) * lineHeight / 2;
 
       this.rotation = 0;
       this.isSelected = false;
-      this.rect = new Rect(this.x, this.y, noteWidth, noteHeight);
     }
-    // console.log('note ', name);
-    // console.log('note position', this.x, this.y);
   }
 
-  click(context, mousePosition) {
-    if (!this.isHit(mousePosition)) return;
+  clickOn(mousePosition, position, hitFn) {
+    if (!this.isHit(mousePosition, position)) return;
 
     this.isSelected = !this.isSelected;
-    this.drawOn(context);
+    hitFn(this, position);
   }
 
-  setListener(l) {
-    this.listener = l;
-  }
-
-  clickOn(mousePosition, i, hitFn) {
-    if (!this.isHit(mousePosition)) return;
-
+  click(mousePosition, position) {
     this.isSelected = !this.isSelected;
-    hitFn(this, i);
   }
 
   select() {
@@ -67,8 +51,13 @@ export default class Note {
     this.isSelected = false;
   }
 
-  isHit(mousePosition) {
-    return this.rect.contains(mousePosition);
+  isHit(mousePosition, position) {
+    return new Rect(this.x(position), this.y, noteWidth, noteHeight)
+      .contains(mousePosition);
+  }
+
+  x(position) {
+    return notePad + (position * (noteDistance + notePad));
   }
 
   name() {
@@ -95,25 +84,11 @@ export default class Note {
     this.y += lineHeight / 2;
   }
 
-  drawOn(context) {
+  drawOn(context, position) {
     context.beginPath();
-    this.drawNote(context);
-    context.fillStyle = this.isSelected ? 'red' : 'white';
-    context.fill();
-    context.stroke();
-
-//    this.isSelected ? this.highlightOn(context) : this.drawOn(context);
-  }
-
-  drawNote(context) {
     context.lineWidth = noteStroke;
-    context.ellipse(this.x, this.y, noteWidth, noteHeight, this.rotation, 0, 2 * Math.PI);
-  }
-
-  highlightOn(context) {
-    context.beginPath();
-    this.drawNote(context);
-    context.fillStyle = 'red';
+    context.ellipse(this.x(position), this.y, noteWidth, noteHeight, this.rotation, 0, 2 * Math.PI);
+    context.fillStyle = this.isSelected ? 'red' : 'white';
     context.fill();
     context.stroke();
   }

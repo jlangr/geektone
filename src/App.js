@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Tone from 'tone';
 import Note, { height, lineHeight } from './Note';
+import NoteSequence from './NoteSequence';
 import './App.css';
 
   // F ---
@@ -29,16 +30,15 @@ class App extends Component {
     this.state = {
       currentNote: -1,
       currNote: nullSelectable,
-      notes: [new Note("E4", 0), new Note("F4", 1), new Note("G4", 2)]
+      noteSequence: new NoteSequence()
     };
+    this.state.noteSequence.add(new Note('E4'));
+    this.state.noteSequence.add(new Note('F4'));
+    this.state.noteSequence.add(new Note('G4'));
   }
 
   componentDidMount() {
     document.getElementById('staff').addEventListener('keyup', this.handleKeyPress.bind(this));
-    this.init();
-  }
-
-  init() {
     this.context = this.canvas().getContext("2d");
     this.canvas().addEventListener('mousedown', this.click.bind(this));
     this.draw();
@@ -60,26 +60,23 @@ class App extends Component {
     return document.getElementById("staff");
   }
 
-  // TODO introduce abstraction for note list
-
   handleKeyPress(e) {
-    if (this.state.currentNote < 0) return;
+    if (!this.state.noteSequence.isNoteSelected()) return;
+    const note = this.state.noteSequence.selectedNote();
     switch (e.key) {
-      case "ArrowUp":
-        this.state.notes[this.state.currentNote].incrementHalf();
-        this.state.notes[this.state.currentNote].incrementHalf();
+      case 'ArrowUp':
+        note.incrementHalf();
+        note.incrementHalf();
         break;
-      case "ArrowDown":
-        this.state.notes[this.state.currentNote].decrementHalf();
-        this.state.notes[this.state.currentNote].decrementHalf();
+      case 'ArrowDown':
+        note.decrementHalf();
+        note.decrementHalf();
         break;
-      case "ArrowRight":
-        this.state.notes[this.state.currentNote++].deselect();
-        this.state.notes[this.state.currentNote].select();
+      case 'ArrowRight':
+        this.state.noteSequence.selectNext();
         break;
-      case "ArrowLeft":
-        this.state.notes[this.state.currentNote--].deselect();
-        this.state.notes[this.state.currentNote].select();
+      case 'ArrowLeft':
+        this.state.noteSequence.selectPrev();
         break;
       default:
         return;
@@ -94,7 +91,9 @@ class App extends Component {
   }
 
   drawNotes() {
-    this.state.notes.forEach(note => note.drawOn(this.context));
+    let i = 0;
+    this.state.noteSequence.allNotes()
+      .forEach(note => note.drawOn(this.context, i++));
   }
 
   line(context, xStart, yStart, xEnd, yEnd, weight=1) {
@@ -124,39 +123,17 @@ class App extends Component {
     };
   }
 
-  clickHit(note, i) {
-    if (note.isSelected) {
-      this.state.currentNote = i; // ugh null object pattern please
-      this.state.currNote.deselect();
-      this.state.currNote = note;
-    } else {
-      this.state.currNote = nullSelectable; // ugh null object pattern please
-      this.state.currentNote = -1;
-    }
-    this.draw();
-  }
-
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
-    for (let i = 0; i < this.state.notes.length; i++) {
-      const note = this.state.notes[i];
-      note.clickOn(clickPoint, i, this.clickHit.bind(this));
-    }
-    /*
-      if (note.isHit(clickPoint)) {
-        if (i === this.state.currentNote) {
-          note.deselect();
-          this.state.currentNote = -1; // ugh null object pattern please
-          this.draw();
-        } else {
-          if (this.state.currentNote >= 0) this.state.notes[this.state.currentNote].deselect();
-          this.state.currentNote = i;
-          note.select();
-          this.draw();
-        }
+    const notes = this.state.noteSequence.allNotes();
+    for (let i = 0; i < notes.length; i++) {
+      const note = notes[i];
+      if (note.isHit(clickPoint, i)) {
+        this.state.noteSequence.click(i);
+        this.draw();
+        break;
       }
-      */
-//      note.click(this.context, this.mousePosition(this.canvas(), e)));
+    }
   }
 
   play() {
