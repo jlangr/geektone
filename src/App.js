@@ -51,6 +51,7 @@ class App extends Component {
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
         <Form>
           <Button onClick={() => this.play() }>Play</Button>
+          <Button onClick={() => this.stop() }>Stop</Button>
         </Form>
       </div>
     );
@@ -65,12 +66,10 @@ class App extends Component {
     const note = this.state.noteSequence.selectedNote();
     switch (e.key) {
       case 'ArrowUp':
-        note.incrementHalf();
-        note.incrementHalf();
+        note.increment();
         break;
       case 'ArrowDown':
-        note.decrementHalf();
-        note.decrementHalf();
+        note.decrement();
         break;
       case 'ArrowRight':
         this.state.noteSequence.selectNext();
@@ -136,11 +135,20 @@ class App extends Component {
     }
   }
 
+  // the notes are wrong! move up by whole note. blah
+  notes() {
+    return this.state.noteSequence.allNotes().map(note => note.name());
+  }
+
+  stop() {
+    Tone.Transport.stop();
+  }
+
   play() {
     var synth = new Tone.FMSynth().toMaster();
-    var pattern = new Tone.Pattern(function(time, note){
+    const pattern = new Tone.Pattern(function(time, note){
     	synth.triggerAttackRelease(note, 0.25);
-    }, ["C4", "E4", "G4", "A4"]);
+    }, this.notes());
     pattern.start(0);
     Tone.Transport.start();
   }

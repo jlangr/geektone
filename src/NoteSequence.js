@@ -50,7 +50,6 @@ export default class NoteSequence {
 
   // untested
   click(position) {
-    console.log('click on note', position, this.note(position).name());
     if (this.isSelected(position)) {
       this.note(position).deselect();
       this.currentNote = -1;
@@ -67,10 +66,8 @@ export default class NoteSequence {
   }
 
   selectNext() {
-    console.log('deselecting', this.selectedNote().name());
     this.selectedNote().deselect();
     this.currentNote = this.notes.next(this.currentNote);
-    console.log('selecting', this.selectedNote().name());
     this.selectedNote().select();
   }
 
