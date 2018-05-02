@@ -1,5 +1,11 @@
-import Note from './Note';
+import Note, { quarter } from './Note';
 import './js/ArrayProtos';
+
+describe('note defaults', () => {
+    it('to quarter note', () => {
+      expect(new Note('F3').duration).toEqual(quarter);
+    });
+});
 
 describe('whole note increment/decrement', () => {
   it('bumps up', () => {

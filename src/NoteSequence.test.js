@@ -1,6 +1,6 @@
 import './js/ArrayProtos';
 import NoteSequence from './NoteSequence';
-import Note from './Note';
+import Note, { quarter, half, whole } from './Note';
 
 describe('NoteSequnce', () => {
   let sequence;
@@ -147,6 +147,16 @@ describe('NoteSequnce', () => {
       sequence.deleteSelected();
 
       expect(sequence.isSelected(0)).toBeTruthy();
+    });
+  });
+
+  describe('set note length', () => {
+    it('sets to half note', () => {
+      sequence.selectFirst();
+
+      sequence.setSelectedToHalfNote();
+
+      expect(sequence.selectedNote().duration).toEqual(half);
     });
   });
 });

@@ -1,4 +1,4 @@
-import Note from './Note';
+import Note, { whole, half, quarter } from './Note';
 
 const nullNote = {
   name: () => 'null',
@@ -106,5 +106,18 @@ export default class NoteSequence {
     const copy = new Note(note.name());
     this.notes.splice(this.currentNote + 1, 0, copy);
     this.selectNext();
+  }
+
+  // TOO many funtions, just pass arg
+  setSelectedToHalfNote() {
+    this.selectedNote().duration = half;
+  }
+
+  setSelectedToWholeNote() {
+    this.selectedNote().duration = whole;
+  }
+
+  setSelectedToQuarterNote() {
+    this.selectedNote().duration = quarter;
   }
 }

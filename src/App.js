@@ -41,6 +41,8 @@ class App extends Component {
           <p>left/right arrows: select prev / next note <br />
           up/down arrows:  move selected note up / down <br />
           d     duplicate note <br />
+          x     delete note <br />
+          1: whole 2: half 4: quarter 8: eighth *: double length /: halve length
           </p>
         </Form>
       </div>
@@ -51,26 +53,22 @@ class App extends Component {
     return document.getElementById("staff");
   }
 
+  // TODO test
   handleKeyPress(e) {
     if (!this.state.noteSequence.isNoteSelected()) return;
+    console.log('e.key', e.key);
     switch (e.key) {
-      case 'ArrowUp':
-        this.state.noteSequence.selectedNote().increment();
-        break;
-      case 'ArrowDown':
-        this.state.noteSequence.selectedNote().decrement();
-        break;
-      case 'ArrowRight':
-        this.state.noteSequence.selectNext();
-        break;
-      case 'ArrowLeft':
-        this.state.noteSequence.selectPrev();
-        break;
-      case 'd':
-        this.state.noteSequence.duplicateNote();
-        break;
-      default:
-        return;
+      // TODO change to incrementSelected / decrementSelected
+      case 'ArrowUp':    this.state.noteSequence.selectedNote().increment(); break;
+      case 'ArrowDown':  this.state.noteSequence.selectedNote().decrement(); break;
+      case 'ArrowLeft':  this.state.noteSequence.selectPrev(); break;
+      case 'ArrowRight': this.state.noteSequence.selectNext(); break;
+      case 'd': this.state.noteSequence.duplicateNote(); break;
+      case 'x': this.state.noteSequence.deleteSelected(); break;
+      case '4': this.state.noteSequence.setSelectedToWholeNote(); break;
+      case '2': this.state.noteSequence.setSelectedToHalfNote(); break;
+      case '1': this.state.noteSequence.setSelectedToQuarterNote(); break;
+      default: return;
     }
     this.draw();
   }
@@ -87,8 +85,9 @@ class App extends Component {
       .forEach(note => note.drawOn(this.context, i++));
   }
 
-  line(context, xStart, yStart, xEnd, yEnd, weight=1) {
+  line(context, xStart, yStart, xEnd, yEnd, weight=1, color='black') {
     context.stroke();
+    context.strokeStyle = color;
     context.lineWidth = weight;
     context.moveTo(xStart, yStart);
     context.lineTo(xEnd, yEnd);
