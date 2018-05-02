@@ -14,6 +14,11 @@ const noteStroke = 2;
 const highlightStroke = 4;
 const rotation = 0;
 
+const lineColor = 'black';
+const highlightColor = 'red';
+const wholeFill = 'white';
+const quarterFill = 'black'
+
 const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"];
 
@@ -74,58 +79,61 @@ export default class Note {
     return verticalIndex(this.name()) * lineHeight / 2;
   }
 
-  drawWhole(context, position) {
-    context.beginPath();
-    context.lineWidth = noteStroke;
-    context.strokeStyle = 'black';
-    context.ellipse(this.x(position), this.y(), noteWidth, noteHeight, rotation, 0, 2 * Math.PI);
-    context.fillStyle = 'white';
+  ellipse(context, position, extraRadius=0) {
+    context.ellipse(
+      this.x(position), this.y(),
+      noteWidth + extraRadius, noteHeight + extraRadius,
+      rotation, 0, 2 * Math.PI);
+  }
+
+  filledEllipse(context, position, color, extraRadius=0) {
+    this.ellipse(context, position, extraRadius);
+    context.fillStyle = color;
     context.fill();
-    context.stroke();
+  }
+
+  stem(context, position) {
+    context.moveTo(this.x(position) + noteWidth, this.y());
+    context.lineTo(this.x(position) + noteWidth, this.y() - stemHeight);
+  }
+
+  drawWhole(context, position) {
+    this.filledEllipse(context, position, wholeFill);
   }
 
   drawHalf(context, position) {
-    context.beginPath();
-    context.lineWidth = noteStroke;
-    context.strokeStyle = 'black';
-    context.ellipse(this.x(position), this.y(), noteWidth, noteHeight, rotation, 0, 2 * Math.PI);
-    context.fillStyle = 'white';
-    context.fill();
-    context.moveTo(this.x(position) + noteWidth, this.y());
-    context.lineTo(this.x(position) + noteWidth, this.y() - stemHeight);
-    context.stroke();
+    this.filledEllipse(context, position, wholeFill);
+    this.stem(context, position);
   }
 
   drawQuarter(context, position) {
-    context.beginPath();
-    context.lineWidth = noteStroke;
-    context.strokeStyle = 'black';
-    context.ellipse(this.x(position), this.y(), noteWidth, noteHeight, rotation, 0, 2 * Math.PI);
-    context.fillStyle = 'black';
-    context.fill();
-    context.moveTo(this.x(position) + noteWidth, this.y());
-    context.lineTo(this.x(position) + noteWidth, this.y() - stemHeight);
-    context.stroke();
+    this.filledEllipse(context, position, quarterFill);
+    this.stem(context, position);
   }
 
   highlightNote(context, position) {
     context.beginPath();
+    context.strokeStyle = highlightColor;
     context.lineWidth = highlightStroke;
-    context.strokeStyle = 'red';
-    context.ellipse(
-      this.x(position), this.y(),
-      noteWidth + highlightStroke, noteHeight + highlightStroke,
-      rotation, 0, 2 * Math.PI);
+    this.ellipse(context, position, highlightStroke);
     context.stroke();
   }
 
-  drawOn(context, position) {
+  drawNoteOn(context, position) {
+    context.beginPath();
+    context.lineWidth = noteStroke;
+    context.strokeStyle = lineColor;
     switch (this.duration) {
       case whole: this.drawWhole(context, position); break;
       case half: this.drawHalf(context, position); break;
       case quarter: this.drawQuarter(context, position); break;
       default: break;
     }
+    context.stroke();
+  }
+
+  drawOn(context, position) {
+    this.drawNoteOn(context, position);
     if (this.isSelected)
       this.highlightNote(context, position);
   }

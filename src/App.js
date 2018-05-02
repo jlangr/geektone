@@ -56,7 +56,6 @@ class App extends Component {
   // TODO test
   handleKeyPress(e) {
     if (!this.state.noteSequence.isNoteSelected()) return;
-    console.log('e.key', e.key);
     switch (e.key) {
       // TODO change to incrementSelected / decrementSelected
       case 'ArrowUp':    this.state.noteSequence.selectedNote().increment(); break;
