@@ -21,44 +21,39 @@ export default class NoteSequence {
     return this.notes;
   }
 
+  note(position) {
+    return this.notes[position];
+  }
+
+  firstNote() {
+    return this.notes[0];
+  }
+
+  lastNote() {
+    return this.notes[this.notes.length - 1];
+  }
+
   allNoteNames() {
     return this.notes.map(n => n.name());
   }
 
-  // TODO test
   isNoteSelected() {
     return this.currentNote !== -1;
   }
 
-  // TODO rename to current note
   selectedNote() {
     if (this.currentNote === -1) return nullNote;
     return this.notes[this.currentNote];
-  }
-
-  selectIth(i) {
-    return this.notes[i];
   }
 
   deselectAll() {
     this.currentNote = -1;
   }
 
-  selectFirst() {
-    this.currentNote = 0;
-  }
-
-  note(position) {
-    return this.notes[position];
-  }
-
   isSelected(position) {
     return this.note(position).isSelected;
   }
 
-  // F'ing tabs & spaces
-
-  // untested
   click(position) {
     if (this.isSelected(position)) {
       this.note(position).deselect();
@@ -75,6 +70,19 @@ export default class NoteSequence {
     return this.currentNote === position;
   }
 
+  select(i) {
+    this.currentNote = i;
+    this.notes[i].select();
+  }
+
+  selectFirst() {
+    this.select(0);
+  }
+
+  selectLast() {
+    this.select(this.notes.length - 1);
+  }
+
   selectNext() {
     this.selectedNote().deselect();
     this.currentNote = this.notes.next(this.currentNote);
@@ -85,6 +93,12 @@ export default class NoteSequence {
     this.selectedNote().deselect();
     this.currentNote = this.notes.prev(this.currentNote);
     this.selectedNote().select();
+  }
+
+  deleteSelected() {
+    this.notes.splice(this.currentNote, 1);
+    this.currentNote = Math.max(0, this.currentNote - 1);
+    this.select(this.currentNote);
   }
 
   duplicateNote() {

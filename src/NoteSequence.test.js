@@ -14,9 +14,19 @@ describe('NoteSequnce', () => {
 
   describe('note sequence', () => {
     it('allows adding notes', () => {
-      const notes = sequence.allNotes();
+      expect(sequence.allNotes().length).toEqual(3);
+    });
+  });
 
-      expect(notes.length).toEqual(3);
+  describe('isNoteSelected', () => {
+    it('returns true after selection', () => {
+      sequence.selectFirst();
+
+      expect(sequence.isNoteSelected()).toBeTruthy();
+    });
+
+    it('returns false by default', () => {
+      expect(sequence.isNoteSelected()).toBeFalsy();
     });
   });
 
@@ -31,6 +41,26 @@ describe('NoteSequnce', () => {
       sequence.selectFirst();
 
       expect(sequence.selectedNote().name()).toEqual('E4');
+    });
+  });
+
+  describe('click on position', () => {
+    it('deselects if already selected', () => {
+      sequence.selectFirst();
+
+      sequence.click(0);
+
+      expect(sequence.firstNote().isSelected).toBeFalsy();
+    });
+
+    it('selects if not selected', () => {
+      sequence.selectLast();
+
+      sequence.click(0);
+
+      const note = sequence.firstNote();
+      expect(sequence.firstNote().isSelected).toBeTruthy();
+      expect(sequence.lastNote().isSelected).toBeFalsy();
     });
   });
 
@@ -85,17 +115,38 @@ describe('NoteSequnce', () => {
       expect(sequence.allNoteNames()).toEqual(['E4', 'E4', 'F4', 'G4']);
     });
 
-    // test ith
-
     it('introduces new note following selected', () => {
       sequence.selectFirst();
 
       sequence.duplicateNote();
 
-      const firstNote = sequence.selectIth(0);
-      const newNote = sequence.selectIth(1);
+      const firstNote = sequence.note(0);
+      const newNote = sequence.note(1);
       expect(firstNote.isSelected).toBeFalsy();
       expect(newNote.isSelected).toBeTruthy();
+    });
+  });
+
+  describe('delete selected', () => {
+    it('removes the currently selected note', () => {
+      sequence.select(1);
+      sequence.deleteSelected();
+
+      expect(sequence.allNoteNames()).toEqual(['E4', 'G4']);
+    });
+
+    it('selects the previous note', () => {
+      sequence.select(1);
+      sequence.deleteSelected();
+
+      expect(sequence.isSelected(0)).toBeTruthy();
+    });
+
+    it('re-selects if the first note is selected', () => {
+      sequence.selectFirst();
+      sequence.deleteSelected();
+
+      expect(sequence.isSelected(0)).toBeTruthy();
     });
   });
 });

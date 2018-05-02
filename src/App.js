@@ -127,7 +127,6 @@ class App extends Component {
     }
   }
 
-  // the notes are wrong! move up by whole note. blah
   notes() {
     return this.state.noteSequence.allNotes().map(note => note.name());
   }
