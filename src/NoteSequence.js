@@ -1,4 +1,4 @@
-import Note, { whole, half, quarter } from './Note';
+import Note from './Note';
 
 const nullNote = {
   name: () => 'null',
@@ -101,23 +101,21 @@ export default class NoteSequence {
     this.select(this.currentNote);
   }
 
+  // TODO test with duration
   duplicateNote() {
     const note = this.selectedNote();
     const copy = new Note(note.name());
+    copy.duration = note.duration;
     this.notes.splice(this.currentNote + 1, 0, copy);
     this.selectNext();
   }
 
-  // TOO many funtions, just pass arg
-  setSelectedToHalfNote() {
-    this.selectedNote().duration = half;
+  setSelectedTo(duration) {
+    this.selectedNote().duration = duration;
   }
 
-  setSelectedToWholeNote() {
-    this.selectedNote().duration = whole;
-  }
-
-  setSelectedToQuarterNote() {
-    this.selectedNote().duration = quarter;
+  // TODO test
+  toggleDotForSelected() {
+    this.selectedNote().toggleDot();
   }
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
+//import * as musical from './musical.js/musical';
 import Tone from 'tone';
-import Note, { height, lineHeight } from './Note';
+import Note, { height, lineHeight, whole, half, quarter } from './Note';
 import NoteSequence from './NoteSequence';
 import './App.css';
 
@@ -42,7 +43,7 @@ class App extends Component {
           up/down arrows:  move selected note up / down <br />
           d     duplicate note <br />
           x     delete note <br />
-          1: whole 2: half 4: quarter 8: eighth *: double length /: halve length
+          1: whole 2: half 3: dotted half 4: quarter 8: eighth *: double length /: halve length
           </p>
         </Form>
       </div>
@@ -64,9 +65,10 @@ class App extends Component {
       case 'ArrowRight': this.state.noteSequence.selectNext(); break;
       case 'd': this.state.noteSequence.duplicateNote(); break;
       case 'x': this.state.noteSequence.deleteSelected(); break;
-      case '4': this.state.noteSequence.setSelectedToWholeNote(); break;
-      case '2': this.state.noteSequence.setSelectedToHalfNote(); break;
-      case '1': this.state.noteSequence.setSelectedToQuarterNote(); break;
+      case '4': this.state.noteSequence.setSelectedTo(whole); break;
+      case '2': this.state.noteSequence.setSelectedTo(half); break;
+      case '1': this.state.noteSequence.setSelectedTo(quarter); break;
+      case '.': this.state.noteSequence.toggleDotForSelected(); break;
       default: return;
     }
     this.draw();
@@ -75,10 +77,6 @@ class App extends Component {
   draw() {
     this.context.clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaff(this.context);
-    this.drawNotes();
-  }
-
-  drawNotes() {
     let i = 0;
     this.state.noteSequence.allNotes()
       .forEach(note => note.drawOn(this.context, i++));
@@ -134,12 +132,33 @@ class App extends Component {
   }
 
   play() {
-    var synth = new Tone.FMSynth().toMaster();
-    const pattern = new Tone.Pattern(function(time, note){
-    	synth.triggerAttackRelease(note, 0.25);
-    }, this.notes());
-    pattern.start(0);
-    Tone.Transport.start();
+var synth = new Tone.FMSynth().toMaster()
+
+//schedule a series of notes to play as soon as the page loads
+synth.triggerAttackRelease('C4', '4n', '8n')
+synth.triggerAttackRelease('E4', '8n', '4n + 8n')
+synth.triggerAttackRelease('G4', '16n', '2n')
+synth.triggerAttackRelease('B4', '16n', '2n + 8t')
+synth.triggerAttackRelease('G4', '16','2n + 8t * 2')
+synth.triggerAttackRelease('E4', '2n', '0:3')
+//var synth = new Tone.PluckSynth().toMaster();
+    // // const pattern = new Tone.Pattern(function(time, note){
+    // // 	synth.triggerAttackRelease(note, 0.25);
+    // // }, this.notes());
+    // Tone.Transport.bpm.value = 170;
+    //
+    // const  this.state.noteSequence.allNotes().forEach(note => {
+    // //   synth.triggerAttackRelease(note.name(), note.duration);
+    // // });
+    //
+    // var loop = new Tone.Loop(time => {
+    // 	 synth.triggerAttackRelease("C2", "8n", time);
+    //   },
+    //   "4n");
+    //
+    // loop.start("1m").stop("4m");
+    //
+    // Tone.Transport.start();
   }
 }
 

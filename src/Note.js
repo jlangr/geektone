@@ -4,7 +4,7 @@ import { verticalIndex } from './Staff';
 export const height = 64;
 export const lineHeight = height / 4;
 
-const stemHeight = 25;
+const stemHeight = 36;
 
 const notePad = 25;
 const noteDistance = 8;
@@ -17,7 +17,7 @@ const rotation = 0;
 const lineColor = 'black';
 const highlightColor = 'red';
 const wholeFill = 'white';
-const quarterFill = 'black'
+const quarterFill = 'black';
 
 const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"];
@@ -35,6 +35,14 @@ export default class Note {
     this.duration = duration;
   }
 
+  toggleDot() {
+    // not whole note
+    if (this.duration.endsWith('.'))
+      this.duration = this.duration.slice(0, -1);
+    else
+      this.duration += '.';
+  }
+
   select() {
     this.isSelected = true;
   }
@@ -48,17 +56,24 @@ export default class Note {
     return `${ascendingWholeNoteScale[this.noteIndex]}${this.octave}`;
   }
 
+
+  isHighestNote() {
+    return this.name() === 'C8';
+  }
+
   increment() {
-    if (this.name() === 'C8')
-      return;
+    if (this.isHighestNote()) return;
 
     if (this.noteIndex + 1 === ascendingWholeNoteScale.length) this.octave++;
     this.noteIndex = ascendingWholeNoteScale.next(this.noteIndex);
   }
 
+  isLowestNote() {
+    return this.octave === 1 && this.noteIndex === 0;
+  }
+
   decrement() {
-    if (this.octave === 1 && this.noteIndex === 0)
-      return;
+    if (this.isLowestNote()) return;
 
     if (this.noteIndex === 0) this.octave--;
     this.noteIndex = ascendingWholeNoteScale.prev(this.noteIndex);
@@ -79,56 +94,76 @@ export default class Note {
     return verticalIndex(this.name()) * lineHeight / 2;
   }
 
-  ellipse(context, position, extraRadius=0) {
+  drawEllipse(context, position, extraRadius=0) {
     context.ellipse(
       this.x(position), this.y(),
       noteWidth + extraRadius, noteHeight + extraRadius,
       rotation, 0, 2 * Math.PI);
   }
 
-  filledEllipse(context, position, color, extraRadius=0) {
-    this.ellipse(context, position, extraRadius);
+  drawFilledEllipse(context, position, color, extraRadius=0) {
+    this.drawEllipse(context, position, extraRadius);
     context.fillStyle = color;
     context.fill();
   }
 
-  stem(context, position) {
+  drawStem(context, position) {
     context.moveTo(this.x(position) + noteWidth, this.y());
     context.lineTo(this.x(position) + noteWidth, this.y() - stemHeight);
   }
 
   drawWhole(context, position) {
-    this.filledEllipse(context, position, wholeFill);
+    this.drawFilledEllipse(context, position, wholeFill);
   }
 
   drawHalf(context, position) {
-    this.filledEllipse(context, position, wholeFill);
-    this.stem(context, position);
+    this.drawFilledEllipse(context, position, wholeFill);
+    this.drawStem(context, position);
   }
 
   drawQuarter(context, position) {
-    this.filledEllipse(context, position, quarterFill);
-    this.stem(context, position);
+    this.drawFilledEllipse(context, position, quarterFill);
+    this.drawStem(context, position);
+  }
+
+  drawDot(context, position) {
+    const dotSize = 2;
+    const dotPad = 3;
+    const dotDescension = 5;
+    const x = this.x(position) + noteWidth + (2 * dotSize + dotPad);
+    const y = this.y() + dotDescension;
+    context.moveTo(x, y);
+    context.ellipse(x, y, dotSize, dotSize, rotation, 0, 2 * Math.PI);
+    context.fill();
   }
 
   highlightNote(context, position) {
     context.beginPath();
     context.strokeStyle = highlightColor;
     context.lineWidth = highlightStroke;
-    this.ellipse(context, position, highlightStroke);
+    this.drawEllipse(context, position, highlightStroke);
     context.stroke();
   }
 
+  isWholeBase() { return this.duration.startsWith(whole); }
+  isHalfBase() { return this.duration.startsWith(half); }
+  isQuarterBase() { return this.duration.startsWith(quarter); }
+
+  isDottedDuration() {
+    return this.duration.endsWith('.');
+  }
+
   drawNoteOn(context, position) {
-    context.beginPath();
+    context.beginPath()
     context.lineWidth = noteStroke;
     context.strokeStyle = lineColor;
-    switch (this.duration) {
-      case whole: this.drawWhole(context, position); break;
-      case half: this.drawHalf(context, position); break;
-      case quarter: this.drawQuarter(context, position); break;
-      default: break;
-    }
+    // TODO externalize
+    if (this.isWholeBase()) this.drawWhole(context, position);
+    else if (this.isHalfBase()) this.drawHalf(context, position);
+    else if (this.isQuarterBase()) this.drawQuarter(context, position);
+
+    if (this.isDottedDuration())
+      this.drawDot(context, position);
     context.stroke();
   }
 
