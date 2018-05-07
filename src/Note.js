@@ -6,6 +6,7 @@ export const lineHeight = height / 4;
 
 const stemHeight = 36;
 
+const sharpArea = 60;
 const notePad = 25;
 const noteDistance = 8;
 const noteWidth = 7;
@@ -87,7 +88,7 @@ export default class Note {
   }
 
   x(position) {
-    return notePad + (position * (noteDistance + notePad));
+    return sharpArea + notePad + (position * (noteDistance + notePad));
   }
 
   y() {

@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
-//import * as musical from './musical.js/musical';
 import Tone from 'tone';
-import Note, { height, lineHeight, whole, half, quarter } from './Note';
+import Note, { whole, half, quarter } from './Note';
 import NoteSequence from './NoteSequence';
+import { drawStaff, drawSharp } from './Staff';
 import './App.css';
-
-const width = 1200;
 
 const nullSelectable = {
   select: () => {},
@@ -56,6 +54,12 @@ class App extends Component {
 
   // TODO test
   handleKeyPress(e) {
+    if (e.key === '#') {
+      drawSharp(this.context, 'E4');
+      // drawSharp(this.context, 'F4');
+      return;
+    }
+
     if (!this.state.noteSequence.isNoteSelected()) return;
     switch (e.key) {
       // TODO change to incrementSelected / decrementSelected
@@ -76,30 +80,10 @@ class App extends Component {
 
   draw() {
     this.context.clearRect(0, 0, this.canvas().width, this.canvas().height);
-    this.drawStaff(this.context);
+    drawStaff(this.context);
     let i = 0;
     this.state.noteSequence.allNotes()
       .forEach(note => note.drawOn(this.context, i++));
-  }
-
-  line(context, xStart, yStart, xEnd, yEnd, weight=1, color='black') {
-    context.stroke();
-    context.strokeStyle = color;
-    context.lineWidth = weight;
-    context.moveTo(xStart, yStart);
-    context.lineTo(xEnd, yEnd);
-    context.stroke();
-  }
-
-  drawStaff(context) {
-    context.beginPath();
-    const beginningStaffWidth = 7;
-    this.line(context, 0, 0, 0, height, beginningStaffWidth);
-    for (let i = 0, currentY = 0; i < 5; i++) {
-      this.line(context, 0, currentY, width, currentY);
-      currentY += lineHeight;
-    }
-    this.line(context, width, 0, width, height);
   }
 
   mousePosition(canvas, e) {
