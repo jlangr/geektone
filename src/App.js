@@ -55,8 +55,10 @@ class App extends Component {
   // TODO test
   handleKeyPress(e) {
     if (e.key === '#') {
-      drawSharp(this.context, 'E4');
-      // drawSharp(this.context, 'F4');
+      drawSharp(this.context, 'E4', 1);
+      drawSharp(this.context, 'F4', 3);
+      drawSharp(this.context, 'G4', 2);
+      drawSharp(this.context, 'A4', 4);
       return;
     }
 

@@ -9,7 +9,7 @@
   // E ---
   // D
   // C (---)
-import { height, lineHeight } from './Note';
+import Note, { height, lineHeight, sharpsArea, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 
 const width = 1200;
 
@@ -20,15 +20,14 @@ const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=1, color='black') 
   context.lineTo(xEnd, yEnd);
 };
 
-export const drawSharp = (context, note) => {
+export const drawSharp = (context, note, sharpCount) => {
+  const height = 24;
+  const widthBetweenUpstrokes = sharpWidth / 4;
+
   context.beginPath();
 
   const y = noteY(note) + 4;
-  const x = 20;
-
-  const height = 24;
-  const width = 24;
-  const widthBetweenUpstrokes = width / 4;
+  const x = ((sharpCount - 1) % sharpsInWidth) * sharpArea + sharpWidth;
 
   let top = y - (height / 2);
   let bottom = y + (height / 2);
@@ -45,8 +44,8 @@ export const drawSharp = (context, note) => {
 
   context.beginPath();
   weight = 4;
-  let left = x - (width / 2);
-  let right = x + (width / 2);
+  let left = x - (sharpWidth / 2);
+  let right = x + (sharpWidth / 2);
   let upslashYstart = y - (height / 4);
   let upslashYend = upslashYstart - verticalOffset;
   drawLine(context, left, upslashYstart, right, upslashYend, weight);

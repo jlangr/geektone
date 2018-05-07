@@ -6,14 +6,19 @@ export const lineHeight = height / 4;
 
 const stemHeight = 36;
 
-const sharpArea = 60;
 const notePad = 25;
-const noteDistance = 8;
+export const noteDistance = 8;
 const noteWidth = 7;
 const noteHeight = 5;
 const noteStroke = 2;
 const highlightStroke = 4;
 const rotation = 0;
+
+export const sharpsInWidth = 3;
+const sharpPad = 8;
+export const sharpWidth = 24;
+export const sharpArea = sharpWidth + 4;
+export const sharpsArea = (sharpsInWidth * sharpArea) + sharpPad;
 
 const lineColor = 'black';
 const highlightColor = 'red';
@@ -30,10 +35,18 @@ export const whole = '1n';
 export default class Note {
   constructor(name, duration = quarter) {
     this.octave = parseInt(name.slice(-1), 10);
-    let note = name.slice(0, -1);
+    let note = Note.note(name); //name.slice(0, -1);
     this.noteIndex = ascendingWholeNoteScale.indexOf(note);
     this.isSelected = false;
     this.duration = duration;
+  }
+
+  static note(name) {
+    return name.slice(0, -1);
+  }
+
+  static isOnLine(name) {
+    return Note.note(name).charCodeAt() % 2 === 1;
   }
 
   toggleDot() {
@@ -88,7 +101,7 @@ export default class Note {
   }
 
   x(position) {
-    return sharpArea + notePad + (position * (noteDistance + notePad));
+    return sharpsArea + notePad + (position * (noteDistance + notePad));
   }
 
   y() {
