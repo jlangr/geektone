@@ -124,7 +124,6 @@ export default class NoteSequence {
     this.select(this.currentNote);
   }
 
-  // TODO test with duration
   duplicateNote() {
     const note = this.selectedNote();
     const copy = new Note(note.name());

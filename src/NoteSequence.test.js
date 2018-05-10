@@ -153,6 +153,15 @@ describe('NoteSequnce', () => {
       expect(sequence.allNoteNames()).toEqual(['E4', 'E4', 'F4', 'G4']);
     });
 
+    it('includes duration', () => {
+      sequence.note(0).duration = '16n';
+      sequence.select(0);
+
+      sequence.duplicateNote();
+
+      expect(sequence.note(1).duration).toEqual('16n');
+    });
+
     it('introduces new note following selected', () => {
       sequence.selectFirst();
 
