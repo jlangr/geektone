@@ -1,4 +1,6 @@
-This source base will be used for my EAST Orlando tutorial workshop on mobbing. [Orlando EAST 2018]().
+This source base is used for my tutorial workshops on mobbing. 
+
+Upcoming: [Agile + DevOps EAST 2018 (Orlando)](https://agiledevopseast.techwell.com).
 
 ## Getting Started
 
