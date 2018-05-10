@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Tone from 'tone';
-import Note, { whole, half, quarter } from './Note';
+import Note, { whole, half, quarter, eighth } from './Note';
 import NoteSequence from './NoteSequence';
 import { drawStaff, drawSharp } from './Staff';
 import './App.css';
@@ -77,6 +77,7 @@ class App extends Component {
       case 'ArrowRight': this.state.noteSequence.selectNext(); break;
       case 'd': this.state.noteSequence.duplicateNote(); break;
       case 'x': this.state.noteSequence.deleteSelected(); break;
+      case '8': this.state.noteSequence.setSelectedTo(eighth); break;
       case '4': this.state.noteSequence.setSelectedTo(whole); break;
       case '2': this.state.noteSequence.setSelectedTo(half); break;
       case '1': this.state.noteSequence.setSelectedTo(quarter); break;

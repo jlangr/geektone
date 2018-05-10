@@ -28,6 +28,7 @@ const quarterFill = 'black';
 const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"];
 
+export const eighth = '8n';
 export const quarter = '4n';
 export const half = '2n';
 export const whole = '1n';
@@ -126,6 +127,12 @@ export default class Note {
     context.lineTo(this.x(position) + noteWidth, this.y() - stemHeight);
   }
 
+  drawFlag(context, position) {
+    context.moveTo(this.x(position) + noteWidth, this.y() - stemHeight); // dup
+    context.lineTo(this.x(position) + noteWidth + 6,
+      this.y() - stemHeight + (stemHeight / 2));
+  }
+
   drawWhole(context, position) {
     this.drawFilledEllipse(context, position, wholeFill);
   }
@@ -138,6 +145,12 @@ export default class Note {
   drawQuarter(context, position) {
     this.drawFilledEllipse(context, position, quarterFill);
     this.drawStem(context, position);
+  }
+
+  drawEighth(context, position) {
+    this.drawFilledEllipse(context, position, quarterFill);
+    this.drawStem(context, position);
+    this.drawFlag(context, position);
   }
 
   drawDot(context, position) {
@@ -162,6 +175,7 @@ export default class Note {
   isWholeBase() { return this.duration.startsWith(whole); }
   isHalfBase() { return this.duration.startsWith(half); }
   isQuarterBase() { return this.duration.startsWith(quarter); }
+  isEighthBase() { return this.duration.startsWith(eighth); }
 
   isDottedDuration() {
     return this.duration.endsWith('.');
@@ -171,10 +185,11 @@ export default class Note {
     context.beginPath()
     context.lineWidth = noteStroke;
     context.strokeStyle = lineColor;
-    // TODO externalize
+    // TODO inject function into note instead
     if (this.isWholeBase()) this.drawWhole(context, position);
     else if (this.isHalfBase()) this.drawHalf(context, position);
     else if (this.isQuarterBase()) this.drawQuarter(context, position);
+    else if (this.isEighthBase()) this.drawEighth(context, position);
 
     if (this.isDottedDuration())
       this.drawDot(context, position);

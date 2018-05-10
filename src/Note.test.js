@@ -45,6 +45,16 @@ describe('whole note increment/decrement', () => {
   });
 })
 
+describe('note bases', () => {
+  expect(new Note('C4', '8n').isEighthBase()).toBeTruthy();
+  expect(new Note('C4', '8n').isHalfBase()).toBeFalsy();
+  expect(new Note('C4', '4n').isQuarterBase()).toBeTruthy();
+  expect(new Note('C4', '4n').isHalfBase()).toBeFalsy();
+  expect(new Note('C4', '2n').isHalfBase()).toBeTruthy();
+  expect(new Note('C4', '2n').isWholeBase()).toBeFalsy();
+  expect(new Note('C4', '1n').isWholeBase()).toBeTruthy();
+});
+
 describe('hit testing', () => {
   it('is false when click does not hit', () => {
     const note = new Note("D4");
