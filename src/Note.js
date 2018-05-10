@@ -16,7 +16,7 @@ const rotation = 0;
 
 export const sharpsInWidth = 3;
 const sharpPad = 8;
-export const sharpWidth = 24;
+export const sharpWidth = 20;
 export const sharpArea = sharpWidth + 4;
 export const sharpsArea = (sharpsInWidth * sharpArea) + sharpPad;
 

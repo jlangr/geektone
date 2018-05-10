@@ -42,6 +42,11 @@ describe('NoteSequnce', () => {
 
       expect(sequence.selectedNote().name()).toEqual('E4');
     });
+
+    it('removes selection on deselectAll', () => {
+      sequence.selectFirst();
+
+    });
   });
 
   describe('click on position', () => {
@@ -154,7 +159,7 @@ describe('NoteSequnce', () => {
     it('sets to half note', () => {
       sequence.selectFirst();
 
-      sequence.setSelectedToHalfNote();
+      sequence.setSelectedTo(half);
 
       expect(sequence.selectedNote().duration).toEqual(half);
     });

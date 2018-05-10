@@ -6,19 +6,17 @@ import NoteSequence from './NoteSequence';
 import { drawStaff, drawSharp } from './Staff';
 import './App.css';
 
-const nullSelectable = {
-  select: () => {},
-  deselect: () => {}
-};
-
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentNote: -1,
-      currNote: nullSelectable,
-      noteSequence: new NoteSequence()
+      noteSequence: new NoteSequence(),
+      currentNote: new Note('--')
     };
+    this.state.noteSequence.onNoteChange(note => {
+      console.log("onNoteChange", note);
+//      this.setState({currentNote: note});
+    });
     this.state.noteSequence.add(new Note('E4'));
   }
 
@@ -39,13 +37,21 @@ class App extends Component {
           <Button onClick={() => this.stop() }>Stop</Button>
           <p>left/right arrows: select prev / next note <br />
           up/down arrows:  move selected note up / down <br />
-          d     duplicate note <br />
-          x     delete note <br />
+          d     duplicate <br />
+          x     delete <br />
           1: whole 2: half 3: dotted half 4: quarter 8: eighth *: double length /: halve length
+          </p>
+          <p>
+          <input value={this.state.currentNote.name()} />
           </p>
         </Form>
       </div>
     );
+  }
+
+  currentNoteInfo() {
+    console.log('this.state.noteSequence.selectedNote', this.state.noteSequence.selectedNote());
+    return this.state.noteSequence.selectedNote().name();
   }
 
   canvas() {
@@ -109,42 +115,55 @@ class App extends Component {
     }
   }
 
-  notes() {
-    return this.state.noteSequence.allNotes().map(note => note.name());
-  }
-
   stop() {
     Tone.Transport.stop();
   }
 
-  play() {
-var synth = new Tone.FMSynth().toMaster()
+  transportTime(totalSixteenths) {
+    const measures = Math.floor(totalSixteenths / 16);
+    const measureSixteenths = totalSixteenths % 16;
+    const quarters = Math.floor(measureSixteenths / 4);
+    const sixteenths = totalSixteenths % 4;
+    return `${measures}:${quarters}:${sixteenths}`;
+  }
 
-//schedule a series of notes to play as soon as the page loads
-synth.triggerAttackRelease('C4', '4n', '8n')
-synth.triggerAttackRelease('E4', '8n', '4n + 8n')
-synth.triggerAttackRelease('G4', '16n', '2n')
-synth.triggerAttackRelease('B4', '16n', '2n + 8t')
-synth.triggerAttackRelease('G4', '16','2n + 8t * 2')
-synth.triggerAttackRelease('E4', '2n', '0:3')
-//var synth = new Tone.PluckSynth().toMaster();
-    // // const pattern = new Tone.Pattern(function(time, note){
-    // // 	synth.triggerAttackRelease(note, 0.25);
-    // // }, this.notes());
-    // Tone.Transport.bpm.value = 170;
-    //
-    // const  this.state.noteSequence.allNotes().forEach(note => {
-    // //   synth.triggerAttackRelease(note.name(), note.duration);
-    // // });
-    //
-    // var loop = new Tone.Loop(time => {
-    // 	 synth.triggerAttackRelease("C2", "8n", time);
-    //   },
-    //   "4n");
-    //
-    // loop.start("1m").stop("4m");
-    //
-    // Tone.Transport.start();
+  time(noteDuration) {
+    switch (noteDuration) {
+      case '16n': return 1;
+      case '8n': return 2;
+      case '4n': return 4;
+      case '2n': return 8;
+      case '1n': return 16;
+    }
+  }
+
+  noteObjects(notes) {
+    const result = [];
+    let startSixteenths = 0;
+    notes.forEach(note => {
+      let startTime = this.transportTime(startSixteenths);
+      result.push({ name: note.name(), duration: note.duration, time: startTime });
+      startSixteenths += this.time(note.duration);
+    });
+    return result;
+  }
+
+  play() {
+    var synth = new Tone.FMSynth().toMaster();
+
+    // const notes = [
+    //   { name: 'C4', duration: '8n', time: '0'},
+    //   { name: 'D4', duration: '8n', time: '0:0:2'},
+    //   { name: 'E4', duration: '8n', time: '0:1'}
+    // ];
+    let notes = this.noteObjects(this.state.noteSequence.allNotes());
+    console.log('notes:', notes);
+
+    var part = new Tone.Part((time, note) => {
+    	synth.triggerAttackRelease(note.name, note.duration, time);
+    }, notes).start();
+
+    Tone.Transport.start();
   }
 }
 

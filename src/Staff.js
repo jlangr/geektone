@@ -9,7 +9,7 @@
   // E ---
   // D
   // C (---)
-import Note, { height, lineHeight, sharpsArea, sharpArea, sharpWidth, sharpsInWidth } from './Note';
+import { height, lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 
 const width = 1200;
 
@@ -21,7 +21,7 @@ const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=1, color='black') 
 };
 
 export const drawSharp = (context, note, sharpCount) => {
-  const height = 24;
+  const height = 20;
   const widthBetweenUpstrokes = sharpWidth / 4;
 
   context.beginPath();
