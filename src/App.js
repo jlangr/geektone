@@ -95,6 +95,7 @@ class App extends Component {
       .forEach(note => note.drawOn(this.context, i++));
   }
 
+  // TODO test
   mousePosition(canvas, e) {
     const rect = canvas.getBoundingClientRect();
     return {
@@ -105,15 +106,8 @@ class App extends Component {
 
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
-    const notes = this.state.noteSequence.allNotes();
-    for (let i = 0; i < notes.length; i++) {
-      const note = notes[i];
-      if (note.isHit(clickPoint, i)) {
-        this.state.noteSequence.click(i);
-        this.draw();
-        break;
-      }
-    }
+    if (this.state.noteSequence.clickHitNote(clickPoint))
+      this.draw();
   }
 
   stop() {
@@ -150,20 +144,11 @@ class App extends Component {
   }
 
   play() {
-    var synth = new Tone.FMSynth().toMaster();
-
-    // const notes = [
-    //   { name: 'C4', duration: '8n', time: '0'},
-    //   { name: 'D4', duration: '8n', time: '0:0:2'},
-    //   { name: 'E4', duration: '8n', time: '0:1'}
-    // ];
+    var synth = new Tone.PolySynth().toMaster();
     let notes = this.noteObjects(this.state.noteSequence.allNotes());
-    console.log('notes:', notes);
-
     var part = new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();
-
     Tone.Transport.start();
   }
 }

@@ -59,6 +59,15 @@ export default class NoteSequence {
     return this.note(position).isSelected;
   }
 
+  clickHitNote(clickPoint) {
+    for (let i = 0; i < this.notes.length; i++)
+      if (this.notes[i].isHit(clickPoint, i)) {
+        this.click(i);
+        return true;
+      }
+    return false;
+  }
+
   click(position) {
     if (this.isSelected(position))
       this.deselect(position);

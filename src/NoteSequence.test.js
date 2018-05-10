@@ -69,6 +69,39 @@ describe('NoteSequnce', () => {
     });
   });
 
+  describe('clickHitNote', () => {
+    it('returns false when no note hit', () => {
+      const clickPoint = { x: -1, y: -1 };
+
+      const wasNoteHit = sequence.clickHitNote(clickPoint);
+
+      expect(wasNoteHit).toBeFalsy();
+    });
+
+    describe('hit note', () => {
+      let firstNoteClickPoint;
+      let note;
+
+      beforeEach(() => {
+        const position = 1;
+        note = sequence.note(position);
+        firstNoteClickPoint = { x: note.x(position), y: note.y() };
+      });
+
+      it('returns true when note hit', () => {
+        const wasNoteHit = sequence.clickHitNote(firstNoteClickPoint);
+
+        expect(wasNoteHit).toBeTruthy();
+      });
+
+      it('clicks note hit', () => {
+        sequence.clickHitNote(firstNoteClickPoint);
+
+        expect(note.isSelected);
+      });
+    });
+  });
+
   describe('next/prev note', () => {
     it('sets selected to subsequent note', () => {
       sequence.selectFirst();
