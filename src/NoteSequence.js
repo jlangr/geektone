@@ -4,6 +4,7 @@ const nullNote = {
   name: () => 'null',
   select: () => {},
   deselect: () => {},
+  toggleDot: () => {},
   isSelected: false
 };
 
@@ -87,7 +88,6 @@ export default class NoteSequence {
   }
 
   deselectAll() {
-//    this.deselect(this.currentNote);
     this.selectedNote().deselect();
     this.currentNote = -1;
   }
@@ -136,7 +136,6 @@ export default class NoteSequence {
     this.selectedNote().duration = duration;
   }
 
-  // TODO test
   toggleDotForSelected() {
     this.selectedNote().toggleDot();
   }
