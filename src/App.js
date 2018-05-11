@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Tone from 'tone';
-import Note, { whole, half, quarter, eighth } from './Note';
+import Note from './Note';
 import NoteSequence from './NoteSequence';
 import { drawStaff, drawSharp } from './Staff';
+import * as keyHandler from './KeyHandler';
 import './App.css';
 
 class App extends Component {
@@ -13,10 +14,6 @@ class App extends Component {
       noteSequence: new NoteSequence(),
       currentNote: new Note('--')
     };
-    this.state.noteSequence.onNoteChange(note => {
-      console.log("onNoteChange", note);
-//      this.setState({currentNote: note});
-    });
     this.state.noteSequence.add(new Note('E4'));
   }
 
@@ -50,7 +47,6 @@ class App extends Component {
   }
 
   currentNoteInfo() {
-    console.log('this.state.noteSequence.selectedNote', this.state.noteSequence.selectedNote());
     return this.state.noteSequence.selectedNote().name();
   }
 
@@ -58,33 +54,17 @@ class App extends Component {
     return document.getElementById("staff");
   }
 
-  // TODO test
-  handleKeyPress(e) {
-    if (e.key === '#') {
-      drawSharp(this.context, 'E4', 1);
-      drawSharp(this.context, 'F4', 3);
-      drawSharp(this.context, 'G4', 2);
-      drawSharp(this.context, 'A4', 4);
-      return;
-    }
 
-    if (!this.state.noteSequence.isNoteSelected()) return;
-    switch (e.key) {
-      // TODO change to incrementSelected / decrementSelected
-      case 'ArrowUp':    this.state.noteSequence.selectedNote().increment(); break;
-      case 'ArrowDown':  this.state.noteSequence.selectedNote().decrement(); break;
-      case 'ArrowLeft':  this.state.noteSequence.selectPrev(); break;
-      case 'ArrowRight': this.state.noteSequence.selectNext(); break;
-      case 'd': this.state.noteSequence.duplicateNote(); break;
-      case 'x': this.state.noteSequence.deleteSelected(); break;
-      case '8': this.state.noteSequence.setSelectedTo(eighth); break;
-      case '4': this.state.noteSequence.setSelectedTo(whole); break;
-      case '2': this.state.noteSequence.setSelectedTo(half); break;
-      case '1': this.state.noteSequence.setSelectedTo(quarter); break;
-      case '.': this.state.noteSequence.toggleDotForSelected(); break;
-      default: return;
-    }
-    this.draw();
+  testDrawSharps(context) {
+    drawSharp(context, 'E4', 1);
+    drawSharp(context, 'F4', 3);
+    drawSharp(context, 'G4', 2);
+    drawSharp(context, 'A4', 4);
+  }
+
+  handleKeyPress(e) {
+    if (e.key === '#') this.testDrawSharps(this.context);
+    if (keyHandler.handleKey(e, this.state.noteSequence)) this.draw();
   }
 
   draw() {
@@ -129,6 +109,7 @@ class App extends Component {
       case '4n': return 4;
       case '2n': return 8;
       case '1n': return 16;
+      default: return 4;
     }
   }
 
@@ -146,7 +127,7 @@ class App extends Component {
   play() {
     var synth = new Tone.PolySynth().toMaster();
     let notes = this.noteObjects(this.state.noteSequence.allNotes());
-    var part = new Tone.Part((time, note) => {
+    new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();
     Tone.Transport.start();

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './js/ArrayProtos';
 import Note from './Note';
 import App, { time, transportTime } from './App';
 
@@ -41,4 +42,5 @@ describe('time', () => {
       { name: 'D4', duration: '4n', time: '0:0:2'}
     ]);
   });
+
 });
