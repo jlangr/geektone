@@ -1,4 +1,4 @@
-import { whole, half, quarter, eighth } from './Note';
+import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
 
 export const handleKey = (e, noteSequence) => {
   if (!noteSequence.isNoteSelected()) return false;
@@ -15,6 +15,8 @@ export const handleKey = (e, noteSequence) => {
     case '2': noteSequence.setSelectedTo(half); return true;
     case '1': noteSequence.setSelectedTo(whole); return true;
     case '.': noteSequence.toggleDotForSelected(); return true;
+    case '/': noteSequence.halveSelectedDuration(); return true;
+    case '*': noteSequence.doubleSelectedDuration(); return true;
     default: return false;
   }
 }

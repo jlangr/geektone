@@ -1,4 +1,5 @@
 import Note from './Note';
+import * as timeUtil from './TimeUtil';
 
 const nullNote = {
   name: () => 'null',
@@ -134,6 +135,14 @@ export default class NoteSequence {
 
   setSelectedTo(duration) {
     this.selectedNote().duration = duration;
+  }
+
+  halveSelectedDuration() {
+    this.selectedNote().duration = timeUtil.halveDuration(this.selectedNote().duration);
+  }
+
+  doubleSelectedDuration() {
+    this.selectedNote().duration = timeUtil.doubleDuration(this.selectedNote().duration);
   }
 
   toggleDotForSelected() {

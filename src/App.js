@@ -5,6 +5,7 @@ import Note from './Note';
 import NoteSequence from './NoteSequence';
 import { drawStaff, drawSharp } from './Staff';
 import * as keyHandler from './KeyHandler';
+import * as timeUtil from './TimeUtil';
 import './App.css';
 
 class App extends Component {
@@ -46,14 +47,9 @@ class App extends Component {
     );
   }
 
-  currentNoteInfo() {
-    return this.state.noteSequence.selectedNote().name();
-  }
-
   canvas() {
     return document.getElementById("staff");
   }
-
 
   testDrawSharps(context) {
     drawSharp(context, 'E4', 1);
@@ -94,39 +90,9 @@ class App extends Component {
     Tone.Transport.stop();
   }
 
-  transportTime(totalSixteenths) {
-    const measures = Math.floor(totalSixteenths / 16);
-    const measureSixteenths = totalSixteenths % 16;
-    const quarters = Math.floor(measureSixteenths / 4);
-    const sixteenths = totalSixteenths % 4;
-    return `${measures}:${quarters}:${sixteenths}`;
-  }
-
-  time(noteDuration) {
-    switch (noteDuration) {
-      case '16n': return 1;
-      case '8n': return 2;
-      case '4n': return 4;
-      case '2n': return 8;
-      case '1n': return 16;
-      default: return 4;
-    }
-  }
-
-  noteObjects(notes) {
-    const result = [];
-    let startSixteenths = 0;
-    notes.forEach(note => {
-      let startTime = this.transportTime(startSixteenths);
-      result.push({ name: note.name(), duration: note.duration, time: startTime });
-      startSixteenths += this.time(note.duration);
-    });
-    return result;
-  }
-
   play() {
     var synth = new Tone.PolySynth().toMaster();
-    let notes = this.noteObjects(this.state.noteSequence.allNotes());
+    let notes = timeUtil.noteObjects(this.state.noteSequence.allNotes());
     new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();

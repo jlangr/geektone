@@ -1,5 +1,6 @@
 import Rect from './Rect';
 import { verticalIndex } from './Staff';
+import { whole, half, quarter, eighth } from './TimeUtil';
 
 export const height = 64;
 export const lineHeight = height / 4;
@@ -27,11 +28,6 @@ const quarterFill = 'black';
 
 const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"];
-
-export const eighth = '8n';
-export const quarter = '4n';
-export const half = '2n';
-export const whole = '1n';
 
 export default class Note {
   constructor(name, duration = quarter) {

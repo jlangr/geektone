@@ -2,6 +2,7 @@ import './js/ArrayProtos';
 import NoteSequence from './NoteSequence';
 import Note from './Note';
 import { handleKey } from './KeyHandler';
+import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
 
 describe('keystrokes', () => {
   let noteSequence;
@@ -84,7 +85,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to 8th on 8', () => {
-    noteSequence.add(new Note('E4', '16n'));
+    noteSequence.add(new Note('E4', sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '8'}, noteSequence);
@@ -93,7 +94,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to quarter on 4', () => {
-    noteSequence.add(new Note('E4', '16n'));
+    noteSequence.add(new Note('E4', sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '4'}, noteSequence);
@@ -102,7 +103,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to half on 2', () => {
-    noteSequence.add(new Note('E4', '16n'));
+    noteSequence.add(new Note('E4', sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '2'}, noteSequence);
@@ -111,7 +112,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to whole on 1', () => {
-    noteSequence.add(new Note('E4', '16n'));
+    noteSequence.add(new Note('E4', sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '1'}, noteSequence);
@@ -126,5 +127,23 @@ describe('keystrokes', () => {
     handleKey({key: '.'}, noteSequence);
 
     expect(noteSequence.firstNote().duration).toEqual('4n.');
+  });
+
+  it('halves selected note duration on /', () => {
+    noteSequence.add(new Note('E4', '2n'));
+    noteSequence.selectFirst();
+
+    handleKey({key: '/'}, noteSequence);
+
+    expect(noteSequence.firstNote().duration).toEqual('4n');
+  });
+
+  it('doubles selected note duration on *', () => {
+    noteSequence.add(new Note('E4', '2n'));
+    noteSequence.selectFirst();
+
+    handleKey({key: '*'}, noteSequence);
+
+    expect(noteSequence.firstNote().duration).toEqual('1n');
   });
 });

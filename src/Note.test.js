@@ -1,4 +1,5 @@
-import Note, { quarter } from './Note';
+import Note from './Note';
+import { quarter } from './TimeUtil';
 import './js/ArrayProtos';
 
 describe('note defaults', () => {
