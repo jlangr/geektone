@@ -1,6 +1,6 @@
 import Rect from './Rect';
 import { verticalIndex } from './Staff';
-import { whole, half, quarter, eighth } from './TimeUtil';
+import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
 
 export const height = 64;
 export const lineHeight = height / 4;
@@ -124,9 +124,17 @@ export default class Note {
   }
 
   drawFlag(context, position) {
-    context.moveTo(this.x(position) + noteWidth, this.y() - stemHeight); // dup
+    context.moveTo(this.x(position) + noteWidth, this.y() - stemHeight);
     context.lineTo(this.x(position) + noteWidth + 6,
       this.y() - stemHeight + (stemHeight / 2));
+  }
+
+  drawLowerFlag(context, position) {
+    const y = this.y() - stemHeight;
+    const yIncrease = 12;
+    context.moveTo(this.x(position) + noteWidth, y + yIncrease);
+    context.lineTo(this.x(position) + noteWidth + 6,
+      y + (stemHeight / 2) + yIncrease);
   }
 
   drawWhole(context, position) {
@@ -147,6 +155,13 @@ export default class Note {
     this.drawFilledEllipse(context, position, quarterFill);
     this.drawStem(context, position);
     this.drawFlag(context, position);
+  }
+
+  drawSixteenth(context, position) {
+    this.drawFilledEllipse(context, position, quarterFill);
+    this.drawStem(context, position);
+    this.drawFlag(context, position);
+    this.drawLowerFlag(context, position);
   }
 
   drawDot(context, position) {
@@ -172,7 +187,9 @@ export default class Note {
   isHalfBase() { return this.duration.startsWith(half); }
   isQuarterBase() { return this.duration.startsWith(quarter); }
   isEighthBase() { return this.duration.startsWith(eighth); }
+  isSixteenthBase() { return this.duration.startsWith(sixteenth); }
 
+  // TODO test
   isDottedDuration() {
     return this.duration.endsWith('.');
   }
@@ -186,6 +203,7 @@ export default class Note {
     else if (this.isHalfBase()) this.drawHalf(context, position);
     else if (this.isQuarterBase()) this.drawQuarter(context, position);
     else if (this.isEighthBase()) this.drawEighth(context, position);
+    else if (this.isSixteenthBase()) this.drawSixteenth(context, position);
 
     if (this.isDottedDuration())
       this.drawDot(context, position);
