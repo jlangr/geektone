@@ -60,29 +60,36 @@ describe('to JSON', () => {
   expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n'});
 });
 
-describe('toggle dot', () => {
-  it('adds dot to non dotted note', () => {
-    const note = new Note('F2', '4n');
+describe('dotted notes', () => {
+  describe('toggle', () => {
+    it('toggles dot to non dotted note', () => {
+      const note = new Note('F2', '4n');
 
-    note.toggleDot();
+      note.toggleDot();
 
-    expect(note.duration).toEqual('4n.');
+      expect(note.duration).toEqual('4n.');
+    });
+
+    it('removes dot from dotted note', () => {
+      const note = new Note('F2', '2n.');
+
+      note.toggleDot();
+
+      expect(note.duration).toEqual('2n');
+    });
+
+    it('does not toggle whole notes', () => {
+      const note = new Note('G4', '1n');
+
+      note.toggleDot();
+
+      expect(note.duration).toEqual('1n');
+    });
   });
 
-  it('removes dot from dotted note', () => {
-    const note = new Note('F2', '2n.');
-
-    note.toggleDot();
-
-    expect(note.duration).toEqual('2n');
-  });
-
-  it('does not toggle whole notes', () => {
-    const note = new Note('G4', '1n');
-
-    note.toggleDot();
-
-    expect(note.duration).toEqual('1n');
+  describe('is dotted', () => {
+    expect(new Note('E4', '4n').isDottedDuration()).toBeFalsy();
+    expect(new Note('E4', '4n.').isDottedDuration()).toBeTruthy();
   });
 
 });
