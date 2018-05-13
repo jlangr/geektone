@@ -51,7 +51,8 @@ export default class Note {
   }
 
   toggleDot() {
-    // TODO do not toggle whole note
+    if (this.isWholeBase()) return;
+
     if (this.duration.endsWith('.'))
       this.duration = this.duration.slice(0, -1);
     else
