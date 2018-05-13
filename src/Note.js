@@ -46,8 +46,12 @@ export default class Note {
     return Note.note(name).charCodeAt() % 2 === 1;
   }
 
+  toJSON() {
+    return { name: this.name(), duration: this.duration };
+  }
+
   toggleDot() {
-    // not whole note
+    // TODO do not toggle whole note
     if (this.duration.endsWith('.'))
       this.duration = this.duration.slice(0, -1);
     else

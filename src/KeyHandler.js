@@ -1,4 +1,4 @@
-import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
+import { whole, half, quarter, eighth } from './TimeUtil';
 
 export const handleKey = (e, noteSequence) => {
   if (!noteSequence.isNoteSelected()) return false;

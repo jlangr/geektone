@@ -8,6 +8,10 @@ import * as keyHandler from './KeyHandler';
 import * as timeUtil from './TimeUtil';
 import './App.css';
 
+import axios from 'axios';
+
+const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
+
 class App extends Component {
   constructor() {
     super();
@@ -33,6 +37,8 @@ class App extends Component {
         <Form>
           <Button onClick={() => this.play() }>Play</Button>
           <Button onClick={() => this.stop() }>Stop</Button>
+          <Button onClick={() => this.save() }>Save</Button>
+          <Button onClick={() => this.load() }>Load</Button>
           <p>left/right arrows: select prev / next note <br />
           up/down arrows:  move selected note up / down <br />
           d     duplicate <br />
@@ -58,8 +64,33 @@ class App extends Component {
     drawSharp(context, 'A4', 4);
   }
 
+  // TODO test
+  load() {
+    return axiosClient.get('http://localhost:3001/song')
+      .then(response => {
+        console.log('got', response.data);
+      })
+      .catch(error => { console.log('error on get', error); });
+  }
+
+  // TODO test
+  save() {
+    const notes = this.state.noteSequence.allNotes()
+      .map(note => note.toJSON());
+
+    const song = {
+      name: 'default',
+      tracks: [{ name: 'track 1', notes: notes }]
+    };
+
+    return axiosClient.post('http://localhost:3001/song', song)
+      .then(response => { })
+      .catch(error => { console.log('unable to save your song, sorry', error); });
+  }
+
   handleKeyPress(e) {
-    if (e.key === '#') this.testDrawSharps(this.context);
+    if (e.key === '#') { this.testDrawSharps(this.context); return; }
+    if (e.key === 's') { this.save(); return; }
     if (keyHandler.handleKey(e, this.state.noteSequence)) this.draw();
   }
 

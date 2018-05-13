@@ -2,10 +2,10 @@ import Note from './Note';
 import { quarter } from './TimeUtil';
 import './js/ArrayProtos';
 
-describe('note defaults', () => {
-    it('to quarter note', () => {
-      expect(new Note('F3').duration).toEqual(quarter);
-    });
+describe('a note', () => {
+  it('defaults to quarter note', () => {
+    expect(new Note('F3').duration).toEqual(quarter);
+  });
 });
 
 describe('whole note increment/decrement', () => {
@@ -54,6 +54,10 @@ describe('note bases', () => {
   expect(new Note('C4', '2n').isHalfBase()).toBeTruthy();
   expect(new Note('C4', '2n').isWholeBase()).toBeFalsy();
   expect(new Note('C4', '1n').isWholeBase()).toBeTruthy();
+});
+
+describe('to JSON', () => {
+  expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n'});
 });
 
 describe('hit testing', () => {
