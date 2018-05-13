@@ -2,10 +2,10 @@ import { whole, half, quarter, eighth } from './TimeUtil';
 
 export const handleKey = (e, noteSequence) => {
   if (!noteSequence.isNoteSelected()) return false;
+  
   switch (e.key) {
-    // TODO change to incrementSelected / decrementSelected
-    case 'ArrowUp':    noteSequence.selectedNote().increment(); return true;
-    case 'ArrowDown':  noteSequence.selectedNote().decrement(); return true;
+    case 'ArrowUp':    noteSequence.incrementSelected(); return true;
+    case 'ArrowDown':  noteSequence.decrementSelected(); return true;
     case 'ArrowLeft':  noteSequence.selectPrev(); return true;
     case 'ArrowRight': noteSequence.selectNext(); return true;
     case 'd': noteSequence.duplicateNote(); return true;

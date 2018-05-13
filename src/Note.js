@@ -72,7 +72,6 @@ export default class Note {
     return `${ascendingWholeNoteScale[this.noteIndex]}${this.octave}`;
   }
 
-
   isHighestNote() {
     return this.name() === 'C8';
   }
@@ -194,7 +193,6 @@ export default class Note {
   isEighthBase() { return this.duration.startsWith(eighth); }
   isSixteenthBase() { return this.duration.startsWith(sixteenth); }
 
-  // TODO test
   isDottedDuration() {
     return this.duration.endsWith('.');
   }

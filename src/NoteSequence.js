@@ -148,4 +148,12 @@ export default class NoteSequence {
   toggleDotForSelected() {
     this.selectedNote().toggleDot();
   }
+
+  incrementSelected() {
+    this.selectedNote().increment();
+  }
+
+  decrementSelected() {
+    this.selectedNote().decrement();
+  }
 }

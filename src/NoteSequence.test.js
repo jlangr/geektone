@@ -207,6 +207,29 @@ describe('NoteSequnce', () => {
     });
   });
 
+  describe('increment/decrement selected', () => {
+    beforeEach(() => {
+      sequence.selectFirst();
+    });
+
+    it('increments selected', () => {
+      expect(sequence.firstNote().name()).toEqual('E4');
+
+      sequence.incrementSelected();
+
+      expect(sequence.selectedNote().name()).toEqual('F4');
+    });
+
+    it('decrements selected', () => {
+      expect(sequence.firstNote().name()).toEqual('E4');
+
+      sequence.decrementSelected();
+
+      expect(sequence.selectedNote().name()).toEqual('D4');
+    });
+
+  });
+
   describe('toggleDotForSelected', () => {
     it('does nothing when note not selected', () => {
       sequence.toggleDotForSelected();
