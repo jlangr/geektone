@@ -102,7 +102,6 @@ class App extends Component {
       .forEach(note => note.drawOn(this.context, i++));
   }
 
-  // TODO test
   mousePosition(canvas, e) {
     const rect = canvas.getBoundingClientRect();
     return {
@@ -113,6 +112,7 @@ class App extends Component {
 
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
+    console.log('click point', clickPoint);
     if (this.state.noteSequence.clickHitNote(clickPoint))
       this.draw();
   }
