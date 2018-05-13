@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './js/ArrayProtos';
 import Note from './Note';
 import App, { time, transportTime } from './App';
 

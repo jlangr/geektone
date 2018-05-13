@@ -1,6 +1,7 @@
 import Rect from './Rect';
 import { verticalIndex } from './Staff';
 import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
+import { next, prev } from './js/ArrayUtil';
 
 export const height = 64;
 export const lineHeight = height / 4;
@@ -80,7 +81,7 @@ export default class Note {
     if (this.isHighestNote()) return;
 
     if (this.noteIndex + 1 === ascendingWholeNoteScale.length) this.octave++;
-    this.noteIndex = ascendingWholeNoteScale.next(this.noteIndex);
+    this.noteIndex = next(ascendingWholeNoteScale, this.noteIndex);
   }
 
   isLowestNote() {
@@ -91,7 +92,7 @@ export default class Note {
     if (this.isLowestNote()) return;
 
     if (this.noteIndex === 0) this.octave--;
-    this.noteIndex = ascendingWholeNoteScale.prev(this.noteIndex);
+    this.noteIndex = prev(ascendingWholeNoteScale, this.noteIndex);
   }
 
   // TODO externalize below ... to Staff?

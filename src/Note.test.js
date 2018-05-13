@@ -1,6 +1,5 @@
 import Note from './Note';
 import { quarter } from './TimeUtil';
-import './js/ArrayProtos';
 
 describe('a note', () => {
   it('defaults to quarter note', () => {

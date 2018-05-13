@@ -1,5 +1,6 @@
 import Note from './Note';
 import * as timeUtil from './TimeUtil';
+import { prev, next } from './js/ArrayUtil';
 
 const nullNote = {
   name: () => 'null',
@@ -109,13 +110,13 @@ export default class NoteSequence {
 
   selectNext() {
     this.selectedNote().deselect();
-    this.currentNote = this.notes.next(this.currentNote);
+    this.currentNote = next(this.notes, this.currentNote);
     this.selectedNote().select();
   }
 
   selectPrev() {
     this.selectedNote().deselect();
-    this.currentNote = this.notes.prev(this.currentNote);
+    this.currentNote = prev(this.notes, this.currentNote);
     this.selectedNote().select();
   }
 

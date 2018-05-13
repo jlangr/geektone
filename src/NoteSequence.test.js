@@ -1,4 +1,3 @@
-import './js/ArrayProtos';
 import NoteSequence from './NoteSequence';
 import Note, { quarter, half, whole } from './Note';
 

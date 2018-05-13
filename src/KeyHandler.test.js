@@ -1,4 +1,3 @@
-import './js/ArrayProtos';
 import NoteSequence from './NoteSequence';
 import Note from './Note';
 import { handleKey } from './KeyHandler';
