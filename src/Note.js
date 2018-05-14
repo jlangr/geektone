@@ -1,7 +1,6 @@
 import Rect from './Rect';
 import { verticalIndex } from './Staff';
-import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
-import { isWholeBase, isHalfBase, isQuarterBase, isEighthBase, isSixteenthBase } from './Duration';
+import * as Duration from './Duration';
 import { next, prev } from './js/ArrayUtil';
 
 export const height = 64;
@@ -32,7 +31,7 @@ const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"];
 
 export default class Note {
-  constructor(name, duration = quarter) {
+  constructor(name, duration = Duration.quarter) {
     this.octave = parseInt(name.slice(-1), 10);
     let note = Note.note(name); //name.slice(0, -1);
     this.noteIndex = ascendingWholeNoteScale.indexOf(note);
@@ -53,7 +52,8 @@ export default class Note {
   }
 
   toggleDot() {
-    if (isWholeBase(this.duration) || isSixteenthBase(this.duration)) return;
+    if (Duration.isWholeBase(this.duration) || Duration.isSixteenthBase(this.duration))
+      return;
 
     if (this.duration.endsWith('.'))
       this.duration = this.duration.slice(0, -1);
@@ -199,11 +199,11 @@ export default class Note {
     context.lineWidth = noteStroke;
     context.strokeStyle = lineColor;
     // TODO inject function into note instead
-    if (isWholeBase(this.duration)) this.drawWhole(context, position);
-    else if (isHalfBase(this.duration)) this.drawHalf(context, position);
-    else if (isQuarterBase(this.duration)) this.drawQuarter(context, position);
-    else if (isEighthBase(this.duration)) this.drawEighth(context, position);
-    else if (isSixteenthBase(this.duration)) this.drawSixteenth(context, position);
+    if (Duration.isWholeBase(this.duration)) this.drawWhole(context, position);
+    else if (Duration.isHalfBase(this.duration)) this.drawHalf(context, position);
+    else if (Duration.isQuarterBase(this.duration)) this.drawQuarter(context, position);
+    else if (Duration.isEighthBase(this.duration)) this.drawEighth(context, position);
+    else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenth(context, position);
 
     if (this.isDottedDuration())
       this.drawDot(context, position);

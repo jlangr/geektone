@@ -1,19 +1,51 @@
-import { noteBase, isWholeBase, isHalfBase, isQuarterBase, isEighthBase, isSixteenthBase } from './Duration';
+import * as Duration from './Duration';
 import Note from './Note';
+
+describe('time', () => {
+  it('converts notes into equivalent 16ths', () => {
+    expect(Duration.time('16n')).toEqual(1);
+    expect(Duration.time('8n')).toEqual(2);
+    expect(Duration.time('4n')).toEqual(4);
+    expect(Duration.time('2n')).toEqual(8);
+    expect(Duration.time('1n')).toEqual(16);
+  });
+
+  it('converts dotted notes into equivalent 16ths', () => {
+    expect(Duration.time('8n.')).toEqual(3);
+    expect(Duration.time('4n.')).toEqual(6);
+    expect(Duration.time('2n.')).toEqual(12);
+  });
+});
 
 describe('note bases', () => {
   it('returns truthy or falsiness of base inquiries', () => {
-    expect(isEighthBase('8n')).toBeTruthy();
-    expect(isHalfBase('8n')).toBeFalsy();
-    expect(isQuarterBase('4n')).toBeTruthy();
-    expect(isHalfBase('4n')).toBeFalsy();
-    expect(isHalfBase('2n')).toBeTruthy();
-    expect(isWholeBase('2n')).toBeFalsy();
-    expect(isWholeBase('1n')).toBeTruthy();
-    expect(isSixteenthBase('16n')).toBeTruthy();
+    expect(Duration.isEighthBase('8n')).toBeTruthy();
+    expect(Duration.isHalfBase('8n')).toBeFalsy();
+    expect(Duration.isQuarterBase('4n')).toBeTruthy();
+    expect(Duration.isHalfBase('4n')).toBeFalsy();
+    expect(Duration.isHalfBase('2n')).toBeTruthy();
+    expect(Duration.isWholeBase('2n')).toBeFalsy();
+    expect(Duration.isWholeBase('1n')).toBeTruthy();
+    expect(Duration.isSixteenthBase('16n')).toBeTruthy();
   });
 
   it('can be extracted', () => {
-    expect(noteBase('16n')).toEqual('16n');
+    expect(Duration.noteBase('16n')).toEqual('16n');
   });
+});
+
+it ('halves durations', () => {
+  expect(Duration.halveDuration('8n')).toEqual('16n');
+});
+
+it ('does not halve the smallest duration', () => {
+  expect(Duration.halveDuration('16n')).toEqual('16n');
+});
+
+it ('doubles durations', () => {
+  expect(Duration.doubleDuration('2n')).toEqual('1n');
+});
+
+it ('does not double the largest duration', () => {
+  expect(Duration.doubleDuration('1n')).toEqual('1n');
 });

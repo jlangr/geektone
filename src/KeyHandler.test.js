@@ -1,7 +1,7 @@
 import NoteSequence from './NoteSequence';
 import Note from './Note';
 import { handleKey } from './KeyHandler';
-import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
+import * as Duration from './Duration';
 
 describe('keystrokes', () => {
   let noteSequence;
@@ -84,7 +84,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to 8th on 8', () => {
-    noteSequence.add(new Note('E4', sixteenth));
+    noteSequence.add(new Note('E4', Duration.sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '8'}, noteSequence);
@@ -93,7 +93,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to quarter on 4', () => {
-    noteSequence.add(new Note('E4', sixteenth));
+    noteSequence.add(new Note('E4', Duration.sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '4'}, noteSequence);
@@ -102,7 +102,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to half on 2', () => {
-    noteSequence.add(new Note('E4', sixteenth));
+    noteSequence.add(new Note('E4', Duration.sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '2'}, noteSequence);
@@ -111,7 +111,7 @@ describe('keystrokes', () => {
   });
 
   it('sets selected note to whole on 1', () => {
-    noteSequence.add(new Note('E4', sixteenth));
+    noteSequence.add(new Note('E4', Duration.sixteenth));
     noteSequence.selectFirst();
 
     handleKey({key: '1'}, noteSequence);

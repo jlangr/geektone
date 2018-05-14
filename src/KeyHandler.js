@@ -1,4 +1,4 @@
-import { whole, half, quarter, eighth } from './TimeUtil';
+import * as Duration from './Duration';
 
 export const handleKey = (e, noteSequence) => {
   if (!noteSequence.isNoteSelected()) return false;
@@ -10,10 +10,10 @@ export const handleKey = (e, noteSequence) => {
     case 'ArrowRight':noteSequence.selectNext(); return true;
     case 'd': noteSequence.duplicateNote(); return true;
     case 'x': noteSequence.deleteSelected(); return true;
-    case '8': noteSequence.setSelectedTo(eighth); return true;
-    case '4': noteSequence.setSelectedTo(quarter); return true;
-    case '2': noteSequence.setSelectedTo(half); return true;
-    case '1': noteSequence.setSelectedTo(whole); return true;
+    case '8': noteSequence.setSelectedTo(Duration.eighth); return true;
+    case '4': noteSequence.setSelectedTo(Duration.quarter); return true;
+    case '2': noteSequence.setSelectedTo(Duration.half); return true;
+    case '1': noteSequence.setSelectedTo(Duration.whole); return true;
     case '.': noteSequence.toggleDotForSelected(); return true;
     case '/': noteSequence.halveSelectedDuration(); return true;
     case '*': noteSequence.doubleSelectedDuration(); return true;

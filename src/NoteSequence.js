@@ -1,5 +1,6 @@
 import Note from './Note';
-import * as timeUtil from './TimeUtil';
+import * as timeUtil from './TimeUtil'; // needed?
+import * as Duration from './Duration';
 import { prev, next } from './js/ArrayUtil';
 
 const nullNote = {
@@ -140,11 +141,11 @@ export default class NoteSequence {
   }
 
   halveSelectedDuration() {
-    this.selectedNote().duration = timeUtil.halveDuration(this.selectedNote().duration);
+    this.selectedNote().duration = Duration.halveDuration(this.selectedNote().duration);
   }
 
   doubleSelectedDuration() {
-    this.selectedNote().duration = timeUtil.doubleDuration(this.selectedNote().duration);
+    this.selectedNote().duration = Duration.doubleDuration(this.selectedNote().duration);
   }
 
   toggleDotForSelected() {
