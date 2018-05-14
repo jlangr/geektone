@@ -14,6 +14,7 @@ export default class NoteSequence {
   constructor() {
     this.notes = [];
     this.currentNote = -1;
+    // is this used anymore
     this.noteChangeFn = () => {};
   }
 

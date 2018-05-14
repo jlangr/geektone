@@ -1,3 +1,5 @@
+import { isDotted, noteBase } from './Duration';
+
 export const sixteenth = '16n';
 export const eighth = '8n';
 export const quarter = '4n';
@@ -15,7 +17,10 @@ export const transportTime = totalSixteenths => {
 };
 
 export const time = noteDuration => {
-  return sixteenths[noteDuration];
+  let result = sixteenths[noteBase(noteDuration)];
+  if (isDotted(noteDuration))
+    result += (result / 2);
+  return result;
 };
 
 export const noteForSixteenths = sixteenths => {

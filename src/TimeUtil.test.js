@@ -10,6 +10,12 @@ describe('time', () => {
     expect(time('1n')).toEqual(16);
   });
 
+  it('converts dotted notes into equivalent 16ths', () => {
+    expect(time('8n.')).toEqual(3);
+    expect(time('4n.')).toEqual(6);
+    expect(time('2n.')).toEqual(12);
+  });
+
   it('converts number of 16s into bars:quarters:sixteenths format', () => {
     expect(transportTime(1)).toEqual('0:0:1');
     expect(transportTime(2)).toEqual('0:0:2');

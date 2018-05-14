@@ -66,9 +66,17 @@ class App extends Component {
 
   // TODO test
   load() {
+    const app = this;
     return axiosClient.get('http://localhost:3001/song')
       .then(response => {
-        console.log('got', response.data);
+        console.log('notes count', response.data.tracks[0].notes.length);
+        const noteSequence = new NoteSequence();
+        response.data.tracks[0].notes.forEach(note => {
+          noteSequence.add(new Note(note.name, note.duration));
+        });
+        app.setState({ noteSequence: noteSequence, currentNote: noteSequence.firstNote() });
+        app.context = app.canvas().getContext("2d");
+        app.drawUsing(app.context);
       })
       .catch(error => { console.log('error on get', error); });
   }
@@ -95,7 +103,11 @@ class App extends Component {
   }
 
   draw() {
-    this.context.clearRect(0, 0, this.canvas().width, this.canvas().height);
+    this.drawUsing(this.context);
+  }
+
+  drawUsing(context) {
+    context.clearRect(0, 0, this.canvas().width, this.canvas().height);
     drawStaff(this.context);
     let i = 0;
     this.state.noteSequence.allNotes()
@@ -124,6 +136,7 @@ class App extends Component {
   play() {
     var synth = new Tone.PolySynth().toMaster();
     let notes = timeUtil.noteObjects(this.state.noteSequence.allNotes());
+    console.log('notes to play:', notes);
     new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();

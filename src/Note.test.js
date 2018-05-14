@@ -45,16 +45,6 @@ describe('whole note increment/decrement', () => {
   });
 })
 
-describe('note bases', () => {
-  expect(new Note('C4', '8n').isEighthBase()).toBeTruthy();
-  expect(new Note('C4', '8n').isHalfBase()).toBeFalsy();
-  expect(new Note('C4', '4n').isQuarterBase()).toBeTruthy();
-  expect(new Note('C4', '4n').isHalfBase()).toBeFalsy();
-  expect(new Note('C4', '2n').isHalfBase()).toBeTruthy();
-  expect(new Note('C4', '2n').isWholeBase()).toBeFalsy();
-  expect(new Note('C4', '1n').isWholeBase()).toBeTruthy();
-});
-
 describe('to JSON', () => {
   expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n'});
 });
@@ -83,6 +73,14 @@ describe('dotted notes', () => {
       note.toggleDot();
 
       expect(note.duration).toEqual('1n');
+    });
+
+    it('does not toggle 16th notes', () => {
+      const note = new Note('G4', '16n');
+
+      note.toggleDot();
+
+      expect(note.duration).toEqual('16n');
     });
   });
 

@@ -1,6 +1,7 @@
 import Rect from './Rect';
 import { verticalIndex } from './Staff';
 import { whole, half, quarter, eighth, sixteenth } from './TimeUtil';
+import { isWholeBase, isHalfBase, isQuarterBase, isEighthBase, isSixteenthBase } from './Duration';
 import { next, prev } from './js/ArrayUtil';
 
 export const height = 64;
@@ -52,7 +53,7 @@ export default class Note {
   }
 
   toggleDot() {
-    if (this.isWholeBase()) return;
+    if (isWholeBase(this.duration) || isSixteenthBase(this.duration)) return;
 
     if (this.duration.endsWith('.'))
       this.duration = this.duration.slice(0, -1);
@@ -188,12 +189,7 @@ export default class Note {
     context.stroke();
   }
 
-  isWholeBase() { return this.duration.startsWith(whole); }
-  isHalfBase() { return this.duration.startsWith(half); }
-  isQuarterBase() { return this.duration.startsWith(quarter); }
-  isEighthBase() { return this.duration.startsWith(eighth); }
-  isSixteenthBase() { return this.duration.startsWith(sixteenth); }
-
+  // TODO dup from Duration.js
   isDottedDuration() {
     return this.duration.endsWith('.');
   }
@@ -203,11 +199,11 @@ export default class Note {
     context.lineWidth = noteStroke;
     context.strokeStyle = lineColor;
     // TODO inject function into note instead
-    if (this.isWholeBase()) this.drawWhole(context, position);
-    else if (this.isHalfBase()) this.drawHalf(context, position);
-    else if (this.isQuarterBase()) this.drawQuarter(context, position);
-    else if (this.isEighthBase()) this.drawEighth(context, position);
-    else if (this.isSixteenthBase()) this.drawSixteenth(context, position);
+    if (isWholeBase(this.duration)) this.drawWhole(context, position);
+    else if (isHalfBase(this.duration)) this.drawHalf(context, position);
+    else if (isQuarterBase(this.duration)) this.drawQuarter(context, position);
+    else if (isEighthBase(this.duration)) this.drawEighth(context, position);
+    else if (isSixteenthBase(this.duration)) this.drawSixteenth(context, position);
 
     if (this.isDottedDuration())
       this.drawDot(context, position);
