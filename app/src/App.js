@@ -140,6 +140,7 @@ class App extends Component {
     new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();
+    Tone.Transport.bpm.value = 144;
     Tone.Transport.start();
   }
 }
