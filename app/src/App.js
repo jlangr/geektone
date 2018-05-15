@@ -17,6 +17,7 @@ class App extends Component {
     super();
     this.state = {
       noteSequence: new NoteSequence(),
+      track2: new NoteSequence(),
       currentNote: new Note('--')
     };
     this.state.noteSequence.add(new Note('E4'));
@@ -74,7 +75,12 @@ class App extends Component {
         response.data.tracks[0].notes.forEach(note => {
           noteSequence.add(new Note(note.name, note.duration));
         });
-        app.setState({ noteSequence: noteSequence, currentNote: noteSequence.firstNote() });
+        const track2 = new NoteSequence();
+        response.data.tracks[1].notes.forEach(note => {
+          track2.add(new Note(note.name, note.duration));
+        });
+
+        app.setState({ noteSequence: noteSequence, track2: track2, currentNote: noteSequence.firstNote() });
         app.context = app.canvas().getContext("2d");
         app.drawUsing(app.context);
       })
@@ -139,9 +145,13 @@ class App extends Component {
         Tone.context.resume();
     var synth = new Tone.PolySynth().toMaster();
     let notes = timeUtil.noteObjects(this.state.noteSequence.allNotes());
+    let track2Notes = timeUtil.noteObjects(this.state.track2.allNotes());
     new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();
+    new Tone.Part((time, note) => {
+    	synth.triggerAttackRelease(note.name, note.duration, time);
+    }, track2Notes).start();
     Tone.Transport.bpm.value = 144;
     const slightDelayToAvoidSchedulingErrors = '+0.1';
     Tone.Transport.start(slightDelayToAvoidSchedulingErrors);
