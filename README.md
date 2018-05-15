@@ -4,7 +4,8 @@ Upcoming: [Agile + DevOps EAST 2018 (Orlando)](https://agiledevopseast.techwell.
 
 ## Getting Started
 
-- Install Node.js.
+- Install Node.js.  See [https://nodejs.org/en/download/](https://nodejs.org/en/download/).
+
 - Download this repository:
 ```
 git clone http://github.com/jlangr/geektone

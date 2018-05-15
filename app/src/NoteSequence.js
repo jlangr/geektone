@@ -1,5 +1,4 @@
 import Note from './Note';
-import * as timeUtil from './TimeUtil'; // needed?
 import * as Duration from './Duration';
 import { prev, next } from './js/ArrayUtil';
 

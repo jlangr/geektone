@@ -131,17 +131,20 @@ class App extends Component {
 
   stop() {
     Tone.Transport.stop();
+    Tone.Transport.cancel();
   }
 
   play() {
+    if (Tone.context.state !== 'running')
+        Tone.context.resume();
     var synth = new Tone.PolySynth().toMaster();
     let notes = timeUtil.noteObjects(this.state.noteSequence.allNotes());
-    console.log('notes to play:', notes);
     new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();
     Tone.Transport.bpm.value = 144;
-    Tone.Transport.start();
+    const slightDelayToAvoidSchedulingErrors = '+0.1';
+    Tone.Transport.start(slightDelayToAvoidSchedulingErrors);
   }
 }
 
