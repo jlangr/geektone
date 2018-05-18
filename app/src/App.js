@@ -16,11 +16,12 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      noteSequence: new NoteSequence(),
-      track2: new NoteSequence(),
-      currentNote: new Note('--')
+      song: {
+        name: 'default',
+        tracks: [{ name: 'track 1', notes: new NoteSequence() }]
+      }
     };
-    this.state.noteSequence.add(new Note('E4'));
+    this.notes().add(new Note('E4'));
   }
 
   componentDidMount() {
@@ -40,14 +41,12 @@ class App extends Component {
           <Button onClick={() => this.stop() }>Stop</Button>
           <Button onClick={() => this.save() }>Save</Button>
           <Button onClick={() => this.load() }>Load</Button>
+          <Button onClick={() => this.newTrack() }>Add Track</Button>
           <p>left/right arrows: select prev / next note <br />
           up/down arrows:  move selected note up / down <br />
           d     duplicate <br />
           x     delete <br />
-          1: whole 2: half 3: dotted half 4: quarter 8: eighth *: double length /: halve length
-          </p>
-          <p>
-          <input value={this.state.currentNote.name()} />
+          1: whole 2: half 3: dotted half 4: quarter 8: eighth *: double length /: halve length <br />
           </p>
         </Form>
       </div>
@@ -70,17 +69,14 @@ class App extends Component {
     const app = this;
     return axiosClient.get('http://localhost:3001/song')
       .then(response => {
-        console.log('notes count', response.data.tracks[0].notes.length);
+        const song = response.data;
         const noteSequence = new NoteSequence();
-        response.data.tracks[0].notes.forEach(note => {
+        song.tracks[0].notes.forEach(note => {
           noteSequence.add(new Note(note.name, note.duration));
         });
-        const track2 = new NoteSequence();
-        response.data.tracks[1].notes.forEach(note => {
-          track2.add(new Note(note.name, note.duration));
-        });
+        song.tracks[0].notes = noteSequence;
 
-        app.setState({ noteSequence: noteSequence, track2: track2, currentNote: noteSequence.firstNote() });
+        app.setState({ song: response.data });
         app.context = app.canvas().getContext("2d");
         app.drawUsing(app.context);
       })
@@ -89,9 +85,7 @@ class App extends Component {
 
   // TODO test
   save() {
-    const notes = this.state.noteSequence.allNotes()
-      .map(note => note.toJSON());
-
+    const notes = this.notes().allNotes().map(note => note.toJSON());
     const song = {
       name: 'default',
       tracks: [{ name: 'track 1', notes: notes }]
@@ -105,7 +99,11 @@ class App extends Component {
   handleKeyPress(e) {
     if (e.key === '#') { this.testDrawSharps(this.context); return; }
     if (e.key === 's') { this.save(); return; }
-    if (keyHandler.handleKey(e, this.state.noteSequence)) this.draw();
+    if (keyHandler.handleKey(e, this.notes())) this.draw();
+  }
+
+  newTrack() {
+
   }
 
   draw() {
@@ -116,7 +114,7 @@ class App extends Component {
     context.clearRect(0, 0, this.canvas().width, this.canvas().height);
     drawStaff(this.context);
     let i = 0;
-    this.state.noteSequence.allNotes()
+    this.notes().allNotes()
       .forEach(note => note.drawOn(this.context, i++));
   }
 
@@ -130,9 +128,12 @@ class App extends Component {
 
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
-    console.log('click point', clickPoint);
-    if (this.state.noteSequence.clickHitNote(clickPoint))
+    if (this.notes().clickHitNote(clickPoint))
       this.draw();
+  }
+
+  notes() {
+    return this.state.song.tracks[0].notes;
   }
 
   stop() {
@@ -144,14 +145,10 @@ class App extends Component {
     if (Tone.context.state !== 'running')
         Tone.context.resume();
     var synth = new Tone.PolySynth().toMaster();
-    let notes = timeUtil.noteObjects(this.state.noteSequence.allNotes());
-    let track2Notes = timeUtil.noteObjects(this.state.track2.allNotes());
+    let notes = timeUtil.noteObjects(this.notes().allNotes());
     new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
     }, notes).start();
-    new Tone.Part((time, note) => {
-    	synth.triggerAttackRelease(note.name, note.duration, time);
-    }, track2Notes).start();
     Tone.Transport.bpm.value = 144;
     const slightDelayToAvoidSchedulingErrors = '+0.1';
     Tone.Transport.start(slightDelayToAvoidSchedulingErrors);
