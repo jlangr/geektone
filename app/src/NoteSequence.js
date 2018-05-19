@@ -81,10 +81,6 @@ export default class NoteSequence {
     }
   }
 
-  isClickOnThisNote(position) {
-    return this.currentNote === position;
-  }
-
   deselect(position) {
     this.note(position).deselect();
     this.currentNote = -1;

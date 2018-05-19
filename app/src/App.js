@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import Track from './Track';
 import Tone from 'tone';
 import Note from './Note';
 import NoteSequence from './NoteSequence';
-import { drawStaff, drawSharp } from './Staff';
-import * as keyHandler from './KeyHandler';
 import * as timeUtil from './TimeUtil';
 import './App.css';
 
@@ -18,24 +17,23 @@ class App extends Component {
     this.state = {
       song: {
         name: 'default',
-        tracks: [{ name: 'track 1', notes: new NoteSequence() }]
+        tracks: [{}] // [{ id: 'track0', name: 'track0', notes: new NoteSequence() }]
       }
     };
-    this.notes().add(new Note('E4'));
   }
 
-  componentDidMount() {
-    document.getElementById('staff').addEventListener('keyup', this.handleKeyPress.bind(this));
-    this.context = this.canvas().getContext("2d");
-    this.canvas().addEventListener('mousedown', this.click.bind(this));
-    this.draw();
+  trackCount() {
+    return this.state.song.tracks.length;
   }
 
   render() {
+    let canvasCount = 0;
+    const tracks = this.state.song.tracks.map(track => {
+        return <Track id={canvasCount++} />;
+      });
     return (
       <div className="App">
-        <canvas id="staff" tabIndex="1" width="1200" height="200"
-          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
+        { tracks }
         <Form>
           <Button onClick={() => this.play() }>Play</Button>
           <Button onClick={() => this.stop() }>Stop</Button>
@@ -53,17 +51,6 @@ class App extends Component {
     );
   }
 
-  canvas() {
-    return document.getElementById("staff");
-  }
-
-  testDrawSharps(context) {
-    drawSharp(context, 'E4', 1);
-    drawSharp(context, 'F4', 3);
-    drawSharp(context, 'G4', 2);
-    drawSharp(context, 'A4', 4);
-  }
-
   // TODO test
   load() {
     const app = this;
@@ -76,9 +63,9 @@ class App extends Component {
         });
         song.tracks[0].notes = noteSequence;
 
-        app.setState({ song: response.data });
-        app.context = app.canvas().getContext("2d");
-        app.drawUsing(app.context);
+        app.setState(() => ({ song: response.data }));
+        // app.context = app.canvas().getContext("2d");
+        // app.drawUsing(app.context);
       })
       .catch(error => { console.log('error on get', error); });
   }
@@ -88,7 +75,7 @@ class App extends Component {
     const notes = this.notes().allNotes().map(note => note.toJSON());
     const song = {
       name: 'default',
-      tracks: [{ name: 'track 1', notes: notes }]
+      tracks: [{ id: 'track1', name: 'track 1', notes: notes }]
     };
 
     return axiosClient.post('http://localhost:3001/song', song)
@@ -96,42 +83,15 @@ class App extends Component {
       .catch(error => { console.log('unable to save your song, sorry', error); });
   }
 
-  handleKeyPress(e) {
-    if (e.key === '#') { this.testDrawSharps(this.context); return; }
-    if (e.key === 's') { this.save(); return; }
-    if (keyHandler.handleKey(e, this.notes())) this.draw();
-  }
-
   newTrack() {
-
+    const updatedSong = {...this.state.song,
+      tracks: [...this.state.song.tracks, { name: 'track 2', notes: new NoteSequence() }]};
+    this.setState(
+      () => ({ song: updatedSong }),
+      () => console.log('added track'));
   }
 
-  draw() {
-    this.drawUsing(this.context);
-  }
-
-  drawUsing(context) {
-    context.clearRect(0, 0, this.canvas().width, this.canvas().height);
-    drawStaff(this.context);
-    let i = 0;
-    this.notes().allNotes()
-      .forEach(note => note.drawOn(this.context, i++));
-  }
-
-  mousePosition(canvas, e) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-      y: (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
-    };
-  }
-
-  click(e) {
-    const clickPoint = this.mousePosition(this.canvas(), e);
-    if (this.notes().clickHitNote(clickPoint))
-      this.draw();
-  }
-
+  // change to take on track number
   notes() {
     return this.state.song.tracks[0].notes;
   }
