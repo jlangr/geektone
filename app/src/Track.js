@@ -11,7 +11,7 @@ class Track extends Component {
   constructor() {
     super();
     this.state = { notes: new NoteSequence() };
-    this.loadTrack();
+//    this.loadTrack();
   }
 
   componentDidMount() {
@@ -42,7 +42,7 @@ class Track extends Component {
   addMouseListener() {
     this.canvas().addEventListener('mousedown', this.click.bind(this));
   }
-  
+
   addKeyListeners() {
     const canvas = document.getElementById(this.trackId(this.props.id));
     canvas.addEventListener('keyup', this.handleKeyPress.bind(this));
