@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import Track from './Track';
 import Tone from 'tone';
 import Note from './Note';
 import NoteSequence from './NoteSequence';
 import * as timeUtil from './TimeUtil';
+import * as actions from './actions';
 import './App.css';
 
 import axios from 'axios';
@@ -12,27 +14,18 @@ import axios from 'axios';
 const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      song: {
-        name: 'default',
-        tracks: [{}] // [{ id: 'track0', name: 'track0', notes: new NoteSequence() }]
-      }
-    };
-  }
-
   trackCount() {
-    return this.state.song.tracks.length;
+    return this.props.song.tracks.length;
   }
 
   render() {
     let canvasCount = 0;
-    const tracks = this.state.song.tracks.map(track => {
+    const tracks = this.props.song.tracks.map(track => {
         return <Track id={canvasCount++} />;
       });
     return (
       <div className="App">
+        <p>{this.props.song.name}</p>
         { tracks }
         <Form>
           <Button onClick={() => this.play() }>Play</Button>
@@ -63,7 +56,8 @@ class App extends Component {
         });
         song.tracks[0].notes = noteSequence;
 
-        app.setState(() => ({ song: response.data }));
+        this.props.replaceSong(response.data);
+
         // app.context = app.canvas().getContext("2d");
         // app.drawUsing(app.context);
       })
@@ -72,28 +66,28 @@ class App extends Component {
 
   // TODO test
   save() {
-    const notes = this.notes().allNotes().map(note => note.toJSON());
-    const song = {
-      name: 'default',
-      tracks: [{ id: 'track1', name: 'track 1', notes: notes }]
-    };
-
-    return axiosClient.post('http://localhost:3001/song', song)
-      .then(response => { })
-      .catch(error => { console.log('unable to save your song, sorry', error); });
+    // const notes = this.notes().allNotes().map(note => note.toJSON());
+    // const song = {
+    //   name: 'default',
+    //   tracks: [{ id: 'track1', name: 'track 1', notes: notes }]
+    // };
+    //
+    // return axiosClient.post('http://localhost:3001/song', song)
+    //   .then(response => { })
+    //   .catch(error => { console.log('unable to save your song, sorry', error); });
   }
 
   newTrack() {
-    const updatedSong = {...this.state.song,
-      tracks: [...this.state.song.tracks, { name: 'track 2', notes: new NoteSequence() }]};
-    this.setState(
-      () => ({ song: updatedSong }),
-      () => console.log('added track'));
+    // const updatedSong = {...this.state.song,
+    //   tracks: [...this.state.song.tracks, { name: 'track 2', notes: new NoteSequence() }]};
+    // this.setState(
+    //   () => ({ song: updatedSong }),
+    //   () => console.log('added track'));
   }
 
   // change to take on track number
   notes() {
-    return this.state.song.tracks[0].notes;
+    // return this.state.song.tracks[0].notes;
   }
 
   stop() {
@@ -115,4 +109,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  this.props.song = state.song;
+}
+
+export default connect(mapStateToProps, actions)(App);
