@@ -10,5 +10,6 @@ repeat section
 clear staff
 note insert mode
 
+move from track-to-track using ctrl-keys
 
 time signature

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Note from './Note';
 import NoteSequence from './NoteSequence';
 import { drawStaff, drawSharp } from './Staff';
@@ -7,32 +8,11 @@ import * as keyHandler from './KeyHandler';
 import axios from 'axios';
 const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
 
-class Track extends Component {
-  constructor() {
-    super();
-    this.state = { notes: new NoteSequence() };
-//    this.loadTrack();
-  }
-
+export class Track extends Component {
   componentDidMount() {
     this.addKeyListeners();
     this.addMouseListener();
     this.draw();
-  }
-
-  loadTrack() {
-    let thisCanvas = this;
-    axiosClient.get('http://localhost:3001/song')
-      .then(response => {
-        const receivedNotes = response.data.tracks[0].notes;
-        const noteSequence = new NoteSequence();
-        receivedNotes.forEach(note => noteSequence.add(new Note(note.name, note.duration)));
-
-        thisCanvas.setState(
-          () => ({ notes: noteSequence }),
-          () => this.draw());
-      })
-      .catch(error => { console.log('error on get', error); });
   }
 
   trackId(id) {
@@ -49,8 +29,11 @@ class Track extends Component {
   }
 
   render() {
-    return <div><canvas id={this.trackId(this.props.id)} border='0' tabIndex={this.props.id} width='1200' height='144'
-      style={{marginLeft: 10, marginRight: 10, marginTop: 20}} /></div>;
+    return <div>
+        <canvas id={this.trackId(this.props.id)} border='0' tabIndex={this.props.id} 
+          width='1200' height='144'
+          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
+      </div>;
   }
 
   trackContext() {
@@ -71,7 +54,11 @@ class Track extends Component {
   handleKeyPress(e) {
     if (e.key === '#') { this.testDrawSharps(this.trackContext()); return; }
     if (e.key === 's') { this.save(); return; }
-    if (keyHandler.handleKey(e, this.state.notes)) this.draw();
+    if (keyHandler.handleKey(e, this.trackData().notes)) this.draw();
+  }
+
+  trackData() {
+    return this.props.song.tracks[this.props.id];
   }
 
   draw() {
@@ -79,7 +66,7 @@ class Track extends Component {
     drawStaff(this.trackContext());
     // TODO use forin
     let i = 0;
-    this.state.notes.allNotes()
+    this.trackData().notes.allNotes()
       .forEach(note => note.drawOn(this.trackContext(), i++));
   }
 
@@ -93,9 +80,9 @@ class Track extends Component {
 
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
-    if (this.state.notes.clickHitNote(clickPoint))
+    if (this.trackData().notes.clickHitNote(clickPoint))
       this.draw();
   }
 }
 
-export default Track;
+export default connect(({song}) => ({song}))(Track);

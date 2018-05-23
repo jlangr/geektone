@@ -1,9 +1,21 @@
 import SongReducer from './SongReducer';
 import NoteSequence from '../NoteSequence';
 import Note from '../Note';
+import * as actions from '../actions';
 import * as type from '../actions/types';
 
 describe('song reducer', () => {
+  it('replaces the song', () => {
+    const song = {name: 'new song', tracks: [
+      {name: 'track1', notes: [{name: 'E4', duration: '4n'}, {name: 'F4', duration: '8n'}]}
+    ]};
+
+    const state = SongReducer(undefined, actions.replaceSong(song));
+
+    const noteSequence = state.song.tracks[0].notes;
+    expect(noteSequence.note(1).name()).toEqual('F4');
+  });
+
   it('allows changing the song name', () => {
     const state = SongReducer(undefined, { payload: 'new name', type: type.CHANGE_SONG_NAME });
 

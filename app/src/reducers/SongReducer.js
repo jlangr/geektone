@@ -1,5 +1,6 @@
+import { ADD_TRACK, CHANGE_SONG_NAME, REPLACE_SONG } from '../actions/types';
 import NoteSequence from '../NoteSequence';
-import { ADD_TRACK, CHANGE_SONG_NAME } from '../actions/types';
+import Note from '../Note';
 
 export const INITIAL_STATE = {
   song: {
@@ -18,6 +19,18 @@ export default (state = INITIAL_STATE, action) => {
     case CHANGE_SONG_NAME:
     {
       return { ...state, song: { ...state.song, name: action.payload }};
+    }
+    case REPLACE_SONG:
+    {
+      const newSong = action.payload;
+      newSong.tracks = newSong.tracks.map(track => {
+        const noteSequence = new NoteSequence();
+        track.notes.forEach(note => 
+          noteSequence.add(new Note(note.name, note.duration)) // TODO simplify with constructor
+        );
+        return { ...track, notes: noteSequence };
+      });
+      return { ...state, song: newSong };
     }
     default:
       return state;

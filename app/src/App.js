@@ -19,6 +19,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('rendering; props= ', this.props);
     let canvasCount = 0;
     const tracks = this.props.song.tracks.map(track => {
         return <Track id={canvasCount++} />;
@@ -46,21 +47,9 @@ class App extends Component {
 
   // TODO test
   load() {
-    const app = this;
+    // TODO move axios stuff into action
     return axiosClient.get('http://localhost:3001/song')
-      .then(response => {
-        const song = response.data;
-        const noteSequence = new NoteSequence();
-        song.tracks[0].notes.forEach(note => {
-          noteSequence.add(new Note(note.name, note.duration));
-        });
-        song.tracks[0].notes = noteSequence;
-
-        this.props.replaceSong(response.data);
-
-        // app.context = app.canvas().getContext("2d");
-        // app.drawUsing(app.context);
-      })
+      .then(response => this.props.replaceSong(response.data))
       .catch(error => { console.log('error on get', error); });
   }
 
@@ -109,8 +98,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  this.props.song = state.song;
-}
+const mapStateToProps = ({song}, ownProps) => {
+  return { song };
+};
 
 export default connect(mapStateToProps, actions)(App);
