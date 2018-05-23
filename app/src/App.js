@@ -21,9 +21,7 @@ class App extends Component {
   render() {
     console.log('rendering; props= ', this.props);
     let canvasCount = 0;
-    const tracks = this.props.song.tracks.map(track => {
-        return <Track id={canvasCount++} />;
-      });
+    const tracks = this.props.song.tracks.map(track => <Track id={canvasCount++} />);
     return (
       <div className="App">
         <p>{this.props.song.name}</p>
@@ -74,11 +72,6 @@ class App extends Component {
     //   () => console.log('added track'));
   }
 
-  // change to take on track number
-  notes() {
-    // return this.state.song.tracks[0].notes;
-  }
-
   stop() {
     Tone.Transport.stop();
     Tone.Transport.cancel();
@@ -88,10 +81,15 @@ class App extends Component {
     if (Tone.context.state !== 'running')
         Tone.context.resume();
     var synth = new Tone.PolySynth().toMaster();
-    let notes = timeUtil.noteObjects(this.notes().allNotes());
+    const tracksAsNoteObjects = this.props.song.tracks.map(track => 
+      timeUtil.noteObjects(track.notes.allNotes())
+    );
+    const allNotes = 
+      tracksAsNoteObjects.reduce((notes, trackNoteObjects) => notes.concat(trackNoteObjects), []);
+
     new Tone.Part((time, note) => {
     	synth.triggerAttackRelease(note.name, note.duration, time);
-    }, notes).start();
+    }, allNotes).start();
     Tone.Transport.bpm.value = 144;
     const slightDelayToAvoidSchedulingErrors = '+0.1';
     Tone.Transport.start(slightDelayToAvoidSchedulingErrors);
