@@ -189,11 +189,6 @@ export default class Note {
     context.stroke();
   }
 
-  // TODO dup from Duration.js
-  isDottedDuration() {
-    return this.duration.endsWith('.');
-  }
-
   drawNoteOn(context, position) {
     context.beginPath()
     context.lineWidth = noteStroke;
@@ -205,7 +200,7 @@ export default class Note {
     else if (Duration.isEighthBase(this.duration)) this.drawEighth(context, position);
     else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenth(context, position);
 
-    if (this.isDottedDuration())
+    if (Duration.isDotted(this.duration))
       this.drawDot(context, position);
     context.stroke();
   }

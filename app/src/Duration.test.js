@@ -17,6 +17,11 @@ describe('time', () => {
   });
 });
 
+describe('is dotted', () => {
+  expect(Duration.isDotted('4n')).toBeFalsy();
+  expect(Duration.isDotted('4n.')).toBeTruthy();
+});
+
 describe('note bases', () => {
   it('returns truthy or falsiness of base inquiries', () => {
     expect(Duration.isEighthBase('8n')).toBeTruthy();

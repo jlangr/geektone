@@ -12,7 +12,7 @@ export const isQuarterBase = duration => duration.startsWith(quarter);
 export const isEighthBase = duration => duration.startsWith(eighth);
 export const isSixteenthBase = duration => duration.startsWith(sixteenth);
 
-export const isDotted = (noteDuration) => noteDuration.endsWith('.');
+export const isDotted = noteDuration => noteDuration.endsWith('.');
 
 export const noteBase = noteDuration => {
   if (isDotted(noteDuration))

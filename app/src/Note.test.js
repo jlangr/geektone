@@ -83,12 +83,6 @@ describe('dotted notes', () => {
       expect(note.duration).toEqual('16n');
     });
   });
-
-  describe('is dotted', () => {
-    expect(new Note('E4', '4n').isDottedDuration()).toBeFalsy();
-    expect(new Note('E4', '4n.').isDottedDuration()).toBeTruthy();
-  });
-
 });
 
 describe('hit testing', () => {
