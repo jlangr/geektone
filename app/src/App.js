@@ -17,8 +17,8 @@ class App extends Component {
         <Form>
           <Button onClick={() => this.play() }>Play</Button>
           <Button onClick={() => this.stop() }>Stop</Button>
-          <Button onClick={() => this.save() }>Save</Button>
-          <Button onClick={() => { console.log('load'); this.props.loadSong() }}>Load</Button>
+          <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
+          <Button onClick={() => this.props.loadSong() }>Load</Button>
           <Button onClick={() => this.newTrack() }>Add Track</Button>
           <p>left/right arrows: select prev / next note <br />
           up/down arrows:  move selected note up / down <br />
@@ -29,17 +29,6 @@ class App extends Component {
         </Form>
       </div>
     );
-  }
-
-  // TODO test
-  save() {
-    this.props.saveSong(this.props.song);
-    // const notes = this.notes().allNotes().map(note => note.toJSON());
-    // const song = {
-    //   name: 'default',
-    //   tracks: [{ id: 'track1', name: 'track 1', notes: notes }]
-    // };
-    //
   }
 
   newTrack() {
