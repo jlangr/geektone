@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Note from './Note';
-import NoteSequence from './NoteSequence';
 import { drawStaff, drawSharp } from './Staff';
 import * as keyHandler from './KeyHandler';
-
-import axios from 'axios';
-const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
 
 export class Track extends Component {
   componentDidMount() {
@@ -29,11 +24,9 @@ export class Track extends Component {
   }
 
   render() {
-    return <div>
-        <canvas id={this.trackId(this.props.id)} border='0' tabIndex={this.props.id} 
+    return <canvas key={this.props.id} id={this.trackId(this.props.id)} border='0' tabIndex={this.props.id} 
           width='1200' height='144'
-          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
-      </div>;
+          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />;
   }
 
   trackContext() {

@@ -3,23 +3,12 @@ import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Track from './Track';
 import Tone from 'tone';
-import Note from './Note';
-import NoteSequence from './NoteSequence';
 import * as timeUtil from './TimeUtil';
 import * as actions from './actions';
 import './App.css';
 
-import axios from 'axios';
-
-const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
-
 class App extends Component {
-  trackCount() {
-    return this.props.song.tracks.length;
-  }
-
   render() {
-    console.log('rendering; props= ', this.props);
     let canvasCount = 0;
     const tracks = this.props.song.tracks.map(track => <Track id={canvasCount++} />);
     return (
@@ -30,7 +19,7 @@ class App extends Component {
           <Button onClick={() => this.play() }>Play</Button>
           <Button onClick={() => this.stop() }>Stop</Button>
           <Button onClick={() => this.save() }>Save</Button>
-          <Button onClick={() => this.load() }>Load</Button>
+          <Button onClick={() => { console.log('load'); this.props.loadSong() }}>Load</Button>
           <Button onClick={() => this.newTrack() }>Add Track</Button>
           <p>left/right arrows: select prev / next note <br />
           up/down arrows:  move selected note up / down <br />
@@ -41,14 +30,6 @@ class App extends Component {
         </Form>
       </div>
     );
-  }
-
-  // TODO test
-  load() {
-    // TODO move axios stuff into action
-    return axiosClient.get('http://localhost:3001/song')
-      .then(response => this.props.replaceSong(response.data))
-      .catch(error => { console.log('error on get', error); });
   }
 
   // TODO test
@@ -100,4 +81,4 @@ const mapStateToProps = ({song}, ownProps) => {
   return { song };
 };
 
-export default connect(mapStateToProps, actions)(App);
+export default connect(mapStateToProps, { loadSong: actions.loadSong })(App);

@@ -22,6 +22,7 @@ export default (state = INITIAL_STATE, action) => {
     }
     case REPLACE_SONG:
     {
+      console.log('action.payload: tracks ', action.payload);
       const newSong = action.payload;
       newSong.tracks = newSong.tracks.map(track => {
         const noteSequence = new NoteSequence();
