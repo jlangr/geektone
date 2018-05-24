@@ -57,10 +57,8 @@ export class Track extends Component {
   draw() {
     this.trackContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     drawStaff(this.trackContext());
-    // TODO use forin
-    let i = 0;
     this.trackData().notes.allNotes()
-      .forEach(note => note.drawOn(this.trackContext(), i++));
+      .forEach((note, i) => note.drawOn(this.trackContext(), i));
   }
 
   mousePosition(canvas, e) {

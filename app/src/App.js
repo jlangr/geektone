@@ -67,4 +67,4 @@ const mapStateToProps = ({song}, ownProps) => {
   return { song };
 };
 
-export default connect(mapStateToProps, { loadSong: actions.loadSong })(App);
+export default connect(mapStateToProps, { loadSong: actions.loadSong, saveSong: actions.saveSong })(App);

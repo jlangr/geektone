@@ -23,8 +23,7 @@ describe('song reducer', () => {
   });
 
   it('adds a track', () => {
-    const noteSequence = new NoteSequence();
-    noteSequence.add(new Note('A3')); // TODO support in ctor
+    const noteSequence = new NoteSequence(['A3']);
     const newTrack = { id: 'track2', name: 'track2', notes: noteSequence };
 
     const state = SongReducer(undefined, { payload: newTrack, type: type.ADD_TRACK });
