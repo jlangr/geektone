@@ -1,258 +1,287 @@
 import NoteSequence from './NoteSequence';
 import Note, { quarter, half, whole } from './Note';
 
-describe('NoteSequnce', () => {
+describe('NoteSequence', () => {
   let sequence;
 
-  beforeEach(() => {
-    sequence = new NoteSequence();
-    sequence.add(new Note('E4', 0));
-    sequence.add(new Note('F4', 1));
-    sequence.add(new Note('G4', 2));
-  });
+  describe('empty sequence', () => {
+    describe('toJSON', () => {
+      it('converts a notesequence to persistable JSON', () => {
+        sequence = new NoteSequence([['E4', '4n'], ['F4', '8n'], ['G4', '16n']]);
 
-  describe('note sequence', () => {
-    it('allows adding notes', () => {
-      expect(sequence.allNotes().length).toEqual(3);
-    });
-  });
-
-  describe('isNoteSelected', () => {
-    it('returns true after selection', () => {
-      sequence.selectFirst();
-
-      expect(sequence.isNoteSelected()).toBeTruthy();
+        expect(sequence.toJSON()).toEqual([
+          { name: 'E4', duration: '4n' },
+          { name: 'F4', duration: '8n' },
+          { name: 'G4', duration: '16n' }
+        ]);
+      });
     });
 
-    it('returns false by default', () => {
-      expect(sequence.isNoteSelected()).toBeFalsy();
-    });
-  });
+    describe('construction', () => {
+      it('can be constructed with multiple notes', () => {
+        sequence = new NoteSequence(['E4', 'F4']);
 
-  describe('note selection', () => {
-    it('returns null when no note selected', () => {
-      const currentNote = sequence.selectedNote();
-
-      expect(currentNote.name()).toEqual('null');
-    });
-
-    it('returns selected note', () => {
-      sequence.selectFirst();
-
-      expect(sequence.selectedNote().name()).toEqual('E4');
-    });
-
-    it('removes selection on deselectAll', () => {
-      sequence.selectFirst();
-
-    });
-  });
-
-  describe('click on position', () => {
-    it('deselects if already selected', () => {
-      sequence.selectFirst();
-
-      sequence.click(0);
-
-      expect(sequence.firstNote().isSelected).toBeFalsy();
-    });
-
-    it('selects if not selected', () => {
-      sequence.selectLast();
-
-      sequence.click(0);
-
-      const note = sequence.firstNote();
-      expect(sequence.firstNote().isSelected).toBeTruthy();
-      expect(sequence.lastNote().isSelected).toBeFalsy();
-    });
-  });
-
-  describe('clickHitNote', () => {
-    it('returns false when no note hit', () => {
-      const clickPoint = { x: -1, y: -1 };
-
-      const wasNoteHit = sequence.clickHitNote(clickPoint);
-
-      expect(wasNoteHit).toBeFalsy();
-    });
-
-    describe('hit note', () => {
-      let firstNoteClickPoint;
-      let note;
-
-      beforeEach(() => {
-        const position = 1;
-        note = sequence.note(position);
-        firstNoteClickPoint = { x: note.x(position), y: note.y() };
+        expect(sequence.allNoteNames()).toEqual(['E4', 'F4']);
       });
 
-      it('returns true when note hit', () => {
-        const wasNoteHit = sequence.clickHitNote(firstNoteClickPoint);
+      it('can be constructed with multiple notes', () => {
+        sequence = new NoteSequence([['E4', '4n'], ['F4', '8n']]);
 
-        expect(wasNoteHit).toBeTruthy();
-      });
-
-      it('clicks note hit', () => {
-        sequence.clickHitNote(firstNoteClickPoint);
-
-        expect(note.isSelected);
+        expect(sequence.note(0).duration).toEqual('4n');
+        expect(sequence.note(1).duration).toEqual('8n');
       });
     });
   });
 
-  describe('next/prev note', () => {
-    it('sets selected to subsequent note', () => {
-      sequence.selectFirst();
-      const first = sequence.selectedNote();
-
-      sequence.selectNext();
-
-      const note = sequence.selectedNote();
-      expect(note.name()).toEqual('F4');
-      expect(note.isSelected).toBeTruthy();
-      expect(first.isSelected).toBeFalsy();
-    });
-
-    it('sets selected to previous note', () => {
-      sequence.selectFirst();
-      const first = sequence.selectedNote();
-
-      sequence.selectPrev();
-
-      const note = sequence.selectedNote();
-      expect(note.name()).toEqual('G4');
-      expect(note.isSelected).toBeTruthy();
-      expect(first.isSelected).toBeFalsy();
-    });
-
-    it('sets selected to null if no current selection is empty', () => {
-      sequence.deselectAll();
-
-      sequence.selectNext();
-
-      expect(sequence.selectedNote().name()).toBe('null');
-    });
-
-    it('prev sets selected to null if no current selection is empty', () => {
-      sequence.deselectAll();
-
-      sequence.selectPrev();
-
-      expect(sequence.selectedNote().name()).toBe('null');
-    });
-  });
-
-  describe('duplicate note', () => {
-    it('introduces new note following selected', () => {
-      sequence.selectFirst();
-
-      sequence.duplicateNote();
-
-      expect(sequence.allNoteNames()).toEqual(['E4', 'E4', 'F4', 'G4']);
-    });
-
-    it('includes duration', () => {
-      sequence.note(0).duration = '16n';
-      sequence.select(0);
-
-      sequence.duplicateNote();
-
-      expect(sequence.note(1).duration).toEqual('16n');
-    });
-
-    it('introduces new note following selected', () => {
-      sequence.selectFirst();
-
-      sequence.duplicateNote();
-
-      const firstNote = sequence.note(0);
-      const newNote = sequence.note(1);
-      expect(firstNote.isSelected).toBeFalsy();
-      expect(newNote.isSelected).toBeTruthy();
-    });
-  });
-
-  describe('delete selected', () => {
-    it('removes the currently selected note', () => {
-      sequence.select(1);
-      sequence.deleteSelected();
-
-      expect(sequence.allNoteNames()).toEqual(['E4', 'G4']);
-    });
-
-    it('selects the previous note', () => {
-      sequence.select(1);
-      sequence.deleteSelected();
-
-      expect(sequence.isSelected(0)).toBeTruthy();
-    });
-
-    it('re-selects if the first note is selected', () => {
-      sequence.selectFirst();
-      sequence.deleteSelected();
-
-      expect(sequence.isSelected(0)).toBeTruthy();
-    });
-  });
-
-  describe('set note length', () => {
-    it('sets to half note', () => {
-      sequence.selectFirst();
-
-      sequence.setSelectedTo(half);
-
-      expect(sequence.selectedNote().duration).toEqual(half);
-    });
-  });
-
-  describe('increment/decrement selected', () => {
+  describe('sequence with 3 notes', () => {
     beforeEach(() => {
-      sequence.selectFirst();
+      sequence = new NoteSequence(['E4', 'F4', 'G4']);
     });
 
-    it('increments selected', () => {
-      expect(sequence.firstNote().name()).toEqual('E4');
-
-      sequence.incrementSelected();
-
-      expect(sequence.selectedNote().name()).toEqual('F4');
+    describe('note sequence', () => {
+      it('allows adding notes', () => {
+        expect(sequence.allNotes().length).toEqual(3);
+      });
     });
 
-    it('decrements selected', () => {
-      expect(sequence.firstNote().name()).toEqual('E4');
 
-      sequence.decrementSelected();
+    describe('isNoteSelected', () => {
+      it('returns true after selection', () => {
+        sequence.selectFirst();
 
-      expect(sequence.selectedNote().name()).toEqual('D4');
+        expect(sequence.isNoteSelected()).toBeTruthy();
+      });
+
+      it('returns false by default', () => {
+        expect(sequence.isNoteSelected()).toBeFalsy();
+      });
     });
 
-  });
+    describe('note selection', () => {
+      it('returns null when no note selected', () => {
+        const currentNote = sequence.selectedNote();
 
-  describe('toggleDotForSelected', () => {
-    it('does nothing when note not selected', () => {
-      sequence.toggleDotForSelected();
+        expect(currentNote.name()).toEqual('null');
+      });
+
+      it('returns selected note', () => {
+        sequence.selectFirst();
+
+        expect(sequence.selectedNote().name()).toEqual('E4');
+      });
+
+      it('removes selection on deselectAll', () => {
+        sequence.selectFirst();
+
+      });
     });
 
-    describe('with first note selected', () => {
+    describe('click on position', () => {
+      it('deselects if already selected', () => {
+        sequence.selectFirst();
+
+        sequence.click(0);
+
+        expect(sequence.firstNote().isSelected).toBeFalsy();
+      });
+
+      it('selects if not selected', () => {
+        sequence.selectLast();
+
+        sequence.click(0);
+
+        const note = sequence.firstNote();
+        expect(sequence.firstNote().isSelected).toBeTruthy();
+        expect(sequence.lastNote().isSelected).toBeFalsy();
+      });
+    });
+
+    describe('clickHitNote', () => {
+      it('returns false when no note hit', () => {
+        const clickPoint = { x: -1, y: -1 };
+
+        const wasNoteHit = sequence.clickHitNote(clickPoint);
+
+        expect(wasNoteHit).toBeFalsy();
+      });
+
+      describe('hit note', () => {
+        let firstNoteClickPoint;
+        let note;
+
+        beforeEach(() => {
+          const position = 1;
+          note = sequence.note(position);
+          firstNoteClickPoint = { x: note.x(position), y: note.y() };
+        });
+
+        it('returns true when note hit', () => {
+          const wasNoteHit = sequence.clickHitNote(firstNoteClickPoint);
+
+          expect(wasNoteHit).toBeTruthy();
+        });
+
+        it('clicks note hit', () => {
+          sequence.clickHitNote(firstNoteClickPoint);
+
+          expect(note.isSelected);
+        });
+      });
+    });
+
+    describe('next/prev note', () => {
+      it('sets selected to subsequent note', () => {
+        sequence.selectFirst();
+        const first = sequence.selectedNote();
+
+        sequence.selectNext();
+
+        const note = sequence.selectedNote();
+        expect(note.name()).toEqual('F4');
+        expect(note.isSelected).toBeTruthy();
+        expect(first.isSelected).toBeFalsy();
+      });
+
+      it('sets selected to previous note', () => {
+        sequence.selectFirst();
+        const first = sequence.selectedNote();
+
+        sequence.selectPrev();
+
+        const note = sequence.selectedNote();
+        expect(note.name()).toEqual('G4');
+        expect(note.isSelected).toBeTruthy();
+        expect(first.isSelected).toBeFalsy();
+      });
+
+      it('sets selected to null if no current selection is empty', () => {
+        sequence.deselectAll();
+
+        sequence.selectNext();
+
+        expect(sequence.selectedNote().name()).toBe('null');
+      });
+
+      it('prev sets selected to null if no current selection is empty', () => {
+        sequence.deselectAll();
+
+        sequence.selectPrev();
+
+        expect(sequence.selectedNote().name()).toBe('null');
+      });
+    });
+
+    describe('duplicate note', () => {
+      it('introduces new note following selected', () => {
+        sequence.selectFirst();
+
+        sequence.duplicateNote();
+
+        expect(sequence.allNoteNames()).toEqual(['E4', 'E4', 'F4', 'G4']);
+      });
+
+      it('includes duration', () => {
+        sequence.note(0).duration = '16n';
+        sequence.select(0);
+
+        sequence.duplicateNote();
+
+        expect(sequence.note(1).duration).toEqual('16n');
+      });
+
+      it('introduces new note following selected', () => {
+        sequence.selectFirst();
+
+        sequence.duplicateNote();
+
+        const firstNote = sequence.note(0);
+        const newNote = sequence.note(1);
+        expect(firstNote.isSelected).toBeFalsy();
+        expect(newNote.isSelected).toBeTruthy();
+      });
+    });
+
+    describe('delete selected', () => {
+      it('removes the currently selected note', () => {
+        sequence.select(1);
+        sequence.deleteSelected();
+
+        expect(sequence.allNoteNames()).toEqual(['E4', 'G4']);
+      });
+
+      it('selects the previous note', () => {
+        sequence.select(1);
+        sequence.deleteSelected();
+
+        expect(sequence.isSelected(0)).toBeTruthy();
+      });
+
+      it('re-selects if the first note is selected', () => {
+        sequence.selectFirst();
+        sequence.deleteSelected();
+
+        expect(sequence.isSelected(0)).toBeTruthy();
+      });
+    });
+
+    describe('set note length', () => {
+      it('sets to half note', () => {
+        sequence.selectFirst();
+
+        sequence.setSelectedTo(half);
+
+        expect(sequence.selectedNote().duration).toEqual(half);
+      });
+    });
+
+    describe('increment/decrement selected', () => {
       beforeEach(() => {
         sequence.selectFirst();
       });
 
-      it('turns on the dot for the selected note', () => {
-        sequence.firstNote().duration = '8n';
+      it('increments selected', () => {
+        expect(sequence.firstNote().name()).toEqual('E4');
 
-        sequence.toggleDotForSelected();
+        sequence.incrementSelected();
 
-        expect(sequence.firstNote().duration).toEqual('8n.');
+        expect(sequence.selectedNote().name()).toEqual('F4');
       });
 
-      it('turns off the dot for the selected note', () => {
-        sequence.firstNote().duration = '8n.';
+      it('decrements selected', () => {
+        expect(sequence.firstNote().name()).toEqual('E4');
 
+        sequence.decrementSelected();
+
+        expect(sequence.selectedNote().name()).toEqual('D4');
+      });
+
+    });
+
+    describe('toggleDotForSelected', () => {
+      it('does nothing when note not selected', () => {
         sequence.toggleDotForSelected();
+      });
 
-        expect(sequence.firstNote().duration).toEqual('8n');
+      describe('with first note selected', () => {
+        beforeEach(() => {
+          sequence.selectFirst();
+        });
+
+        it('turns on the dot for the selected note', () => {
+          sequence.firstNote().duration = '8n';
+
+          sequence.toggleDotForSelected();
+
+          expect(sequence.firstNote().duration).toEqual('8n.');
+        });
+
+        it('turns off the dot for the selected note', () => {
+          sequence.firstNote().duration = '8n.';
+
+          sequence.toggleDotForSelected();
+
+          expect(sequence.firstNote().duration).toEqual('8n');
+        });
       });
     });
   });

@@ -13,8 +13,19 @@ export const loadSong = () => {
         dispatch(replaceSong(response.data));
       })
       .catch(error => { 
-        // TODO proper error handling
-        dispatch({ type: type.ERROR, payload: error.toString() })
+        dispatch({ type: type.ERROR, payload: `unable to load song; ${error.toString()}` })
       })
   }
+};
+
+export const saveSong = (song) => {
+  return dispatch => {
+    return axiosClient.post('/song', song)
+      .then(response => { 
+        dispatch({ type: type.MESSAGE, payload: 'song saved'});
+      })
+      .catch(error => { 
+        dispatch({ type: type.ERROR, payload: `unable to save your song, sorry: ${error.toString()}` })
+    })
+  };
 };

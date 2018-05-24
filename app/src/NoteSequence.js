@@ -11,15 +11,17 @@ const nullNote = {
 };
 
 export default class NoteSequence {
-  constructor() {
+  constructor(noteNames = []) {
     this.notes = [];
+    noteNames.forEach(n => {
+      if (Array.isArray(n))
+        this.add(new Note(n[0], n[1]));
+      else {
+        const noteName = n;
+        this.add(new Note(noteName));
+      }
+    });
     this.currentNote = -1;
-    // is this used anymore
-    this.noteChangeFn = () => {};
-  }
-
-  onNoteChange(fn) {
-    this.noteChangeFn = fn;
   }
 
   add(note) {
@@ -46,6 +48,12 @@ export default class NoteSequence {
 
   lastNote() {
     return this.notes[this.notes.length - 1];
+  }
+
+  // ==
+
+  toJSON() {
+    return this.allNotes().map(note => note.toJSON());
   }
 
   // ==
@@ -94,7 +102,6 @@ export default class NoteSequence {
   select(position) {
     this.currentNote = position;
     this.notes[position].select();
-    this.noteChangeFn(this.note(this.currentNote));
   }
 
   selectFirst() {

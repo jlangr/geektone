@@ -9,8 +9,7 @@ import './App.css';
 
 class App extends Component {
   render() {
-    let canvasCount = 0;
-    const tracks = this.props.song.tracks.map(track => <Track id={canvasCount++} />);
+    const tracks = this.props.song.tracks.map((track, i) => <Track key={i} id={i} />);
     return (
       <div className="App">
         <p>{this.props.song.name}</p>
@@ -34,15 +33,13 @@ class App extends Component {
 
   // TODO test
   save() {
+    this.props.saveSong(this.props.song);
     // const notes = this.notes().allNotes().map(note => note.toJSON());
     // const song = {
     //   name: 'default',
     //   tracks: [{ id: 'track1', name: 'track 1', notes: notes }]
     // };
     //
-    // return axiosClient.post('http://localhost:3001/song', song)
-    //   .then(response => { })
-    //   .catch(error => { console.log('unable to save your song, sorry', error); });
   }
 
   newTrack() {
