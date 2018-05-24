@@ -1,6 +1,5 @@
 import { ADD_TRACK, CHANGE_SONG_NAME, REPLACE_SONG } from '../actions/types';
 import NoteSequence from '../NoteSequence';
-import Note from '../Note';
 
 export const INITIAL_STATE = {
   song: {
