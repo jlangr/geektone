@@ -15,6 +15,7 @@ class App extends Component {
         <p>{this.props.song.name}</p>
         { tracks }
         <Form>
+          <Button onClick={() => this.loadSamples() }>Load Samples</Button>
           <Button onClick={() => this.play() }>Play</Button>
           <Button onClick={() => this.stop() }>Stop</Button>
           <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
@@ -59,8 +60,6 @@ class App extends Component {
     }
   }
 
-//  {[key]:"John"}
-
   createNoteToFile(instrument) {
     const filename = noteName => `${noteName.replace('#', 's')}.mp3`;
     var noteToFile = {};
@@ -69,41 +68,54 @@ class App extends Component {
     return noteToFile;
   }
 
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  // createSampler(instrument, noteToFile) {
+  //   const promise = new Promise((resolve, reject) => {
+  //     let sampler;
+  //     new Tone.Sampler(noteToFile, 
+  //       { 
+  //         'release' : 1, 
+  //         'baseUrl' : `./samples/${instrument}/`,
+  //         'onload': (sampler) => { 
+  //           console.log('loaded!', instrument);
+  //           console.log('loaded sampler!', sampler);
+  //           resolve(sampler);
+  //         }
+  //       });
+  //     return sampler.toMaster();
+  //   });
+  // }
+  //   // const synths = await Promise.all([synth0, synth1]);
 
-  createSampler(instrument, noteToFile) {
-    return new Tone.Sampler( noteToFile, 
+  cSampler(instrument, noteToFile) {
+    return new Tone.Sampler(noteToFile, 
       { 
         'release' : 1, 
         'baseUrl' : `./samples/${instrument}/`,
-        'onLoad': () => { console.log('loaded!', instrument)}
+        'onload': () => { 
+          console.log('loaded ', instrument);
+        }
       }).toMaster();
+  }
+
+  loadSamples() {
+    this.synth0 = this.cSampler('piano', this.createNoteToFile('piano'));
+    this.synth1 = this.cSampler('violin', this.createNoteToFile('violin'));
   }
 
   async play() {
     if (Tone.context.state !== 'running')
         Tone.context.resume();
 
-    const notes0 = this.createNoteToFile('piano');
-    const notes1 = this.createNoteToFile('violin');
-
-    const synth0 = this.createSampler('piano', notes0);
-    const synth1 = this.createSampler('violin', notes1);
-
-    await this.sleep(2000);
-
     const tracksAsNoteObjects = this.props.song.tracks.map(track => 
       timeUtil.noteObjects(track.notes.allNotes())
     );
 
     new Tone.Part((time, note) => {
-    	synth0.triggerAttackRelease(note.name, note.duration, time);
+    	this.synth0.triggerAttackRelease(note.name, note.duration, time);
     }, tracksAsNoteObjects[0]).start();
 
     new Tone.Part((time, note) => {
-    	synth1.triggerAttackRelease(note.name, note.duration, time);
+    	this.synth1.triggerAttackRelease(note.name, note.duration, time);
     }, tracksAsNoteObjects[1]).start();
 
     Tone.Transport.bpm.value = 144;
