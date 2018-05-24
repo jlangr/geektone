@@ -24,11 +24,8 @@ export default (state = INITIAL_STATE, action) => {
     {
       const newSong = action.payload;
       newSong.tracks = newSong.tracks.map(track => {
-        const noteSequence = new NoteSequence();
-        track.notes.forEach(note => 
-          noteSequence.add(new Note(note.name, note.duration)) // TODO simplify with constructor
-        );
-        return { ...track, notes: noteSequence };
+        const notes = track.notes.map(note => [note.name, note.duration]);
+        return { ...track, notes: new NoteSequence(notes) };
       });
       return { ...state, song: newSong };
     }
