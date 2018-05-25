@@ -34,9 +34,6 @@ export default (state = INITIAL_STATE, action) => {
       return state;
   // const updatedSong = {...this.state.song,
   //   tracks: [...this.state.song.tracks, { name: 'track 2', notes: new NoteSequence() }]};
-  // this.setState(
-  //   () => ({ song: updatedSong }),
-  //   () => console.log('added track'));
     }
     case type.REPLACE_SONG:
     {

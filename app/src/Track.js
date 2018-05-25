@@ -25,14 +25,11 @@ export class Track extends Component {
   }
 
   instrumentChange(e) {
-    console.log('new instrument', e.target.value);
-    console.log('this.props.id', this.props.id);
     this.props.changeTrackInstrument(e.target.value, this.props.id);
   }
 
   // TODO create first-class canvas component and move in some of the drawing funcs
   render() {
-    console.log(this.trackData());
     return (
       <div>
         <select value={this.trackData().instrument} onChange={this.instrumentChange.bind(this)}>

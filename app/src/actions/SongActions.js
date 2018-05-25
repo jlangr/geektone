@@ -1,8 +1,6 @@
 import * as type from './types';
 import axios from 'axios';
 
-//const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
-
 export const server = 'http://localhost:3001';
 export const request = path => `${server}${path}`;
 
@@ -30,7 +28,6 @@ export const newTrack = () => ({ type: type.NEW_TRACK });
 
 export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song });
 
-// TODO test
 export const saveSong = (song) => {
   return dispatch => {
     return axios.post(request('/song'), song)
