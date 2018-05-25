@@ -22,7 +22,7 @@ class App extends Component {
           <Button onClick={() => ToneUtils.stop() }>Stop</Button>
           <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
           <Button onClick={this.props.loadSong}>Load</Button>
-          <Button onClick={() => this.newTrack() }>Add Track</Button>
+          <Button onClick={() => this.props.newTrack() }>Add Track</Button>
           <p>left/right arrows: select prev / next note <br />
           up/down arrows:  move selected note up / down <br />
           d     duplicate <br />
@@ -34,16 +34,9 @@ class App extends Component {
     );
   }
 
+  // TODO what's the best way to get this out
   samplesLoaded() {
     return this.props.synths.length === this.props.expectedSynthCount;
-  }
-
-  newTrack() {
-    // const updatedSong = {...this.state.song,
-    //   tracks: [...this.state.song.tracks, { name: 'track 2', notes: new NoteSequence() }]};
-    // this.setState(
-    //   () => ({ song: updatedSong }),
-    //   () => console.log('added track'));
   }
 }
 
@@ -57,6 +50,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    newTrack: () => dispatch(actions.newTrack()),
     loadSong: () => dispatch(actions.loadSong()),
     saveSong: song => dispatch(actions.saveSong(song)),
     loadSamples: () => dispatch(actions.loadSamples())

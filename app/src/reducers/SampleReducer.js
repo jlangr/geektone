@@ -1,11 +1,11 @@
 import { ADD_SYNTH } from '../actions/types';
 
-export const INITIAL_SAMPLE_STATE = {
+const INITIAL_STATE = {
   synths: [],
   expectedSynthCount: 2
 };
 
-export default(state = INITIAL_SAMPLE_STATE, action) => {
+export default(state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_SYNTH: 
       return {...state, synths: [...state.synths, action.payload]};
