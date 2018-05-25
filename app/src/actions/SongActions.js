@@ -5,6 +5,8 @@ const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 40
 
 export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song });
 
+export const newTrack = () => ({ type: type.NEW_TRACK });
+
 // TODO test
 export const loadSong = () => {
   return dispatch => {

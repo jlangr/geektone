@@ -9,6 +9,8 @@ export const play = async (tracks, synths) => {
     TimeUtil.noteObjects(track.notes.allNotes())
   );
 
+  // todo use synth appropriate to track. Maybe synths is an "instrumentToSynth" mapping
+
   tracksAsNoteObjects.forEach(trackNoteObjects => {
     new Tone.Part((time, note) => {
       synths[0].triggerAttackRelease(note.name, note.duration, time);
