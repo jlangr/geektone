@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
 
-export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song });
+export const addTrack = newTrack => ({ type: type.ADD_TRACK, payload: newTrack });
 
-export const newTrack = () => ({ type: type.NEW_TRACK });
+export const changeSongName = newName => ({ type: type.CHANGE_SONG_NAME, payload: 'new name' });
 
 export const changeTrackInstrument = (instrument, id) => {
   return { type: type.CHANGE_TRACK_INSTRUMENT, payload: {instrument: instrument, trackId: id }};
@@ -23,6 +23,10 @@ export const loadSong = () => {
       })
   }
 };
+
+export const newTrack = () => ({ type: type.NEW_TRACK });
+
+export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song });
 
 // TODO test
 export const saveSong = (song) => {
