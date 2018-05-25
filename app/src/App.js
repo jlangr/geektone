@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Track from './Track';
-import Tone from 'tone';
-import * as timeUtil from './TimeUtil';
+import * as ToneUtils from './utils/ToneUtils';
 import * as actions from './actions';
 import './App.css';
 
@@ -19,8 +18,8 @@ class App extends Component {
         <p>{this.props.song.name}</p>
         { tracks }
         <Form>
-          <Button onClick={() => this.play()}  {...(this.samplesLoaded() ? {} : { disabled : true })}>Play</Button>
-          <Button onClick={() => this.stop() }>Stop</Button>
+          <Button onClick={() => ToneUtils.play(this.props.song.tracks, this.props.synths)}  {...(this.samplesLoaded() ? {} : { disabled : true })}>Play</Button>
+          <Button onClick={() => ToneUtils.stop() }>Stop</Button>
           <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
           <Button onClick={this.props.loadSong}>Load</Button>
           <Button onClick={() => this.newTrack() }>Add Track</Button>
@@ -45,30 +44,6 @@ class App extends Component {
     // this.setState(
     //   () => ({ song: updatedSong }),
     //   () => console.log('added track'));
-  }
-
-  stop() {
-    Tone.Transport.stop();
-    Tone.Transport.cancel();
-  }
-
-  async play() {
-    if (Tone.context.state !== 'running')
-        Tone.context.resume();
-
-    const tracksAsNoteObjects = this.props.song.tracks.map(track => 
-      timeUtil.noteObjects(track.notes.allNotes())
-    );
-
-    tracksAsNoteObjects.forEach(trackNoteObjects => {
-      new Tone.Part((time, note) => {
-        this.props.synths[0].triggerAttackRelease(note.name, note.duration, time);
-      }, trackNoteObjects).start();
-    });
-
-    Tone.Transport.bpm.value = 144;
-    const slightDelayToAvoidSchedulingErrors = '+0.1';
-    Tone.Transport.start(slightDelayToAvoidSchedulingErrors);
   }
 }
 

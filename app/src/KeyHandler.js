@@ -1,4 +1,4 @@
-import * as Duration from './Duration';
+import * as Duration from './utils/Duration';
 
 export const handleKey = (e, noteSequence) => {
   if (!noteSequence.isNoteSelected()) return false;

@@ -1,5 +1,5 @@
 import Note from './Note';
-import { quarter } from './Duration';
+import { quarter } from './utils/Duration';
 
 describe('a note', () => {
   it('defaults to quarter note', () => {

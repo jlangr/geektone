@@ -1,6 +1,6 @@
 import Rect from './Rect';
 import { verticalIndex } from './Staff';
-import * as Duration from './Duration';
+import * as Duration from './utils/Duration';
 import { next, prev } from './js/ArrayUtil';
 
 export const height = 64;
