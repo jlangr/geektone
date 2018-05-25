@@ -21,6 +21,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.15.0",
+    "redux-mock-store": "^1.5.1",
     "redux-thunk": "^2.2.0"
   }
 }

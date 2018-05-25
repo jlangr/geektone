@@ -1,7 +1,10 @@
 import * as type from './types';
 import axios from 'axios';
 
-const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
+//const axiosClient = axios.create({ baseURL: 'http://localhost:3001', timeout: 4000});
+
+export const server = 'http://localhost:3001';
+export const request = path => `${server}${path}`;
 
 export const addTrack = newTrack => ({ type: type.ADD_TRACK, payload: newTrack });
 
@@ -11,10 +14,9 @@ export const changeTrackInstrument = (instrument, id) => {
   return { type: type.CHANGE_TRACK_INSTRUMENT, payload: {instrument: instrument, trackId: id }};
 };
 
-// TODO test
 export const loadSong = () => {
   return dispatch => {
-    return axiosClient.get('/song')
+    return axios.get(request('/song'))
       .then(response => {
         dispatch(replaceSong(response.data));
       })
@@ -31,7 +33,7 @@ export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song });
 // TODO test
 export const saveSong = (song) => {
   return dispatch => {
-    return axiosClient.post('/song', song)
+    return axios.post(request('/song'), song)
       .then(response => { 
         dispatch({ type: type.MESSAGE, payload: 'song saved'});
       })
