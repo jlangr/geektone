@@ -5,17 +5,19 @@ export const play = async (tracks, synths) => {
   if (Tone.context.state !== 'running')
       Tone.context.resume();
 
-  const tracksAsNoteObjects = tracks.map(track => 
-    NoteUtil.noteObjects(track.notes.allNotes())
-  );
-
-  // todo use synth appropriate to track. Maybe synths is an "instrumentToSynth" mapping
-
-  tracksAsNoteObjects.forEach(trackNoteObjects => {
-    new Tone.Part((time, note) => {
-      synths[0].triggerAttackRelease(note.name, note.duration, time);
-    }, trackNoteObjects).start();
+  const parts = tracks.map(track => {
+    const toneNotes = NoteUtil.noteObjects(track.notes.allNotes());
+    return new Tone.Part((time, note) => {
+      let synth;
+      if (track.instrument === 'piano')
+        synth = synths[0];
+      else
+        synth = synths[1];
+      synth.triggerAttackRelease(note.name, note.duration, time);
+    }, toneNotes);
   });
+
+  parts.forEach(part => part.start());
 
   Tone.Transport.bpm.value = 144;
   const slightDelayToAvoidSchedulingErrors = '+0.1';
@@ -23,6 +25,6 @@ export const play = async (tracks, synths) => {
 }
 
 export const stop = () => {
-    Tone.Transport.stop();
-    Tone.Transport.cancel();
+  Tone.Transport.stop();
+  Tone.Transport.cancel();
 };

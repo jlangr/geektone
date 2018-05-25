@@ -7,8 +7,11 @@ const INITIAL_STATE = {
 
 export default(state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ADD_SYNTH: 
-      return {...state, synths: [...state.synths, action.payload]};
+    case ADD_SYNTH: {
+      const instrument = action.payload.instrument;
+      const synth = action.payload.synth;
+      return {...state, synths: {...state.synths, [instrument]: synth} };
+    }
     default: 
       return state;
   }

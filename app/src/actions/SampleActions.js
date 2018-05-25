@@ -28,9 +28,11 @@ const createSynth = (instrument, dispatch) => {
     { 
       'release' : 1, 
       'baseUrl' : `./samples/${instrument}/`,
-      'onload': buffers => dispatch({ type: type.ADD_SYNTH, payload: synth})
+      'onload': buffers => dispatch(addSynthAction(instrument, synth))
     }).toMaster();
 }
+
+export const addSynthAction = (instrument, synth) => ( { type: type.ADD_SYNTH, payload: { instrument, synth } } );;
 
 export const loadSamples = () => {
   return function(dispatch) {

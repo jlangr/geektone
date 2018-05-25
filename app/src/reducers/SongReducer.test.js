@@ -17,6 +17,7 @@ describe('song reducer', () => {
   });
 
   it('allows changing the song name', () => {
+// TODO use action
     const state = SongReducer(undefined, { payload: 'new name', type: type.CHANGE_SONG_NAME });
 
     expect(state.song.name).toEqual('new name');
@@ -26,6 +27,7 @@ describe('song reducer', () => {
     const noteSequence = new NoteSequence(['A3']);
     const newTrack = { id: 'track2', name: 'track2', notes: noteSequence };
 
+// TODO use action
     const state = SongReducer(undefined, { payload: newTrack, type: type.ADD_TRACK });
 
     expect(state.song.tracks.length).toEqual(1);
