@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Track from './Track';
 import * as ToneUtils from './ToneUtils';
 import * as actions from './actions';
+import { synthsLoaded } from './reducers/SampleReducer';
 import './App.css';
 
 class App extends Component {
@@ -18,7 +19,8 @@ class App extends Component {
         <p>{this.props.song.name}</p>
         { tracks }
         <Form>
-          <Button onClick={() => ToneUtils.play(this.props.song.tracks, this.props.synths)}  {...(this.samplesLoaded() ? {} : { disabled : true })}>Play</Button>
+          <Button onClick={() => ToneUtils.play(this.props.song.tracks, this.props.synthState.synths)}  
+            {...(synthsLoaded(this.props.synthState) ? {} : { disabled : true })}>Play</Button>
           <Button onClick={() => ToneUtils.stop() }>Stop</Button>
           <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
           <Button onClick={this.props.loadSong}>Load</Button>
@@ -33,18 +35,12 @@ class App extends Component {
       </div>
     );
   }
-
-  // TODO what's the best way to get this out
-  samplesLoaded() {
-    return this.props.synths.length === this.props.expectedSynthCount;
-  }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return { 
     song: state.composition.song,
-    synths: state.samples.synths,
-    expectedSynthCount: state.samples.expectedSynthCount
+    synthState: state.samples
   };
 };
 

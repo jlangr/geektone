@@ -1,7 +1,11 @@
 import { ADD_SYNTH } from '../actions/types';
 
+export const synthsLoaded = synthState => {
+  return Object.keys(synthState.synths).length === synthState.expectedSynthCount;
+};
+
 const INITIAL_STATE = {
-  synths: [],
+  synths: {},
   expectedSynthCount: 2
 };
 

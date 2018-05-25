@@ -8,12 +8,7 @@ export const play = async (tracks, synths) => {
   const parts = tracks.map(track => {
     const toneNotes = NoteUtil.noteObjects(track.notes.allNotes());
     return new Tone.Part((time, note) => {
-      let synth;
-      if (track.instrument === 'piano')
-        synth = synths[0];
-      else
-        synth = synths[1];
-      synth.triggerAttackRelease(note.name, note.duration, time);
+      synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
     }, toneNotes);
   });
 

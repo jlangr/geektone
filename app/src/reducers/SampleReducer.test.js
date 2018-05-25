@@ -3,14 +3,11 @@ import * as actions from '../actions/SampleActions';
 import SampleReducer from './SampleReducer';
 
 describe('add synth', () => {
-  it('updates instrument-to-synth object', ()=> {
+  it('updates instrument-to-synth object', () => {
     const synth = 'flugelhornSynth';
 
     const state = SampleReducer(
-      { 
-        expectedSynthCount: 2,
-        synths: { 'x': 'y' }
-      },
+      { synths: { 'x': 'y' }, expectedSynthCount: 2 },
       actions.addSynthAction('flugelhorn', synth));
 
     expect(state).toEqual({
