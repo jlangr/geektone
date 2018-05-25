@@ -19,6 +19,20 @@ export default (state = INITIAL_STATE, action) => {
     {
       return { ...state, song: { ...state.song, name: action.payload }};
     }
+    case type.CHANGE_TRACK_INSTRUMENT:
+    {
+      console.log('payload', action.payload);
+      const trackId = action.payload.trackId;
+      console.log('trackid=', trackId);
+      const updatedTrack = state.song.tracks[trackId];
+      console.log('state.song.tracks', state.song.tracks);
+      console.log('updated track', updatedTrack);
+      updatedTrack.instrument = action.payload.instrument;
+
+      const tracks = state.song.tracks.map(track => ( track.id === trackId ? updatedTrack: track));
+
+      return { ...state, song: {...state.song, tracks: tracks }};
+    }
     case type.NEW_TRACK:
     {
       return state;

@@ -34,7 +34,7 @@ const createSynth = (instrument, dispatch) => {
 
 export const addSynthAction = (instrument, synth) => ( { type: type.ADD_SYNTH, payload: { instrument, synth } } );;
 
-export const loadSamples = () => {
+export const loadSynths = () => {
   return function(dispatch) {
     createSynth('piano', dispatch);
     createSynth('violin', dispatch);

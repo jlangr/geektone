@@ -7,6 +7,10 @@ export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song });
 
 export const newTrack = () => ({ type: type.NEW_TRACK });
 
+export const changeTrackInstrument = (instrument, id) => {
+  return { type: type.CHANGE_TRACK_INSTRUMENT, payload: {instrument: instrument, trackId: id }};
+};
+
 // TODO test
 export const loadSong = () => {
   return dispatch => {

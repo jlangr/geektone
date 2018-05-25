@@ -33,4 +33,12 @@ describe('song reducer', () => {
     expect(state.song.tracks.length).toEqual(1);
     expect(state.song.tracks[0].name).toEqual('track2');
   });
+
+  it('changes track instrument', () => {
+    const state = { song: { tracks: [{instrument: 'piano'}]}};
+
+    const newState = SongReducer(state, actions.changeTrackInstrument('cornet', 0));
+
+    expect(newState.song.tracks[0].instrument).toEqual('cornet');
+  });
 });

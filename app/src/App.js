@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Track from './Track';
-import * as ToneUtils from './ToneUtils';
-import * as actions from './actions';
-import { synthsLoaded } from './reducers/SampleReducer';
+
 import './App.css';
+
+import Track from './Track';
+import HelpPanel from './components/HelpPanel';
+
+import * as ToneUtils from './ToneUtils';
+import { newTrack, loadSong, saveSong, loadSynths } from './actions';
+import { synthsLoaded } from './reducers/SynthReducer';
 
 class App extends Component {
   componentDidMount() {
-    this.props.loadSamples();
+    this.props.loadSynths();
   }
 
   render() {
@@ -25,12 +29,7 @@ class App extends Component {
           <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
           <Button onClick={this.props.loadSong}>Load</Button>
           <Button onClick={() => this.props.newTrack() }>Add Track</Button>
-          <p>left/right arrows: select prev / next note <br />
-          up/down arrows:  move selected note up / down <br />
-          d     duplicate <br />
-          x     delete <br />
-          1: whole 2: half 3: dotted half 4: quarter 8: eighth *: double length /: halve length <br />
-          </p>
+          <HelpPanel />
         </Form>
       </div>
     );
@@ -44,13 +43,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    newTrack: () => dispatch(actions.newTrack()),
-    loadSong: () => dispatch(actions.loadSong()),
-    saveSong: song => dispatch(actions.saveSong(song)),
-    loadSamples: () => dispatch(actions.loadSamples())
-  };
-};
+const mapDispatchToProps = { newTrack, loadSong, saveSong, loadSynths };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

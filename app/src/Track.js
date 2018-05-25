@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { drawStaff, drawSharp } from './Staff';
 import * as keyHandler from './KeyHandler';
+import { changeTrackInstrument } from './actions';
 
 export class Track extends Component {
   componentDidMount() {
@@ -23,10 +24,25 @@ export class Track extends Component {
     canvas.addEventListener('keyup', this.handleKeyPress.bind(this));
   }
 
+  instrumentChange(e) {
+    console.log('new instrument', e.target.value);
+    console.log('this.props.id', this.props.id);
+    this.props.changeTrackInstrument(e.target.value, this.props.id);
+  }
+
+  // TODO create first-class canvas component and move in some of the drawing funcs
   render() {
-    return <canvas key={this.props.id} id={this.trackId(this.props.id)} border='0' tabIndex={this.props.id} 
-          width='1200' height='144'
-          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />;
+    console.log(this.trackData());
+    return (
+      <div>
+        <select value={this.trackData().instrument} onChange={this.instrumentChange.bind(this)}>
+          <option value='piano'>Piano</option>
+          <option value='violin'>Violin</option>
+        </select>
+        <canvas key={this.props.id} id={this.trackId(this.props.id)} border='0' tabIndex={this.props.id} 
+            width='1200' height='144'
+            style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
+      </div>);
   }
 
   trackContext() {
@@ -76,4 +92,6 @@ export class Track extends Component {
   }
 }
 
-export default connect(({composition}) => ({song: composition.song}))(Track);
+const mapStateToProps = ({composition}) => ({song: composition.song});
+const mapDispatchToProps = { changeTrackInstrument };
+export default connect(mapStateToProps, mapDispatchToProps)(Track);

@@ -1,2 +1,2 @@
 export * from './SongActions';
-export * from './SampleActions';
+export * from './SynthActions';
