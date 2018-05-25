@@ -1,5 +1,4 @@
-import { transportTime, time, noteObjects, halveDuration, doubleDuration } from './TimeUtil';
-import Note from './Note';
+import { transportTime, time, halveDuration, doubleDuration } from './TimeUtil';
 
 describe('time', () => {
   it('converts number of 16s into bars:quarters:sixteenths format', () => {
@@ -14,12 +13,4 @@ describe('time', () => {
     expect(transportTime(33)).toEqual('2:0:1');
   });
 
-  it('creates note objects with time transpoprts', () => {
-    let notes = [ new Note('C4', '8n'), new Note('D4', '4n')];
-
-    expect(noteObjects(notes)).toEqual([
-      { name: 'C4', duration: '8n', time: '0:0:0'},
-      { name: 'D4', duration: '4n', time: '0:0:2'}
-    ]);
-  });
 });

@@ -1,5 +1,4 @@
 import * as Duration from './Duration';
-import Note from './Note';
 
 describe('time', () => {
   it('converts notes into equivalent 16ths', () => {
