@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import songReducer from '../reducers/SongReducer';
+import reducers from '../reducers';
 
-export default createStore(songReducer, applyMiddleware(thunk));
+export default createStore(reducers, applyMiddleware(thunk));

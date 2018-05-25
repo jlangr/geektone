@@ -76,4 +76,4 @@ export class Track extends Component {
   }
 }
 
-export default connect(({song}) => ({song}))(Track);
+export default connect(({composition}) => ({song: composition.song}))(Track);
