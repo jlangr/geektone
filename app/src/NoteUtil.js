@@ -1,5 +1,5 @@
-import * as Duration from './utils/Duration';
-import { transportTime } from './utils/TimeUtil';
+import * as Duration from './Duration';
+import { transportTime } from './TimeUtil';
 
 export const noteObjects = notes => {
   const result = [];

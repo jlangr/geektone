@@ -1,7 +1,7 @@
 import NoteSequence from './NoteSequence';
 import Note from './Note';
 import { handleKey } from './KeyHandler';
-import * as Duration from './utils/Duration';
+import * as Duration from './Duration';
 
 describe('keystrokes', () => {
   let noteSequence;

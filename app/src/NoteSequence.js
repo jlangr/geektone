@@ -1,5 +1,5 @@
 import Note from './Note';
-import * as Duration from './utils/Duration';
+import * as Duration from './Duration';
 import { prev, next } from './js/ArrayUtil';
 
 const nullNote = {

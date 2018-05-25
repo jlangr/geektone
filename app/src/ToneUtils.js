@@ -1,12 +1,12 @@
 import Tone from 'tone';
-import * as TimeUtil from './TimeUtil';
+import * as NoteUtil from './NoteUtil';
 
 export const play = async (tracks, synths) => {
   if (Tone.context.state !== 'running')
       Tone.context.resume();
 
   const tracksAsNoteObjects = tracks.map(track => 
-    TimeUtil.noteObjects(track.notes.allNotes())
+    NoteUtil.noteObjects(track.notes.allNotes())
   );
 
   // todo use synth appropriate to track. Maybe synths is an "instrumentToSynth" mapping

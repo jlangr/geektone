@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Track from './Track';
-import * as ToneUtils from './utils/ToneUtils';
+import * as ToneUtils from './ToneUtils';
 import * as actions from './actions';
 import './App.css';
 
