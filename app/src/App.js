@@ -9,7 +9,7 @@ import Track from './Track';
 import HelpPanel from './components/HelpPanel';
 
 import * as ToneUtils from './ToneUtils';
-import { newTrack, loadSong, saveSong, loadSynths } from './actions';
+import { newTrack, loadSong, saveSong, loadSynths, changeBpm } from './actions';
 import { synthsLoaded } from './reducers/SynthReducer';
 
 class App extends Component {
@@ -25,8 +25,13 @@ class App extends Component {
         { tracks }
         <Form>
           <label htmlFor='bpm'>BPM</label>
-          <NumericInput id='bpm' min={25} max={200} value={120} />
-          <Button onClick={() => ToneUtils.play(this.props.song.tracks, this.props.synthState.synths)}  
+          <NumericInput 
+            id='bpm' 
+            style={{input: { width: 70 }}} 
+            min={25} max={200} 
+            value={this.props.song.bpm} 
+            onChange={this.props.changeBpm.bind(this)} />
+          <Button onClick={() => ToneUtils.play(this.props.song, this.props.synthState.synths)}  
             {...(synthsLoaded(this.props.synthState) ? {} : { disabled : true })}>Play</Button>
           <Button onClick={() => ToneUtils.stop() }>Stop</Button>
           <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
@@ -46,6 +51,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = { newTrack, loadSong, saveSong, loadSynths };
+const mapDispatchToProps = { newTrack, loadSong, saveSong, loadSynths, changeBpm };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

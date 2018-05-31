@@ -15,6 +15,10 @@ export default (state = INITIAL_STATE, action) => {
       const track = action.payload;
       return { ...state, song: { ...state.song, tracks: [...state.song.tracks, track] } };
     }
+    case type.CHANGE_BPM:
+    {
+      return { ...state, song: { ...state.song, bpm: action.payload }};
+    }
     case type.CHANGE_SONG_NAME:
     {
       return { ...state, song: { ...state.song, name: action.payload }};

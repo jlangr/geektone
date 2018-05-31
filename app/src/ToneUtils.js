@@ -1,7 +1,8 @@
 import Tone from 'tone';
 import * as NoteUtil from './NoteUtil';
 
-export const play = async (tracks, synths) => {
+export const play = async (song, synths) => {
+  const tracks = song.tracks;
   if (Tone.context.state !== 'running')
       Tone.context.resume();
 
@@ -14,7 +15,7 @@ export const play = async (tracks, synths) => {
 
   parts.forEach(part => part.start());
 
-  Tone.Transport.bpm.value = 144;
+  Tone.Transport.bpm.value = song.bpm;
   const slightDelayToAvoidSchedulingErrors = '+0.1';
   Tone.Transport.start(slightDelayToAvoidSchedulingErrors);
 }

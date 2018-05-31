@@ -6,6 +6,8 @@ export const request = path => `${server}${path}`;
 
 export const addTrack = newTrack => ({ type: type.ADD_TRACK, payload: newTrack });
 
+export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm });
+
 export const changeSongName = newName => ({ type: type.CHANGE_SONG_NAME, payload: 'new name' });
 
 export const changeTrackInstrument = (instrument, id) => {

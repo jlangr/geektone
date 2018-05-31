@@ -21,6 +21,14 @@ describe('song reducer', () => {
 
     expect(state.song.name).toEqual('new name');
   });
+  
+  it('allows changing the BPM', () => {
+    const state = { song: { bpm: 120 }};
+
+    const newState = SongReducer(state, actions.changeBpm(140));
+
+    expect(newState.song.bpm).toEqual(140);
+  });
 
   it('adds a track', () => {
     const noteSequence = new NoteSequence(['A3']);

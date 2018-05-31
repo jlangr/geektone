@@ -1,5 +1,6 @@
 export const ADD_SYNTH = 'add_synth';
 export const ADD_TRACK = 'add_track';
+export const CHANGE_BPM = 'change_bpm';
 export const CHANGE_SONG_NAME = 'change_song_name';
 export const CHANGE_TRACK_INSTRUMENT = 'change_track_instrument';
 export const ERROR = 'error';
