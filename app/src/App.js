@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import NumericInput from 'react-numeric-input';
 
 import './App.css';
 
@@ -23,6 +24,8 @@ class App extends Component {
         <p>{this.props.song.name}</p>
         { tracks }
         <Form>
+          <label htmlFor='bpm'>BPM</label>
+          <NumericInput id='bpm' min={25} max={200} value={120} />
           <Button onClick={() => ToneUtils.play(this.props.song.tracks, this.props.synthState.synths)}  
             {...(synthsLoaded(this.props.synthState) ? {} : { disabled : true })}>Play</Button>
           <Button onClick={() => ToneUtils.stop() }>Stop</Button>

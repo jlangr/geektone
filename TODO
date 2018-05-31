@@ -1,6 +1,5 @@
 BPM
 undo / redo
-multiple staffs / instruments
 flats / sharps
 rests
 bars
@@ -9,6 +8,8 @@ delete last note
 repeat section
 clear staff
 note insert mode
+mouse insert note
+delete / copy / paste multiple notes
 
 move from track-to-track using ctrl-keys
 
