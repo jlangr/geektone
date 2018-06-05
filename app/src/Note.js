@@ -1,4 +1,4 @@
-import Rect from './Rect';
+import Rect, { RectAroundCenter } from './Rect';
 import { verticalIndex, topMargin } from './Staff';
 import * as Duration from './Duration';
 import { next, prev } from './js/ArrayUtil';
@@ -99,8 +99,9 @@ export default class Note {
   // TODO externalize below ... to Staff?
 
   isHit(mousePosition, position) {
-    return new Rect(this.x(position), this.y(), noteWidth, noteHeight)
+    return RectAroundCenter(this.x(position), this.y(), noteWidth, noteHeight)
       .contains(mousePosition);
+    // return new Rect(this.x(position), this.y(), noteWidth, noteHeight)
   }
 
   x(position) {
