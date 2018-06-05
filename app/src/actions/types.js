@@ -8,3 +8,4 @@ export const LOAD_SAMPLES = 'load_samples';
 export const MESSAGE = 'message';
 export const NEW_TRACK = 'new_track';
 export const REPLACE_SONG = 'replace_song';
+export const TOGGLE_SHARPS_MODE = 'toggle_sharps_mode';

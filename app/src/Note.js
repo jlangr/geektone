@@ -1,5 +1,5 @@
 import Rect from './Rect';
-import { verticalIndex } from './Staff';
+import { verticalIndex, topMargin } from './Staff';
 import * as Duration from './Duration';
 import { next, prev } from './js/ArrayUtil';
 
@@ -107,8 +107,9 @@ export default class Note {
     return sharpsArea + notePad + (position * (noteDistance + notePad));
   }
 
+  // dup with noteY from staff
   y() {
-    return verticalIndex(this.name()) * lineHeight / 2;
+    return (verticalIndex(this.name()) * lineHeight / 2);
   }
 
   drawEllipse(context, position, extraRadius=0) {

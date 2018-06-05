@@ -9,10 +9,12 @@ import Track from './Track';
 import HelpPanel from './components/HelpPanel';
 
 import * as ToneUtils from './ToneUtils';
-import { newTrack, loadSong, saveSong, loadSynths, changeBpm } from './actions';
+import { 
+  changeBpm, loadSong, loadSynths, newTrack, saveSong
+} from './actions';
 import { synthsLoaded } from './reducers/SynthReducer';
 
-class App extends Component {
+export class App extends Component {
   componentDidMount() {
     this.props.loadSynths();
   }
@@ -51,6 +53,8 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = { newTrack, loadSong, saveSong, loadSynths, changeBpm };
+const mapDispatchToProps = { 
+  changeBpm, loadSong, loadSynths, newTrack, saveSong
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

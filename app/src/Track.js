@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { drawStaff, drawSharp } from './Staff';
+import Staff, { drawSharp } from './Staff';
 import * as keyHandler from './KeyHandler';
-import { changeTrackInstrument } from './actions';
+import { changeTrackInstrument, toggleSharpsMode } from './actions';
 
 export class Track extends Component {
   componentDidMount() {
@@ -36,9 +37,10 @@ export class Track extends Component {
           <option value='piano'>Piano</option>
           <option value='violin'>Violin</option>
         </select>
+        <Button onClick={() => { this.props.toggleSharpsMode(); this.draw(); } }>Add #</Button>
         <canvas key={this.props.id} id={this.trackId(this.props.id)} border='0' tabIndex={this.props.id} 
-            width='1200' height='144'
-            style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
+          width='1200' height='144'
+          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
       </div>);
   }
 
@@ -50,15 +52,7 @@ export class Track extends Component {
     return document.getElementById(this.trackId(this.props.id));
   }
 
-  testDrawSharps(context) {
-    drawSharp(context, 'E4', 1);
-    drawSharp(context, 'F4', 3);
-    drawSharp(context, 'G4', 2);
-    drawSharp(context, 'A4', 4);
-  }
-
   handleKeyPress(e) {
-    if (e.key === '#') { this.testDrawSharps(this.trackContext()); return; }
     if (e.key === 's') { this.save(); return; }
     if (keyHandler.handleKey(e, this.trackData().notes)) this.draw();
   }
@@ -69,7 +63,8 @@ export class Track extends Component {
 
   draw() {
     this.trackContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
-    drawStaff(this.trackContext());
+    new Staff(this.trackContext()).draw();
+    // drawStaff(this.trackContext());
     this.trackData().notes.allNotes()
       .forEach((note, i) => note.drawOn(this.trackContext(), i));
   }
@@ -90,5 +85,5 @@ export class Track extends Component {
 }
 
 const mapStateToProps = ({composition}) => ({song: composition.song});
-const mapDispatchToProps = { changeTrackInstrument };
+const mapDispatchToProps = { changeTrackInstrument, toggleSharpsMode };
 export default connect(mapStateToProps, mapDispatchToProps)(Track);
