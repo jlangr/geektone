@@ -1,4 +1,4 @@
-import RectAroundCenter from './Rect';
+import Rect from './Rect';
 import { verticalIndex } from './Staff';
 import * as Duration from './Duration';
 import { next, prev } from './js/ArrayUtil';
@@ -99,9 +99,12 @@ export default class Note {
   // TODO externalize below ... to Staff?
 
   isHit(mousePosition, position) {
-    return RectAroundCenter(this.x(position), this.y(), noteWidth, noteHeight)
+    const centerX = this.x(position);
+    const centerY = this.y();
+    return new Rect(
+      centerX - noteWidth, centerY - noteHeight,
+      centerX + noteWidth, centerX + noteHeight)
       .contains(mousePosition);
-    // return new Rect(this.x(position), this.y(), noteWidth, noteHeight)
   }
 
   x(position) {

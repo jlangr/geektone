@@ -1,8 +1,3 @@
-export const RectAroundCenter = (centerX, centerY, halfWidth, halfHeight) => 
-  new Rect(
-    centerX - halfWidth, centerY - halfHeight, 
-    centerX + halfWidth, centerY + halfHeight);
-
 export default class Rect {
   constructor(startX, startY, endX, endY) {
     this.startX = startX;
