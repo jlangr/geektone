@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Staff, { drawSharp } from './Staff';
+import Staff from './Staff';
 import * as keyHandler from './KeyHandler';
 import { changeTrackInstrument, toggleSharpsMode } from './actions';
 
@@ -79,15 +79,16 @@ export class Track extends Component {
 
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
-    if (this.staff.isClickInAccidentalsAndEditing(clickPoint)) { // TODO get toggle from props
-      console.log('yup');
-      this.draw();
-    }
-    if (this.trackData().notes.clickHitNote(clickPoint))
-      this.draw();
+    if (this.props.ui.sharpsMode) {
+      if (this.staff.isClickInAccidentals(clickPoint)) {
+        this.draw();
+      }
+    } else
+      if (this.trackData().notes.clickHitNote(clickPoint))
+        this.draw();
   }
 }
 
-const mapStateToProps = ({composition}) => ({song: composition.song});
+const mapStateToProps = ({composition, ui}) => ({ song: composition.song, ui });
 const mapDispatchToProps = { changeTrackInstrument, toggleSharpsMode };
 export default connect(mapStateToProps, mapDispatchToProps)(Track);

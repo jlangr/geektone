@@ -1,12 +1,9 @@
-import { height, lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
+import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 import store from './store';
 import Rect from './Rect';
 
 const staffWidth = 1200;
 const highlightColor = 'red'; // move to ui constants source
-const defaultColor = 'black'; // move to ui constants source
-const defaultWeight = 1;
-
 const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
 const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
 
@@ -29,9 +26,8 @@ class Staff {
   }
   
   // TODO test
-  isClickInAccidentalsAndEditing(point) {
-    return this.accidentalsRect.contains(point) &&
-      store.getState().ui.sharpsMode;
+  isClickInAccidentals(point) {
+    return this.accidentalsRect.contains(point);
   }
 
   y(noteName) {

@@ -1,5 +1,5 @@
-import Rect, { RectAroundCenter } from './Rect';
-import { verticalIndex, topMargin } from './Staff';
+import RectAroundCenter from './Rect';
+import { verticalIndex } from './Staff';
 import * as Duration from './Duration';
 import { next, prev } from './js/ArrayUtil';
 
