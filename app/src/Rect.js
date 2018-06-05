@@ -10,12 +10,12 @@ export default class Rect {
     this.endX = endX;
     this.endY = endY;
   }
-  // constructor(centerX, centerY, halfWidth, halfHeight) {
-  //   this.startX = centerX - halfWidth;
-  //   this.startY = centerY - halfHeight;
-  //   this.endX = centerX + halfWidth;
-  //   this.endY = centerY + halfHeight;
-  // }
+
+  drawOn(context, color='black', weight=1) {
+    context.strokeStyle = color;
+    context.lineWidth = weight;
+    context.rect(this.startX, this.startY, this.endX, this.endY);
+  }
 
   contains(point) {
     return point.x >= this.startX && point.x <= this.endX &&

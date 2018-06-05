@@ -1,18 +1,8 @@
-  // F ---
-  // E
-  // D ---
-  // C
-  // B ---
-  // A
-  // G ---
-  // F
-  // E ---
-  // D
-  // C (---)
 import { height, lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 import store from './store';
+import Rect from './Rect';
 
-const width = 1200;
+const staffWidth = 1200;
 const highlightColor = 'red'; // move to ui constants source
 const defaultColor = 'black'; // move to ui constants source
 const defaultWeight = 1;
@@ -27,6 +17,15 @@ export const verticalIndex = noteName => {
 class Staff {
   constructor(ctx) {
     this.context = ctx;
+    this.createAccidentalsRect();
+  }
+
+  createAccidentalsRect() {
+    const right = sharpArea * sharpsInWidth;
+    const top = 0;
+    const left = 0;
+    const bottom = this.noteY('C4');
+    this.accidentalsRect = new Rect(left, top, right, bottom);
   }
 
   y(noteName) {
@@ -36,14 +35,13 @@ class Staff {
   draw() {
     this.context.beginPath();
 
-    const staffHeight = trebleStaffLines.length * lineHeight;
-
     const topLineY = this.y(trebleStaffLines[0]);
     for (let i = 0; i < trebleStaffLines.length; i++) {
       const currentY = this.y(trebleStaffLines[i]);
-      this.drawLine(0, currentY, width, currentY);
+      this.drawLine(0, currentY, staffWidth, currentY);
     }
-    this.drawLine(width, topLineY, width, staffHeight);
+    this.staffHeight = trebleStaffLines.length * lineHeight;
+    this.drawLine(staffWidth, topLineY, staffWidth, this.staffHeight);
     this.context.stroke();
     this.drawAccidentalsArea(this.context);
   }
@@ -56,20 +54,20 @@ class Staff {
   }
 
   drawSharp(note, sharpCount) {
-    const height = 20;
-    const widthBetweenUpstrokes = sharpWidth / 4;
+    const sharpHeight = 20;
+    const staffWidthBetweenUpstrokes = sharpWidth / 4;
 
     this.context.beginPath();
 
     const y = this.noteY(note) + 4;
     const x = ((sharpCount - 1) % sharpsInWidth) * sharpArea + sharpWidth;
 
-    let top = y - (height / 2);
-    let bottom = y + (height / 2);
-    let upstrokeLeft = x - (widthBetweenUpstrokes / 2);
-    let upstrokeRight = x + (widthBetweenUpstrokes / 2);
+    let top = y - (sharpHeight / 2);
+    let bottom = y + (sharpHeight / 2);
+    let upstrokeLeft = x - (staffWidthBetweenUpstrokes / 2);
+    let upstrokeRight = x + (staffWidthBetweenUpstrokes / 2);
 
-    let verticalOffset = height / 3;
+    let verticalOffset = sharpHeight / 3;
 
     let weight = 2;
     this.drawLine(upstrokeLeft, top, upstrokeLeft, bottom, weight);
@@ -81,11 +79,11 @@ class Staff {
     weight = 4;
     let left = x - (sharpWidth / 2);
     let right = x + (sharpWidth / 2);
-    let upslashYstart = y - (height / 4);
+    let upslashYstart = y - (sharpHeight / 4);
     let upslashYend = upslashYstart - verticalOffset;
     this.drawLine(left, upslashYstart, right, upslashYend, weight);
 
-    upslashYstart = y + (height / 4);
+    upslashYstart = y + (sharpHeight / 4);
     upslashYend = upslashYstart - verticalOffset;
     this.drawLine(left, upslashYstart, right, upslashYend, weight);
     this.context.stroke();
@@ -94,13 +92,8 @@ class Staff {
   drawAccidentalsArea() {
     if (store.getState().ui.sharpsMode) {
       this.context.beginPath();
-      this.context.strokeStyle = highlightColor;
-      this.context.lineWidth = 6;
-      const right = sharpArea * sharpsInWidth;
-      const top = 0;
-      const left = 0;
-      const bottom = this.noteY('C4');
-      this.context.rect(left, top, right, bottom);
+      const lineWidth = 6;
+      this.accidentalsRect.drawOn(this.context, highlightColor, lineWidth);
       this.context.stroke();
     }
   }
