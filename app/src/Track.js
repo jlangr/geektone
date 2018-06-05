@@ -7,6 +7,7 @@ import { changeTrackInstrument, toggleSharpsMode } from './actions';
 
 export class Track extends Component {
   componentDidMount() {
+    this.staff = new Staff(this.trackContext());
     this.addKeyListeners();
     this.addMouseListener();
     this.draw();
@@ -63,8 +64,7 @@ export class Track extends Component {
 
   draw() {
     this.trackContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
-    new Staff(this.trackContext()).draw();
-    // drawStaff(this.trackContext());
+    this.staff.draw();
     this.trackData().notes.allNotes()
       .forEach((note, i) => note.drawOn(this.trackContext(), i));
   }
@@ -79,6 +79,10 @@ export class Track extends Component {
 
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
+    if (this.staff.isClickInAccidentalsAndEditing(clickPoint)) { // TODO get toggle from props
+      console.log('yup');
+      this.draw();
+    }
     if (this.trackData().notes.clickHitNote(clickPoint))
       this.draw();
   }

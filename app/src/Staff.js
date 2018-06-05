@@ -27,6 +27,12 @@ class Staff {
     const bottom = this.noteY('C4');
     this.accidentalsRect = new Rect(left, top, right, bottom);
   }
+  
+  // TODO test
+  isClickInAccidentalsAndEditing(point) {
+    return this.accidentalsRect.contains(point) &&
+      store.getState().ui.sharpsMode;
+  }
 
   y(noteName) {
     return (verticalIndex(noteName) * lineHeight / 2);
