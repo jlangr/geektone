@@ -47,3 +47,13 @@ describe('song reducer', () => {
     expect(newState.song.tracks[0].instrument).toEqual('cornet');
   });
 });
+
+describe('toggle sharps mode', () => {
+  it('turns on with first toggle', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: false}]}};
+
+    const newState = SongReducer(state, actions.toggleSharpsMode(0));
+
+    expect(newState.song.tracks[0].sharpsMode).toBeTruthy();
+  });
+});

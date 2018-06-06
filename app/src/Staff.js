@@ -1,3 +1,7 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 import Rect from './Rect';
 
@@ -24,12 +28,22 @@ export class Range {
   }
 }
 
-export default class Staff {
-  constructor(ctx, ui) {
-    this.context = ctx;
-    this.createAccidentalsRect();
+export class Staff extends Component {
+  constructor() {
+    super();
     this.buildStaffNoteLineRanges();
-    this.ui = ui;
+    this.createAccidentalsRect();
+  }
+
+  componentDidMount() {
+    this.addKeyListeners();
+    this.addMouseListener();
+    this.draw();
+  }
+
+  // check what changed?
+  componentDidUpdate() {
+    this.draw();
   }
 
   createAccidentalsRect() {
@@ -38,6 +52,59 @@ export default class Staff {
     const left = 0;
     const bottom = this.noteY('C4');
     this.accidentalsRect = new Rect(left, top, right, bottom);
+  }
+
+  staffContext() {
+    const canvas = this.canvas();
+    return canvas.getContext('2d');
+  }
+
+  canvas() {
+    return document.getElementById(this.props.id);
+  }
+
+  addMouseListener() {
+    this.canvas().addEventListener('mousedown', this.click.bind(this));
+  }
+
+  addKeyListeners() {
+    const canvas = document.getElementById(this.props.id);
+    canvas.addEventListener('keyup', this.handleKeyPress.bind(this));
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 's') { this.save(); return; }
+    if (keyHandler.handleKey(e, this.noteSequence().notes)) this.draw();
+  }
+
+  render() {
+    return (
+      <div>
+        <canvas id={this.props.id} 
+          border='0' width='1200' height='144'
+          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
+      </div>
+    );
+  }
+
+  mousePosition(canvas, e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+      y: (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+    };
+  }
+
+  click(e) {
+    const clickPoint = this.mousePosition(this.canvas(), e);
+    if (this.isInSharpsMode()) {
+      if (this.isClickInAccidentals(clickPoint)) {
+        console.log('note', this.nearestNote(clickPoint));
+        this.draw();
+      }
+    } else
+      if (this.noteSequence().notes.clickHitNote(clickPoint))
+        this.draw();
   }
 
   withinTolerance(note, point) {
@@ -75,7 +142,18 @@ export default class Staff {
   }
 
   draw() {
-    this.context.beginPath();
+    this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
+    this.drawStaffLines();
+    this.noteSequence().notes.allNotes()
+      .forEach((note, i) => note.drawOn(this.staffContext(), i));
+  }
+
+  noteSequence() {
+    return this.props.song.tracks[this.props.id];
+  }
+
+  drawStaffLines() {
+    this.staffContext().beginPath();
 
     const topLineY = this.y(trebleStaffLines[0]);
     for (let i = 0; i < trebleStaffLines.length; i++) {
@@ -84,22 +162,22 @@ export default class Staff {
     }
     this.staffHeight = trebleStaffLines.length * lineHeight;
     this.drawLine(staffWidth, topLineY, staffWidth, this.staffHeight);
-    this.context.stroke();
-    this.drawAccidentalsArea(this.context);
+    this.staffContext().stroke();
+    this.drawAccidentalsArea();
   }
 
   drawLine(xStart, yStart, xEnd, yEnd, weight=1, color='black') {
-    this.context.strokeStyle = color;
-    this.context.lineWidth = weight;
-    this.context.moveTo(xStart, yStart);
-    this.context.lineTo(xEnd, yEnd);
+    this.staffContext().strokeStyle = color;
+    this.staffContext().lineWidth = weight;
+    this.staffContext().moveTo(xStart, yStart);
+    this.staffContext().lineTo(xEnd, yEnd);
   }
 
   drawSharp(note, sharpCount) {
     const sharpHeight = 20;
     const staffWidthBetweenUpstrokes = sharpWidth / 4;
 
-    this.context.beginPath();
+    this.staffContext().beginPath();
 
     const y = this.noteY(note) + 4;
     const x = ((sharpCount - 1) % sharpsInWidth) * sharpArea + sharpWidth;
@@ -115,9 +193,9 @@ export default class Staff {
     this.drawLine(upstrokeLeft, top, upstrokeLeft, bottom, weight);
     this.drawLine(upstrokeRight, top - verticalOffset, upstrokeRight, bottom - verticalOffset, weight);
 
-    this.context.stroke();
+    this.staffContext().stroke();
 
-    this.context.beginPath();
+    this.staffContext().beginPath();
     weight = 4;
     let left = x - (sharpWidth / 2);
     let right = x + (sharpWidth / 2);
@@ -128,16 +206,19 @@ export default class Staff {
     upslashYstart = y + (sharpHeight / 4);
     upslashYend = upslashYstart - verticalOffset;
     this.drawLine(left, upslashYstart, right, upslashYend, weight);
-    this.context.stroke();
+    this.staffContext().stroke();
+  }
+
+  isInSharpsMode() {
+    return this.props.song.tracks[this.props.id].sharpsMode;
   }
 
   drawAccidentalsArea() {
-    console.log('this.ui', this.ui);
-    if (this.ui.sharpsMode) {
-      this.context.beginPath();
+    if (this.isInSharpsMode()) {
+      this.staffContext().beginPath();
       const lineWidth = 6;
-      this.accidentalsRect.drawOn(this.context, highlightColor, lineWidth);
-      this.context.stroke();
+      this.accidentalsRect.drawOn(this.staffContext(), highlightColor, lineWidth);
+      this.staffContext().stroke();
     }
   }
 
@@ -146,3 +227,9 @@ export default class Staff {
     return (verticalIndex(noteName) * lineHeight / 2);
   }
 }
+
+const mapStateToProps = ({ ui, composition }) => {
+  return { ui, song: composition.song };
+};
+
+export default connect(mapStateToProps)(Staff);

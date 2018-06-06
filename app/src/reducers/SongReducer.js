@@ -48,6 +48,14 @@ export default(state = INITIAL_STATE, action) => {
       });
       return { ...state, song: newSong };
     }
+
+    case type.TOGGLE_SHARPS_MODE:
+      const trackIndex = action.payload;
+      const changedTrack = state.song.tracks[trackIndex];
+      changedTrack.sharpsMode = !changedTrack.sharpsMode;
+      const newTracks = 
+        [...state.song.tracks.slice(0, trackIndex), changedTrack, ...state.song.tracks.slice(trackIndex+1) ];
+      return { ...state, song: {...state.song, tracks: newTracks} };
     default:
       return state;
   }
