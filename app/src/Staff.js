@@ -6,15 +6,30 @@ const staffWidth = 1200;
 const highlightColor = 'red'; // move to ui constants source
 const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
 const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
+const trebleStaffInterlineIndices = [ 3, 5, 7, 9 ];
+
+export const lineClickTolerance = 3;
 
 export const verticalIndex = noteName => {
   return trebleStaffNotes.indexOf(noteName);
 };
 
+class Range {
+  constructor(start, end) {
+    this.start = start;
+    this.end = end;
+  }
+
+  contains(number) {
+    return number >= this.start && number <= this.end;
+  }
+}
+
 class Staff {
   constructor(ctx) {
     this.context = ctx;
     this.createAccidentalsRect();
+    this.buildStaffNoteLineRanges();
   }
 
   createAccidentalsRect() {
@@ -23,6 +38,31 @@ class Staff {
     const left = 0;
     const bottom = this.noteY('C4');
     this.accidentalsRect = new Rect(left, top, right, bottom);
+  }
+
+  withinTolerance(note, point) {
+    return Math.abs(point.y - this.noteY(note)) <= lineClickTolerance;
+  }
+
+  buildStaffNoteLineRanges() {
+    this.ranges = {};
+    trebleStaffLines.forEach(note => {
+      const y = this.noteY(note);
+      this.ranges[note] = new Range(y - lineClickTolerance, y + lineClickTolerance);
+    });
+    trebleStaffInterlineIndices.forEach(i => {
+      const note = trebleStaffNotes[i];
+      const higherNote = trebleStaffNotes[i - 1];
+      const lowerNote = trebleStaffNotes[i + 1];
+      this.ranges[note] = 
+        new Range(this.ranges[higherNote].end + 1, this.ranges[lowerNote].start - 1);
+    });
+  }
+
+  nearestNote(point) {
+    const pair = Object.entries(this.ranges)
+      .find(([note, range]) => range.contains(point.y));
+    return pair ? pair[0] : undefined;
   }
   
   // TODO test

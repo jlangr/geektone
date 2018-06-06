@@ -81,6 +81,7 @@ export class Track extends Component {
     const clickPoint = this.mousePosition(this.canvas(), e);
     if (this.props.ui.sharpsMode) {
       if (this.staff.isClickInAccidentals(clickPoint)) {
+        this.staff.nearestNote(clickPoint);
         this.draw();
       }
     } else

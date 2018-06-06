@@ -1,8 +1,8 @@
 import SongReducer from './SongReducer';
 import NoteSequence from '../NoteSequence';
-import Note from '../Note';
 import * as actions from '../actions';
 import * as type from '../actions/types';
+//import combineReducers from './index';
 
 describe('song reducer', () => {
   it('replaces the song', () => {
