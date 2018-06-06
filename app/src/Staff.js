@@ -1,5 +1,4 @@
 import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
-import store from './store';
 import Rect from './Rect';
 
 const staffWidth = 1200;
@@ -14,7 +13,7 @@ export const verticalIndex = noteName => {
   return trebleStaffNotes.indexOf(noteName);
 };
 
-class Range {
+export class Range {
   constructor(start, end) {
     this.start = start;
     this.end = end;
@@ -25,11 +24,12 @@ class Range {
   }
 }
 
-class Staff {
-  constructor(ctx) {
+export default class Staff {
+  constructor(ctx, ui) {
     this.context = ctx;
     this.createAccidentalsRect();
     this.buildStaffNoteLineRanges();
+    this.ui = ui;
   }
 
   createAccidentalsRect() {
@@ -132,7 +132,8 @@ class Staff {
   }
 
   drawAccidentalsArea() {
-    if (store.getState().ui.sharpsMode) {
+    console.log('this.ui', this.ui);
+    if (this.ui.sharpsMode) {
       this.context.beginPath();
       const lineWidth = 6;
       this.accidentalsRect.drawOn(this.context, highlightColor, lineWidth);
@@ -145,5 +146,3 @@ class Staff {
     return (verticalIndex(noteName) * lineHeight / 2);
   }
 }
-
-export default Staff;

@@ -7,7 +7,7 @@ import { changeTrackInstrument, toggleSharpsMode } from './actions';
 
 export class Track extends Component {
   componentDidMount() {
-    this.staff = new Staff(this.trackContext());
+    this.staff = new Staff(this.trackContext(), this.props.ui);
     this.addKeyListeners();
     this.addMouseListener();
     this.draw();

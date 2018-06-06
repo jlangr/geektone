@@ -8,7 +8,7 @@ export const INITIAL_STATE = {
   }
 };
 
-const SongReducer = (state = INITIAL_STATE, action) => {
+export default(state = INITIAL_STATE, action) => {
   switch (action.type) {
     case type.ADD_TRACK:
     {
@@ -52,5 +52,3 @@ const SongReducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 };
-
-export default SongReducer;
