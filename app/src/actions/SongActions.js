@@ -4,6 +4,8 @@ import axios from 'axios';
 export const server = 'http://localhost:3001';
 export const request = path => `${server}${path}`;
 
+export const addSharp = (trackIndex, note) => ({ type: type.ADD_SHARP, payload: { trackIndex, note }});
+
 export const addTrack = newTrack => ({ type: type.ADD_TRACK, payload: newTrack });
 
 export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm });

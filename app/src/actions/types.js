@@ -1,3 +1,4 @@
+export const ADD_SHARP = 'add_sharp';
 export const ADD_SYNTH = 'add_synth';
 export const ADD_TRACK = 'add_track';
 export const CHANGE_BPM = 'change_bpm';

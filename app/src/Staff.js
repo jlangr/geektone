@@ -5,6 +5,8 @@ import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 import Rect from './Rect';
 
+import { addSharp } from './actions';
+
 const staffWidth = 1200;
 const highlightColor = 'red'; // move to ui constants source
 const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
@@ -74,7 +76,7 @@ export class Staff extends Component {
   }
 
   handleKeyPress(e) {
-    if (keyHandler.handleKey(e, this.noteSequence().notes)) this.draw();
+    if (keyHandler.handleKey(e, this.trackData().notes)) this.draw();
   }
 
   mousePosition(canvas, e) {
@@ -90,10 +92,11 @@ export class Staff extends Component {
     if (this.isInSharpsMode()) {
       if (this.isClickInAccidentals(clickPoint)) {
         console.log('note', this.nearestNote(clickPoint));
+        this.props.addSharp(this.props.id, this.nearestNote(clickPoint));
         this.draw();
       }
     } else
-      if (this.noteSequence().notes.clickHitNote(clickPoint))
+      if (this.trackData().notes.clickHitNote(clickPoint))
         this.draw();
   }
 
@@ -142,11 +145,11 @@ export class Staff extends Component {
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
-    this.noteSequence().notes.allNotes()
+    this.trackData().notes.allNotes()
       .forEach((note, i) => note.drawOn(this.staffContext(), i));
   }
 
-  noteSequence() {
+  trackData() {
     return this.props.song.tracks[this.props.id];
   }
 
@@ -171,14 +174,14 @@ export class Staff extends Component {
     this.staffContext().lineTo(xEnd, yEnd);
   }
 
-  drawSharp(note, sharpCount) {
+  drawSharp(note, sharpIndex) {
     const sharpHeight = 20;
     const staffWidthBetweenUpstrokes = sharpWidth / 4;
 
     this.staffContext().beginPath();
 
     const y = this.noteY(note) + 4;
-    const x = ((sharpCount - 1) % sharpsInWidth) * sharpArea + sharpWidth;
+    const x = (sharpIndex % sharpsInWidth) * sharpArea + sharpWidth;
 
     let top = y - (sharpHeight / 2);
     let bottom = y + (sharpHeight / 2);
@@ -218,6 +221,11 @@ export class Staff extends Component {
       this.accidentalsRect.drawOn(this.staffContext(), highlightColor, lineWidth);
       this.staffContext().stroke();
     }
+
+    if (this.trackData().sharps)
+      this.trackData().sharps.forEach((note, i) => {
+        this.drawSharp(note, i);
+    });
   }
 
   // dup from note
@@ -226,8 +234,7 @@ export class Staff extends Component {
   }
 }
 
-const mapStateToProps = ({ ui, composition }) => {
-  return { ui, song: composition.song };
-};
+const mapStateToProps = ({ ui, composition }) => ({ ui, song: composition.song });
+const mapDispatchToProps = { addSharp };
 
-export default connect(mapStateToProps)(Staff);
+export default connect(mapStateToProps, mapDispatchToProps)(Staff);

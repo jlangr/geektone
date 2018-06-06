@@ -50,10 +50,36 @@ describe('song reducer', () => {
 
 describe('toggle sharps mode', () => {
   it('turns on with first toggle', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: false}]}};
+    const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: false}, {name: 'y', sharpsMode: false}]}};
 
-    const newState = SongReducer(state, actions.toggleSharpsMode(0));
+    const newState = SongReducer(state, actions.toggleSharpsMode(1));
 
-    expect(newState.song.tracks[0].sharpsMode).toBeTruthy();
+    expect(newState.song.tracks[1].sharpsMode).toBeTruthy();
+  });
+});
+
+describe('add accidental', () => {
+  it('adds note to sharps', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'a'}]}};
+
+    const newState = SongReducer(state, actions.addSharp(0, 'F5'));
+
+    expect(newState.song.tracks[0].sharps).toEqual(['F5']);
+  });
+
+  it('ignores undefined', () => {
+    const state = { song: { name: 'x', tracks: [{sharps: ['F5'], name: 'a'}]}};
+
+    const newState = SongReducer(state, actions.addSharp(0, undefined));
+
+    expect(newState.song.tracks[0].sharps).toEqual(['F5']);
+  });
+
+  it('removes when already exists', () => {
+    const state = { song: { name: 'x', tracks: [{sharps: ['F5'], name: 'a'}]}};
+
+    const newState = SongReducer(state, actions.addSharp(0, 'F5'));
+
+    expect(newState.song.tracks[0].sharps).toEqual([]);
   });
 });
