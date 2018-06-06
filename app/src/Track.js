@@ -17,10 +17,9 @@ export class Track extends Component {
           <option value='violin'>Violin</option>
         </select>
         <Button onClick={() => { this.props.toggleSharpsMode(this.props.id); } }>Add #</Button>
-        <Staff key={this.props.id} id={this.props.id} tabIndex={this.props.id} />
+        <Staff key={this.props.id} id={this.props.id} />
       </div>);
   }
-  // TODO does the Staff component need all three things with the same ID
 
   trackData() {
     return this.props.song.tracks[this.props.id];

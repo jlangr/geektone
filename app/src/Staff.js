@@ -46,7 +46,6 @@ export class Staff extends Component {
     this.draw();
   }
 
-  // tabIndex needed for key events
   render() {
     return (
       <div>
@@ -55,7 +54,7 @@ export class Staff extends Component {
           border='0' width='1200' height='144'
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
       </div>
-    );
+    );  // note: tabIndex needed for key events
   }
 
   canvas() {
@@ -63,12 +62,10 @@ export class Staff extends Component {
   }
 
   staffContext() {
-    const canvas = this.canvas();
-    return canvas.getContext('2d');
+    return this.canvas().getContext('2d');
   }
 
   addMouseListener() {
-    console.log('adding mouse listener to canvas ', this.canvas());
     this.canvas().addEventListener('mousedown', this.click.bind(this));
   }
 
@@ -89,7 +86,6 @@ export class Staff extends Component {
   }
 
   click(e) {
-    console.log('click ', e);
     const clickPoint = this.mousePosition(this.canvas(), e);
     if (this.isInSharpsMode()) {
       if (this.isClickInAccidentals(clickPoint)) {
