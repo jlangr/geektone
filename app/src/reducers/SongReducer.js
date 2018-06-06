@@ -1,6 +1,5 @@
 import * as type from '../actions/types';
 import NoteSequence from '../NoteSequence';
-import { toggleSharpsMode } from '../actions';
 
 export const INITIAL_STATE = {
   song: {

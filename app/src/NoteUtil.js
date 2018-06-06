@@ -1,12 +1,20 @@
 import * as Duration from './Duration';
 import { transportTime } from './TimeUtil';
 
-export const noteObjects = notes => {
+// TODO test sharpen
+export const noteObjects = (notes, sharps = []) => {
   const result = [];
   let startSixteenths = 0;
   notes.forEach(note => {
-    let startTime = transportTime(startSixteenths);
-    result.push({ name: note.name(), duration: note.duration, time: startTime });
+    const startTime = transportTime(startSixteenths);
+    let noteName = note.name();
+    console.log(`sharps ${sharps} note ${noteName}`)
+    if (sharps.includes(noteName)) { // note base really
+      noteName = noteName.substring(0, 1) + '#' + noteName.substring(1);
+    }
+    console.log(noteName);
+
+    result.push({ name: noteName, duration: note.duration, time: startTime });
     startSixteenths += Duration.time(note.duration);
   });
   return result;

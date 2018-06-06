@@ -7,7 +7,8 @@ export const play = async (song, synths) => {
       Tone.context.resume();
 
   const parts = tracks.map(track => {
-    const toneNotes = NoteUtil.noteObjects(track.notes.allNotes());
+      console.log(track);
+    const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps);
     return new Tone.Part((time, note) => {
       synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
     }, toneNotes);
