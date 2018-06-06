@@ -7,11 +7,8 @@ import './App.css';
 
 import Track from './Track';
 import HelpPanel from './components/HelpPanel';
-
 import * as ToneUtils from './ToneUtils';
-import { 
-  changeBpm, loadSong, loadSynths, newTrack, saveSong
-} from './actions';
+import { changeBpm, loadSong, loadSynths, newTrack, saveSong } from './actions';
 import { synthsLoaded } from './reducers/SynthReducer';
 
 export class App extends Component {

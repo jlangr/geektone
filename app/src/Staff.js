@@ -46,12 +46,20 @@ export class Staff extends Component {
     this.draw();
   }
 
-  createAccidentalsRect() {
-    const right = sharpArea * sharpsInWidth;
-    const top = 0;
-    const left = 0;
-    const bottom = this.noteY('C4');
-    this.accidentalsRect = new Rect(left, top, right, bottom);
+  // tabIndex needed for key events
+  render() {
+    return (
+      <div>
+        <canvas id={this.props.id} 
+          tabIndex={this.props.id}
+          border='0' width='1200' height='144'
+          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
+      </div>
+    );
+  }
+
+  canvas() {
+    return document.getElementById(this.props.id);
   }
 
   staffContext() {
@@ -59,32 +67,17 @@ export class Staff extends Component {
     return canvas.getContext('2d');
   }
 
-  canvas() {
-    return document.getElementById(this.props.id);
-  }
-
   addMouseListener() {
+    console.log('adding mouse listener to canvas ', this.canvas());
     this.canvas().addEventListener('mousedown', this.click.bind(this));
   }
 
   addKeyListeners() {
-    const canvas = document.getElementById(this.props.id);
-    canvas.addEventListener('keyup', this.handleKeyPress.bind(this));
+    this.canvas().addEventListener('keyup', this.handleKeyPress.bind(this));
   }
 
   handleKeyPress(e) {
-    if (e.key === 's') { this.save(); return; }
     if (keyHandler.handleKey(e, this.noteSequence().notes)) this.draw();
-  }
-
-  render() {
-    return (
-      <div>
-        <canvas id={this.props.id} 
-          border='0' width='1200' height='144'
-          style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
-      </div>
-    );
   }
 
   mousePosition(canvas, e) {
@@ -96,6 +89,7 @@ export class Staff extends Component {
   }
 
   click(e) {
+    console.log('click ', e);
     const clickPoint = this.mousePosition(this.canvas(), e);
     if (this.isInSharpsMode()) {
       if (this.isClickInAccidentals(clickPoint)) {
@@ -130,6 +124,14 @@ export class Staff extends Component {
     const pair = Object.entries(this.ranges)
       .find(([note, range]) => range.contains(point.y));
     return pair ? pair[0] : undefined;
+  }
+
+  createAccidentalsRect() {
+    const right = sharpArea * sharpsInWidth;
+    const top = 0;
+    const left = 0;
+    const bottom = this.noteY('C4');
+    this.accidentalsRect = new Rect(left, top, right, bottom);
   }
   
   // TODO test
