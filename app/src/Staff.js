@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 import Rect from './Rect';
+import Range from './Range';
 
 import { addSharp } from './actions';
 
@@ -18,17 +19,6 @@ export const lineClickTolerance = 3;
 export const verticalIndex = noteName => {
   return trebleStaffNotes.indexOf(noteName);
 };
-
-export class Range {
-  constructor(start, end) {
-    this.start = start;
-    this.end = end;
-  }
-
-  contains(number) {
-    return number >= this.start && number <= this.end;
-  }
-}
 
 export class Staff extends Component {
   constructor() {
