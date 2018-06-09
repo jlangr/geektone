@@ -56,6 +56,32 @@ describe('toggle sharps mode', () => {
 
     expect(newState.song.tracks[1].sharpsMode).toBeTruthy();
   });
+
+  it('toggles off when on', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: true}, {name: 'y', sharpsMode: false}]}};
+
+    const newState = SongReducer(state, actions.toggleSharpsMode(0));
+
+    expect(newState.song.tracks[1].sharpsMode).toBeFalsy();
+  });
+});
+
+describe('toggle mute', () => {
+  it('turns on with first toggle', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', isMuted: false}]}};
+
+    const newState = SongReducer(state, actions.toggleMute(0));
+
+    expect(newState.song.tracks[0].isMuted).toBeTruthy();
+  });
+
+  it('toggles off when on', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', isMuted: true}]}};
+
+    const newState = SongReducer(state, actions.toggleMute(0));
+
+    expect(newState.song.tracks[0].isMuted).toBeFalsy();
+  });
 });
 
 describe('is in sharps mode?', () => {

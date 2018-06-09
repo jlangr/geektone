@@ -18,13 +18,24 @@ const remove = (arr, element) => {
   arr.splice(i, 1);
 }
 
-const updateState_toggleSharpsMode = (state, trackIndex) => {
-  const changedTrack = state.song.tracks[trackIndex];
-  changedTrack.sharpsMode = !changedTrack.sharpsMode;
-  const newTracks = 
-    [...state.song.tracks.slice(0, trackIndex), changedTrack, ...state.song.tracks.slice(trackIndex+1) ];
-  return { ...state, song: {...state.song, tracks: newTracks} };
+const updateStateForTrack = (state, trackIndex, changeFn) => {
+    const changedTrack = state.song.tracks[trackIndex] 
+    changeFn(changedTrack);
+    const newTracks = 
+      [...state.song.tracks.slice(0, trackIndex), changedTrack, ...state.song.tracks.slice(trackIndex+1) ];
+    return { ...state, song: {...state.song, tracks: newTracks} };
+ };
+
+const updateState_toggleMute = (state, trackIndex) => {
+  return updateStateForTrack(state, trackIndex, (changedTrack) => {
+    changedTrack.isMuted = !changedTrack.isMuted;
+  });
 };
+
+const updateState_toggleSharpsMode = (state, trackIndex) => {
+  return updateStateForTrack(state, trackIndex, (changedTrack) => {
+    changedTrack.sharpsMode = !changedTrack.sharpsMode;
+  });
 
 const updateState_addSharp = (state, trackIndex, note) => {
   if (!note) return state;
@@ -92,9 +103,18 @@ export default(state = INITIAL_STATE, action) => {
       return { ...state, song: newSong };
     }
 
-    case type.TOGGLE_SHARPS_MODE:
+    case type.TOGGLE_SHARPS_MODE: 
+    {
       const trackIndex = action.payload;
       return updateState_toggleSharpsMode(state, trackIndex);
+    }
+
+    case type.TOGGLE_MUTE:
+    {
+      const trackIndex = action.payload;
+      return updateState_toggleMute(state, trackIndex);
+    }
+
     default:
       return state;
   }

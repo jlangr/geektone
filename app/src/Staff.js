@@ -175,7 +175,7 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
     isInSharpsMode: isInSharpsMode(song, ownProps.id),
     nearestNote: point => nearestNote(ui, point),
     ui, 
-    song: composition.song };
+    song };
 };
 
 const mapDispatchToProps = { addSharp };

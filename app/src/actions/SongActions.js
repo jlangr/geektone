@@ -45,3 +45,5 @@ export const saveSong = (song) => {
 };
 
 export const toggleSharpsMode = trackIndex => ({ type: type.TOGGLE_SHARPS_MODE, payload: trackIndex });
+
+export const toggleMute = trackIndex => ({ type: type.TOGGLE_MUTE, payload: trackIndex });
