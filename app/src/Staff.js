@@ -9,6 +9,8 @@ import Range from './Range';
 import { addSharp } from './actions';
 import { isInSharpsMode } from './reducers/SongReducer';
 
+import * as UI from './util/UI';
+
 const staffWidth = 1200;
 const highlightColor = 'red'; // move to ui constants source
 const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
@@ -71,16 +73,8 @@ export class Staff extends Component {
     if (keyHandler.handleKey(e, this.trackData().notes)) this.draw();
   }
 
-  mousePosition(canvas, e) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-      y: (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
-    };
-  }
-
   click(e) {
-    const clickPoint = this.mousePosition(this.canvas(), e);
+    const clickPoint = UI.mousePosition(this.canvas(), e);
     if (this.props.isInSharpsMode) {
       if (this.isClickInAccidentals(clickPoint)) {
         this.props.addSharp(this.props.id, this.nearestNote(clickPoint));
