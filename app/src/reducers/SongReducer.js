@@ -8,6 +8,11 @@ export const INITIAL_STATE = {
   }
 };
 
+// query functions
+export const isInSharpsMode = (song, id) => song.tracks[id].sharpsMode;
+
+// helpers
+
 const remove = (arr, element) => {
   const i = arr.indexOf(element);
   arr.splice(i, 1);
@@ -20,7 +25,6 @@ const updateState_toggleSharpsMode = (state, trackIndex) => {
     [...state.song.tracks.slice(0, trackIndex), changedTrack, ...state.song.tracks.slice(trackIndex+1) ];
   return { ...state, song: {...state.song, tracks: newTracks} };
 };
-
 
 const updateState_addSharp = (state, trackIndex, note) => {
   if (!note) return state;

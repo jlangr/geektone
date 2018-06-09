@@ -15,6 +15,12 @@ describe('staff', () => {
     });
   });
 
+  describe('sharps mode', () => {
+    it('is on when track data has it on', () => {
+
+    });
+  });
+
   describe('nearest note', () => {
     it('selects a staff-line note if dead-on', () => {
       const nearest = staff.nearestNote({ x: 1, y: staff.noteY('F5')});

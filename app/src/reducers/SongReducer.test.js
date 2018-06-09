@@ -1,6 +1,6 @@
 import * as type from '../actions/types';
 import * as actions from '../actions/SongActions';
-import SongReducer from './SongReducer';
+import SongReducer, { isInSharpsMode } from './SongReducer';
 import NoteSequence from '../NoteSequence';
 
 describe('song reducer', () => {
@@ -55,6 +55,20 @@ describe('toggle sharps mode', () => {
     const newState = SongReducer(state, actions.toggleSharpsMode(1));
 
     expect(newState.song.tracks[1].sharpsMode).toBeTruthy();
+  });
+});
+
+describe('is in sharps mode?', () => {
+  it('is true when flag is on for track', () => {
+    const song = { tracks: [ { sharpsMode: true } ]};
+
+    expect(isInSharpsMode(song, 0)).toBeTruthy();
+  });
+
+  it('is false when flag is off for track', () => {
+    const song = { tracks: [ { sharpsMode: true }, { sharpsMode: false } ]};
+
+    expect(isInSharpsMode(song, 1)).toBeFalsy();
   });
 });
 

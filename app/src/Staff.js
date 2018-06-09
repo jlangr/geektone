@@ -7,6 +7,7 @@ import Rect from './Rect';
 import Range from './Range';
 
 import { addSharp } from './actions';
+import { isInSharpsMode } from './reducers/SongReducer';
 
 const staffWidth = 1200;
 const highlightColor = 'red'; // move to ui constants source
@@ -116,12 +117,9 @@ export class Staff extends Component {
     return pair ? pair[0] : undefined;
   }
 
+  // tested
   createAccidentalsRect() {
-    const right = sharpArea * sharpsInWidth;
-    const top = 0;
-    const left = 0;
-    const bottom = this.noteY(MiddleC);
-    this.accidentalsRect = new Rect(left, top, right, bottom);
+    this.accidentalsRect = new Rect(0, 0, sharpArea  * sharpsInWidth, this.noteY(MiddleC));
   }
   
   // TODO test
@@ -202,11 +200,11 @@ export class Staff extends Component {
   }
 
   isInSharpsMode() {
-    return this.props.song.tracks[this.props.id].sharpsMode;
+    return false; //this.props.song.tracks[this.props.id].sharpsMode;
   }
 
   drawAccidentalsArea() {
-    if (this.isInSharpsMode()) {
+    if (this.props.isInSharpsMode) {
       this.staffContext().beginPath();
       const lineWidth = 6;
       this.accidentalsRect.drawOn(this.staffContext(), highlightColor, lineWidth);
@@ -225,7 +223,14 @@ export class Staff extends Component {
   }
 }
 
-const mapStateToProps = ({ ui, composition }) => ({ ui, song: composition.song });
+const mapStateToProps = ({ ui, composition }, ownProps) => {
+  const song = composition.song;
+  return { 
+    isInSharpsMode: isInSharpsMode(song, ownProps.id),
+    ui, 
+    song: composition.song };
+};
+
 const mapDispatchToProps = { addSharp };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Staff);
