@@ -6,7 +6,7 @@ import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 
 import { addSharp } from './actions';
 import { isInSharpsMode } from './reducers/SongReducer';
-import { nearestNote } from './reducers/UIReducer';
+import { nearestNote, noteY } from './reducers/UIReducer';
 
 import * as UI from './util/UI';
 
@@ -124,7 +124,7 @@ export class Staff extends Component {
 
     this.staffContext().beginPath();
 
-    const y = this.noteY(note) + 4;
+    const y = noteY(note) + 4;
     const x = (sharpIndex % sharpsInWidth) * sharpArea + sharpWidth;
 
     let top = y - (sharpHeight / 2);
@@ -166,11 +166,6 @@ export class Staff extends Component {
       this.trackData().sharps.forEach((note, i) => {
         this.drawSharp(note, i);
     });
-  }
-
-  // dup from note
-  noteY(noteName) {
-    return (verticalIndex(noteName) * lineHeight / 2);
   }
 }
 
