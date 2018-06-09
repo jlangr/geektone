@@ -9,4 +9,9 @@ describe('range', () => {
   it('does not contain number outside of start and end', () => {
     expect(range.contains(17)).toBeFalsy();
   })
+
+  it('contains number at start or end', () => {
+    expect(range.contains(10)).toBeTruthy();
+    expect(range.contains(5)).toBeTruthy();
+  })
 });
