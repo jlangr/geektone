@@ -85,10 +85,6 @@ export class Staff extends Component {
         this.draw();
   }
 
-  withinTolerance(note, point) {
-    return Math.abs(point.y - this.noteY(note)) <= lineClickTolerance;
-  }
-
   buildStaffNoteLineRanges() {
     this.ranges = {};
     trebleStaffLines.forEach(note => {
