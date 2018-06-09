@@ -81,9 +81,8 @@ export class Staff extends Component {
 
   click(e) {
     const clickPoint = this.mousePosition(this.canvas(), e);
-    if (this.isInSharpsMode()) {
+    if (this.props.isInSharpsMode) {
       if (this.isClickInAccidentals(clickPoint)) {
-        console.log('note', this.nearestNote(clickPoint));
         this.props.addSharp(this.props.id, this.nearestNote(clickPoint));
         this.draw();
       }
