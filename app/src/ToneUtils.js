@@ -1,18 +1,21 @@
 import Tone from 'tone';
 import * as NoteUtil from './NoteUtil';
 
+// lots of this can be tested...
 export const play = async (song, synths) => {
   const tracks = song.tracks;
   if (Tone.context.state !== 'running')
       Tone.context.resume();
 
-  const parts = tracks.map(track => {
-      console.log(track);
-    const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps);
-    return new Tone.Part((time, note) => {
-      synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
-    }, toneNotes);
-  });
+  const parts = tracks
+    .filter(track => !track.isMuted)
+    .map(track => {
+        console.log(track);
+      const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps);
+      return new Tone.Part((time, note) => {
+        synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
+      }, toneNotes);
+    });
 
   parts.forEach(part => part.start());
 
