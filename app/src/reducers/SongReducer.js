@@ -36,6 +36,7 @@ const updateState_toggleSharpsMode = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, (changedTrack) => {
     changedTrack.sharpsMode = !changedTrack.sharpsMode;
   });
+};
 
 const updateState_addSharp = (state, trackIndex, note) => {
   if (!note) return state;
