@@ -14,6 +14,7 @@ const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4',
 const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
 const trebleStaffInterlineIndices = [ 3, 5, 7, 9 ];
 
+export const MiddleC = 'C4';
 export const lineClickTolerance = 3;
 
 export const verticalIndex = noteName => {
@@ -119,7 +120,7 @@ export class Staff extends Component {
     const right = sharpArea * sharpsInWidth;
     const top = 0;
     const left = 0;
-    const bottom = this.noteY('C4');
+    const bottom = this.noteY(MiddleC);
     this.accidentalsRect = new Rect(left, top, right, bottom);
   }
   
