@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 
 import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
-import Rect from './Rect';
-import Range from './Range';
 
 import { addSharp } from './actions';
 import { isInSharpsMode } from './reducers/SongReducer';
+import { nearestNote } from './reducers/UIReducer';
 
 import * as UI from './util/UI';
 
@@ -15,22 +14,12 @@ const staffWidth = 1200;
 const highlightColor = 'red'; // move to ui constants source
 const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
 const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
-const trebleStaffInterlineIndices = [ 3, 5, 7, 9 ];
-
-export const MiddleC = 'C4';
-export const lineClickTolerance = 3;
 
 export const verticalIndex = noteName => {
   return trebleStaffNotes.indexOf(noteName);
 };
 
 export class Staff extends Component {
-  constructor() {
-    super();
-    this.buildStaffNoteLineRanges();
-    this.createAccidentalsRect();
-  }
-
   componentDidMount() {
     this.addKeyListeners();
     this.addMouseListener();
@@ -77,7 +66,7 @@ export class Staff extends Component {
     const clickPoint = UI.mousePosition(this.canvas(), e);
     if (this.props.isInSharpsMode) {
       if (this.isClickInAccidentals(clickPoint)) {
-        this.props.addSharp(this.props.id, this.nearestNote(clickPoint));
+        this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint));
         this.draw();
       }
     } else
@@ -85,35 +74,12 @@ export class Staff extends Component {
         this.draw();
   }
 
-  buildStaffNoteLineRanges() {
-    this.ranges = {};
-    trebleStaffLines.forEach(note => {
-      const y = this.noteY(note);
-      this.ranges[note] = new Range(y - lineClickTolerance, y + lineClickTolerance);
-    });
-    trebleStaffInterlineIndices.forEach(i => {
-      const note = trebleStaffNotes[i];
-      const higherNote = trebleStaffNotes[i - 1];
-      const lowerNote = trebleStaffNotes[i + 1];
-      this.ranges[note] = 
-        new Range(this.ranges[higherNote].end + 1, this.ranges[lowerNote].start - 1);
-    });
-  }
-
-  nearestNote(point) {
-    const pair = Object.entries(this.ranges)
-      .find(([note, range]) => range.contains(point.y));
-    return pair ? pair[0] : undefined;
-  }
-
   // tested
-  createAccidentalsRect() {
-    this.accidentalsRect = new Rect(0, 0, sharpArea  * sharpsInWidth, this.noteY(MiddleC));
-  }
+
   
   // TODO test
   isClickInAccidentals(point) {
-    return this.accidentalsRect.contains(point);
+    return this.props.ui.staff.accidentalsRect.contains(point);
   }
 
   y(noteName) {
@@ -188,15 +154,11 @@ export class Staff extends Component {
     this.staffContext().stroke();
   }
 
-  isInSharpsMode() {
-    return false; //this.props.song.tracks[this.props.id].sharpsMode;
-  }
-
   drawAccidentalsArea() {
     if (this.props.isInSharpsMode) {
       this.staffContext().beginPath();
       const lineWidth = 6;
-      this.accidentalsRect.drawOn(this.staffContext(), highlightColor, lineWidth);
+      this.props.ui.staff.accidentalsRect.drawOn(this.staffContext(), highlightColor, lineWidth);
       this.staffContext().stroke();
     }
 
@@ -216,6 +178,7 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
   const song = composition.song;
   return { 
     isInSharpsMode: isInSharpsMode(song, ownProps.id),
+    nearestNote: point => nearestNote(ui, point),
     ui, 
     song: composition.song };
 };
