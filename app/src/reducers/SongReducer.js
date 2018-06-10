@@ -11,12 +11,17 @@ export const INITIAL_STATE = {
 // query functions
 export const isInSharpsMode = (song, id) => song.tracks[id].sharpsMode;
 
+export const trackData = (state, trackId) => state.song.tracks[trackId];
+
 // helpers
 
+// TODO move
 const remove = (arr, element) => {
   const i = arr.indexOf(element);
   arr.splice(i, 1);
 }
+
+// state
 
 const updateStateForTrack = (state, trackIndex, changeFn) => {
     const changedTrack = state.song.tracks[trackIndex] 

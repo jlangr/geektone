@@ -1,6 +1,6 @@
 import * as type from '../actions/types';
 import * as actions from '../actions/SongActions';
-import SongReducer, { isInSharpsMode } from './SongReducer';
+import SongReducer, { isInSharpsMode, trackData } from './SongReducer';
 import NoteSequence from '../NoteSequence';
 
 describe('song reducer', () => {
@@ -95,6 +95,18 @@ describe('is in sharps mode?', () => {
     const song = { tracks: [ { sharpsMode: true }, { sharpsMode: false } ]};
 
     expect(isInSharpsMode(song, 1)).toBeFalsy();
+  });
+});
+
+// TODO track ID should not be index of track
+
+describe('trackData', () => {
+  it('represents the track given an id', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x'}, {name: 'y'}]}};
+
+    const track = trackData(state, 1);
+
+    expect(track).toEqual({name: 'y'});
   });
 });
 
