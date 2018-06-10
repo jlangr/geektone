@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
-
 import { addSharp } from './actions';
 import { isInSharpsMode, trackData } from './reducers/SongReducer';
 import { nearestNote, noteY } from './reducers/UIReducer';
-
 import * as UI from './util/UI';
 
 const staffWidth = 1200;
@@ -74,9 +71,6 @@ export class Staff extends Component {
         this.draw();
   }
 
-  // tested
-
-  
   // TODO test
   isClickInAccidentals(point) {
     return this.props.ui.staff.accidentalsRect.contains(point);

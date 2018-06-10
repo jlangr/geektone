@@ -10,5 +10,5 @@ export const prev = (array, i) => {
 
 export const remove = (arr, element) => {
   const i = arr.indexOf(element);
-  return arr.splice(i, 1);
+  arr.splice(i, 1);
 };
