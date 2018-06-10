@@ -5,7 +5,7 @@ import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
 
 import { addSharp } from './actions';
-import { isInSharpsMode } from './reducers/SongReducer';
+import { isInSharpsMode, trackData } from './reducers/SongReducer';
 import { nearestNote, noteY } from './reducers/UIReducer';
 
 import * as UI from './util/UI';
@@ -59,7 +59,7 @@ export class Staff extends Component {
   }
 
   handleKeyPress(e) {
-    if (keyHandler.handleKey(e, this.trackData().notes)) this.draw();
+    if (keyHandler.handleKey(e, this.props.trackData.notes)) this.draw();
   }
 
   click(e) {
@@ -70,7 +70,7 @@ export class Staff extends Component {
         this.draw();
       }
     } else
-      if (this.trackData().notes.clickHitNote(clickPoint))
+      if (this.props.trackData.notes.clickHitNote(clickPoint))
         this.draw();
   }
 
@@ -89,12 +89,8 @@ export class Staff extends Component {
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
-    this.trackData().notes.allNotes()
+    this.props.trackData.notes.allNotes()
       .forEach((note, i) => note.drawOn(this.staffContext(), i));
-  }
-
-  trackData() {
-    return this.props.song.tracks[this.props.id];
   }
 
   drawStaffLines() {
@@ -162,8 +158,8 @@ export class Staff extends Component {
       this.staffContext().stroke();
     }
 
-    if (this.trackData().sharps)
-      this.trackData().sharps.forEach((note, i) => {
+    if (this.props.trackData.sharps)
+      this.props.trackData.sharps.forEach((note, i) => {
         this.drawSharp(note, i);
     });
   }
@@ -172,6 +168,7 @@ export class Staff extends Component {
 const mapStateToProps = ({ ui, composition }, ownProps) => {
   const song = composition.song;
   return { 
+    trackData: trackData(composition, ownProps.id),
     isInSharpsMode: isInSharpsMode(song, ownProps.id),
     nearestNote: point => nearestNote(ui, point),
     ui, 

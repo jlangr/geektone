@@ -7,3 +7,8 @@ export const prev = (array, i) => {
   if (i < 0 || i >= array.length) return -1;
   return i === 0 ? array.length - 1 : i - 1;
 };
+
+export const remove = (arr, element) => {
+  const i = arr.indexOf(element);
+  return arr.splice(i, 1);
+};

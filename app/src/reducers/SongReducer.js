@@ -1,5 +1,6 @@
 import * as type from '../actions/types';
 import NoteSequence from '../NoteSequence';
+import { remove } from '../js/ArrayUtil';
 
 export const INITIAL_STATE = {
   song: {
@@ -9,17 +10,10 @@ export const INITIAL_STATE = {
 };
 
 // query functions
+
 export const isInSharpsMode = (song, id) => song.tracks[id].sharpsMode;
 
 export const trackData = (state, trackId) => state.song.tracks[trackId];
-
-// helpers
-
-// TODO move
-const remove = (arr, element) => {
-  const i = arr.indexOf(element);
-  arr.splice(i, 1);
-}
 
 // state
 
