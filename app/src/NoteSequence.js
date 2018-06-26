@@ -1,6 +1,8 @@
 import Note from './Note';
 import * as Duration from './Duration';
 import { prev, next } from './js/ArrayUtil';
+import Bar from './Bar';
+import Tie from './Tie';
 
 const nullNote = {
   name: () => 'null',
@@ -26,6 +28,10 @@ export default class NoteSequence {
 
   add(note) {
     this.notes.push(note);
+  }
+
+  addAll() {
+    this.notes = Array.prototype.concat.apply(this.notes, arguments);
   }
 
   // ==
@@ -160,5 +166,26 @@ export default class NoteSequence {
 
   decrementSelected() {
     this.selectedNote().decrement();
+  }
+
+  barsAndNotes() {
+    const bar = new Bar();
+    const barSequence = [];
+    let sixteenths = 0;
+    this.notes.forEach(note => {
+      sixteenths = sixteenths + Duration.time(note.duration);
+      if (sixteenths <= 16) {
+        barSequence.push(note);
+        if (sixteenths === 16) {
+          barSequence.push(bar);
+          sixteenths = 0;
+        }
+      }
+      else {
+        barSequence.push(new Tie(note));
+        sixteenths = sixteenths % 16;
+      }
+    });
+    return barSequence;
   }
 }

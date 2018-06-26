@@ -1,8 +1,8 @@
+bars
 undo / redo
-flats / sharps
+flats
 rests
 mute
-bars
 save song by name
 delete last note
 repeat section
@@ -14,3 +14,4 @@ delete / copy / paste multiple notes
 move from track-to-track using ctrl-keys
 
 time signature
+flats / sharps in proper order on accidentals area

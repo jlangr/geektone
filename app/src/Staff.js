@@ -83,8 +83,10 @@ export class Staff extends Component {
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
-    this.props.trackData.notes.allNotes()
-      .forEach((note, i) => note.drawOn(this.staffContext(), i));
+    this.props.trackData.notes.barsAndNotes()
+      .forEach((note, i) => {
+        note.drawOn(this.staffContext(), i) 
+      });
   }
 
   drawStaffLines() {

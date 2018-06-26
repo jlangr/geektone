@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import NumericInput from 'react-numeric-input';
+import { Label } from 'react-bootstrap';
 
 import './App.css';
 
@@ -20,22 +21,32 @@ export class App extends Component {
     const tracks = this.props.song.tracks.map((track, i) => <Track key={i} id={i} />);
     return (
       <div className="App">
-        <p>{this.props.song.name}</p>
+        <Label>{this.props.song.name}</Label>
         { tracks }
         <Form>
-          <label htmlFor='bpm'>BPM</label>
-          <NumericInput 
-            id='bpm' 
-            style={{input: { width: 70 }}} 
-            min={25} max={200} 
-            value={this.props.song.bpm} 
-            onChange={this.props.changeBpm.bind(this)} />
-          <Button onClick={() => ToneUtils.play(this.props.song, this.props.synthState.synths)}  
-            {...(synthsLoaded(this.props.synthState) ? {} : { disabled : true })}>Play</Button>
-          <Button onClick={() => ToneUtils.stop() }>Stop</Button>
-          <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
-          <Button onClick={this.props.loadSong}>Load</Button>
-          <Button onClick={() => this.props.newTrack() }>Add Track</Button>
+          <Grid>
+            <Row className='show-grid'>
+              <Col>
+                <label htmlFor='bpm'>BPM</label>
+                <NumericInput 
+                  id='bpm' 
+                  style={{input: { width: 70 }}} 
+                  min={25} max={200} 
+                  value={this.props.song.bpm} 
+                  onChange={this.props.changeBpm.bind(this)} />
+              </Col>
+
+              <Col>
+                <Button onClick={() => ToneUtils.play(this.props.song, this.props.synthState.synths)}  
+                  {...(synthsLoaded(this.props.synthState) ? {} : { disabled : true })}>Play</Button>
+                <Button onClick={() => ToneUtils.stop() }>Stop</Button>
+                <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
+                <Button onClick={this.props.loadSong}>Load</Button>
+                <Button onClick={() => this.props.newTrack() }>Add Track</Button>
+              </Col>
+            </Row>
+          </Grid>
+
           <HelpPanel />
         </Form>
       </div>

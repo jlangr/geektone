@@ -1,5 +1,7 @@
 import NoteSequence from './NoteSequence';
 import Note, { quarter, half, whole } from './Note';
+import Bar from './Bar';
+import Tie from './Tie';
 
 describe('NoteSequence', () => {
   let sequence;
@@ -31,6 +33,58 @@ describe('NoteSequence', () => {
         expect(sequence.note(1).duration).toEqual('8n');
       });
     });
+
+    describe('bars', () => {
+      const bar = new Bar();
+      const e = new Note('E4', '4n');
+      let sequence;
+
+      beforeEach(() => {
+        sequence = new NoteSequence();
+      });
+
+      it('appends a bar after four beats', () => {
+        sequence.addAll(e, e, e, e);
+
+        const bars = sequence.barsAndNotes();
+
+        expect(bars).toEqual([e, e, e, e, bar]);
+      });
+
+      it('does not append a bar if less than 4 beats', () => {
+        sequence.addAll(e, e, e);
+
+        const barsAndNotes = sequence.barsAndNotes();
+
+        expect(barsAndNotes).toEqual([ e, e, e ]);
+      });
+
+      it('puts a bar inbetween every 4 beats', () => {
+        sequence.addAll(e, e, e, e, e, e, e, e, e);
+
+        const barsAndNotes = sequence.barsAndNotes();
+
+        expect(barsAndNotes).toEqual([e, e, e, e, bar, e, e, e, e, bar, e]);
+      });
+
+      it('handles all notes', () => {
+        const fHalf = new Note('F4', '2n');
+        sequence.addAll(e, e, fHalf, e);
+
+        const barsAndNotes = sequence.barsAndNotes();
+
+        expect(barsAndNotes).toEqual([e, e, fHalf, bar, e]);
+      });
+
+      it('creates a tie for notes crossing bar', () => {
+        const fHalf = new Note('F4', '2n');
+        sequence.addAll(e, e, e, fHalf);
+
+        const barsAndNotes = sequence.barsAndNotes();
+
+        expect(barsAndNotes).toEqual([e, e, e, new Tie(fHalf)]);
+      });
+    });
   });
 
   describe('sequence with 3 notes', () => {
@@ -40,7 +94,9 @@ describe('NoteSequence', () => {
 
     describe('note sequence', () => {
       it('allows adding notes', () => {
-        expect(sequence.allNotes().length).toEqual(3);
+        sequence.add(new Note('A4'));
+
+        expect(sequence.allNoteNames()).toEqual(['E4', 'F4', 'G4', 'A4']);
       });
     });
 
@@ -253,6 +309,13 @@ describe('NoteSequence', () => {
         sequence.decrementSelected();
 
         expect(sequence.selectedNote().name()).toEqual('D4');
+      });
+
+    });
+
+    describe('splitting into bars', () => {
+      it('does so', () => {
+
       });
 
     });
