@@ -8,7 +8,7 @@ export const lineHeight = height / 4;
 
 const stemHeight = 36;
 
-const notePad = 25;
+export const notePad = 25;
 export const noteDistance = 8;
 const noteWidth = 7;
 const noteHeight = 5;

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as keyHandler from './KeyHandler';
-import { lineHeight, sharpArea, sharpWidth, sharpsInWidth } from './Note';
+import { lineHeight, sharpArea, sharpsArea, notePad, noteDistance, sharpWidth, sharpsInWidth } from './Note';
 import { addSharp } from './actions';
 import { isInSharpsMode, trackData } from './reducers/SongReducer';
+import Bar from './Bar';
 import { nearestNote, noteY } from './reducers/UIReducer';
 import * as UI from './util/UI';
 
-const staffWidth = 1200;
+const staffWidth = 1600;
 const highlightColor = 'red'; // move to ui constants source
 const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
 const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
@@ -33,7 +34,7 @@ export class Staff extends Component {
       <div>
         <canvas id={this.props.id} 
           tabIndex={this.props.id}
-          border='0' width='1200' height='144'
+          border='0' width={staffWidth} height='144'
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
       </div>
     );  // note: tabIndex needed for key events
@@ -80,25 +81,44 @@ export class Staff extends Component {
     return (verticalIndex(noteName) * lineHeight / 2);
   }
 
+  x(position) {
+    return sharpsArea + notePad + (position * (noteDistance + notePad));
+  }
+
+  topLineY() {
+    return this.y(trebleStaffLines[0]);
+  }
+
+  drawBar(position) {
+    const x = this.x(position);
+    this.staffContext().beginPath();
+    this.drawLine(x, this.topLineY(), x, this.staffHeight);
+    this.staffContext().stroke();
+  }
+
+  drawItem(note, position) {
+    if (note instanceof Bar)
+      this.drawBar(position);
+    else
+      note.drawOn(this.staffContext(), position);
+  }
+
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
     this.props.trackData.notes.barsAndNotes()
-      .forEach((note, i) => {
-        note.drawOn(this.staffContext(), i) 
-      });
+      .forEach(this.drawItem.bind(this));
   }
 
   drawStaffLines() {
     this.staffContext().beginPath();
 
-    const topLineY = this.y(trebleStaffLines[0]);
     for (let i = 0; i < trebleStaffLines.length; i++) {
       const currentY = this.y(trebleStaffLines[i]);
       this.drawLine(0, currentY, staffWidth, currentY);
     }
     this.staffHeight = trebleStaffLines.length * lineHeight;
-    this.drawLine(staffWidth, topLineY, staffWidth, this.staffHeight);
+    this.drawLine(staffWidth, this.topLineY(), staffWidth, this.staffHeight);
     this.staffContext().stroke();
     this.drawAccidentalsArea();
   }
