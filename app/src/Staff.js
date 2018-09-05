@@ -19,11 +19,6 @@ export const verticalIndex = noteName => {
 };
 
 export class Staff extends Component {
-  constructor() {
-    super();
-    this.drawItem.bind(this);
-  }
-
   componentDidMount() {
     this.addKeyListeners();
     this.addMouseListener();

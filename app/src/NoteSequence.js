@@ -171,20 +171,16 @@ export default class NoteSequence {
   bars() {
     const barSequence = [];
     let bar = new Bar();
-    // move sixteenths calc to Bar class
-    let sixteenths = 0;
     this.notes.forEach(note => {
-      sixteenths = sixteenths + Duration.time(note.duration);
-      if (sixteenths <= 16) {
+      if (bar.canAccommodate(note)) {
         bar.push(note);
-        if (sixteenths === 16) {
+        if (bar.isFull()) {
           barSequence.push(bar);
           bar = new Bar();
-          sixteenths = 0;
         }
       }
     });
-    if (bar.notes.length > 0) barSequence.push(bar);
+    if (!bar.isEmpty()) barSequence.push(bar);
     return barSequence;
   }
 }

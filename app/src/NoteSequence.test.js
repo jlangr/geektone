@@ -36,7 +36,6 @@ describe('NoteSequence', () => {
   });
 
   describe('bar sequence', () => {
-    const bar = new Bar();
     const e = new Note('E4', '4n');
     let sequence;
 
