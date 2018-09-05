@@ -5,6 +5,7 @@ import { lineHeight, sharpArea, sharpsArea, notePad, noteDistance, sharpWidth, s
 import { addSharp } from './actions';
 import { isInSharpsMode, trackData } from './reducers/SongReducer';
 import Bar from './Bar';
+import * as Duration from './Duration';
 import { nearestNote, noteY } from './reducers/UIReducer';
 import * as UI from './util/UI';
 
@@ -18,6 +19,11 @@ export const verticalIndex = noteName => {
 };
 
 export class Staff extends Component {
+  constructor() {
+    super();
+    this.drawItem.bind(this);
+  }
+
   componentDidMount() {
     this.addKeyListeners();
     this.addMouseListener();
@@ -96,18 +102,30 @@ export class Staff extends Component {
     this.staffContext().stroke();
   }
 
-  drawItem(note, position) {
-    if (note instanceof Bar)
-      this.drawBar(position);
-    else
-      note.drawOn(this.staffContext(), position);
-  }
-
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
-    this.props.trackData.notes.barsAndNotes()
-      .forEach(this.drawItem.bind(this));
+    let i = 0;
+    this.props.trackData.notes.bars()
+      .forEach(bar => {
+        bar.notes.forEach(note => {
+          note.drawOn(this.staffContext(), i);
+          // this doesn't hold up terribly well.
+          if (note.duration === Duration.half)
+            i += 2;
+          else
+            i++;
+          // better algorithm: for all bars
+          // at an index in bars() return, 
+          // find the most positions that any one bar
+          // must display. E.g. if all notes are
+          // 16ths, then all bars at same index
+          // must display 16 positions.
+          // if all notes are whole, then all bars
+          // must display 1 position.
+        });
+        this.drawBar(i++);
+      });
   }
 
   drawStaffLines() {

@@ -168,24 +168,23 @@ export default class NoteSequence {
     this.selectedNote().decrement();
   }
 
-  barsAndNotes() {
-    const bar = new Bar();
+  bars() {
     const barSequence = [];
+    let bar = new Bar();
+    // move sixteenths calc to Bar class
     let sixteenths = 0;
     this.notes.forEach(note => {
       sixteenths = sixteenths + Duration.time(note.duration);
       if (sixteenths <= 16) {
-        barSequence.push(note);
+        bar.push(note);
         if (sixteenths === 16) {
           barSequence.push(bar);
+          bar = new Bar();
           sixteenths = 0;
         }
       }
-      else {
-        barSequence.push(new Tie(note));
-        sixteenths = sixteenths % 16;
-      }
     });
+    if (bar.notes.length > 0) barSequence.push(bar);
     return barSequence;
   }
 }
