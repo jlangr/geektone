@@ -38,21 +38,84 @@ describe('a bar', () => {
     expect(bar.isFull()).toBeTruthy();
   });
 
-  it('can not accommodate notes when full', () => {
-    bar.push(new Note('E4', Duration.whole));
+  describe('accommodating new notes', () => {
+    it('can not accommodate notes when full', () => {
+      bar.push(new Note('E4', Duration.whole));
 
-    expect(bar.canAccommodate(new Note('E4', Duration.sixteenth))).toBeFalsy();
+      expect(bar.canAccommodate(new Note('E4', Duration.sixteenth))).toBeFalsy();
+    });
+
+    it('can not accommodate note larger than remaining size', () => {
+      bar.push(new Note('E4', Duration.half));
+
+      expect(bar.canAccommodate(new Note('E4', Duration.whole))).toBeFalsy();
+    });
+
+    it('can accommodate note less than remaining size', () => {
+      bar.push(new Note('E4', Duration.half));
+
+      expect(bar.canAccommodate(new Note('E4', Duration.quarter))).toBeTruthy();
+    });
   });
 
-  it('can not accommodate note larger than remaining size', () => {
-    bar.push(new Note('E4', Duration.half));
+  describe('number of positions required for notes within', () => {
+    it('is 1 for whole note', () => {
+      bar.push(new Note('E5', Duration.whole));
 
-    expect(bar.canAccommodate(new Note('E4', Duration.whole))).toBeFalsy();
-  });
+      expect(bar.positionsRequired()).toEqual(1);
+    });
 
-  it('can accommodate note less than remaining size', () => {
-    bar.push(new Note('E4', Duration.half));
+    describe('no dotted notes', () => {
+      it('is 2 if smallest note is a half', () => {
+        bar.push(new Note('E5', Duration.whole));
+        bar.push(new Note('E5', Duration.half));
 
-    expect(bar.canAccommodate(new Note('E4', Duration.quarter))).toBeTruthy();
-  });
+        expect(bar.positionsRequired()).toEqual(2);
+      });
+
+      it('is 4 if smallest note is a quarter', () => {
+        bar.push(new Note('E5', Duration.whole));
+        bar.push(new Note('E5', Duration.quarter));
+
+        expect(bar.positionsRequired()).toEqual(4);
+      });
+
+      it('is 8 if smallest note is an eighth', () => {
+        bar.push(new Note('E5', Duration.whole));
+        bar.push(new Note('E5', Duration.eighth));
+
+        expect(bar.positionsRequired()).toEqual(8);
+      });
+
+      it('is 16 if smallest note is a sixteenth', () => {
+        bar.push(new Note('E5', Duration.whole));
+        bar.push(new Note('E5', Duration.sixteenth));
+
+        expect(bar.positionsRequired()).toEqual(16);
+      });
+    });
+
+    describe('with dotted notes', () => {
+      it('is 4 if smallest note is dotted half', () => {
+        bar.push(new Note('E5', Duration.whole));
+        bar.push(new Note('E5', '4n.'));
+
+        expect(bar.positionsRequired()).toEqual(8);
+      });
+
+      it('is 8 if smallest note is dotted quarter', () => {
+        bar.push(new Note('E5', Duration.whole));
+        bar.push(new Note('E5', '4n.'));
+
+        expect(bar.positionsRequired()).toEqual(8);
+      });
+
+      it('is 16 if smallest note is dotted eighth', () => {
+        bar.push(new Note('E5', Duration.whole));
+        bar.push(new Note('E5', '8n.'));
+
+        expect(bar.positionsRequired()).toEqual(16);
+      });
+    });
+  })
 });

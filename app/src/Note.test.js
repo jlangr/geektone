@@ -1,17 +1,15 @@
 import Note from './Note';
-import { quarter } from './Duration';
-
-console.warn = jest.fn(); 
-global.console = {warn: jest.fn()}
+import * as Duration from './Duration';
 
 describe('note', () => {
-  beforeEach(() => { 
-    // jest.spyOn(global.console, 'warn').mockImplementation(() => {});
-  })
-
   describe('a note', () => {
     it('defaults to quarter note', () => {
-      expect(new Note('F3').duration).toEqual(quarter);
+      expect(new Note('F3').duration).toEqual(Duration.quarter);
+    });
+
+    it('answers number of sixteenths', () => {
+      expect(new Note('F3', Duration.quarter).sixteenths()).toEqual(4);
+      expect(new Note('F3', '4n.').sixteenths()).toEqual(6);
     });
   });
 

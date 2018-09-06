@@ -34,9 +34,10 @@ export default class Note {
   constructor(name, duration = Duration.quarter) {
     this.octave = parseInt(name.slice(-1), 10);
     let note = Note.note(name); //name.slice(0, -1);
+    this.baseName = note;
     this.noteIndex = ascendingWholeNoteScale.indexOf(note);
     this.isSelected = false;
-    this.duration = duration;
+    this.duration = duration; // objectify?
   }
 
   static note(name) {
@@ -47,8 +48,22 @@ export default class Note {
     return Note.note(name).charCodeAt() % 2 === 1;
   }
 
+  dotSixteenths() {
+    return Duration.time(Duration.noteBase(this.duration)) / 2;
+  }
+
+  sixteenths() {
+    return Duration.time(this.duration);
+  }
+
   toJSON() {
     return { name: this.name(), duration: this.duration };
+  }
+
+
+  // TODO test
+  isDotted() {
+    return Duration.isDotted(this.duration);
   }
 
   toggleDot() {
@@ -205,7 +220,7 @@ export default class Note {
     else if (Duration.isEighthBase(this.duration)) this.drawEighth(context, position);
     else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenth(context, position);
 
-    if (Duration.isDotted(this.duration))
+    if (this.isDotted())
       this.drawDot(context, position);
     context.stroke();
   }

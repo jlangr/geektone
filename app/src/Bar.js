@@ -2,6 +2,8 @@ import * as Duration from './Duration';
 
 // TODO test this stuff directly
 
+const SixteenthsCapacity = 16;
+
 export default class Bar {
   constructor() {
     this.notes = [];
@@ -14,14 +16,24 @@ export default class Bar {
 
   push(note) {
     this.notes.push(note);
-    this.sixteenths += Duration.time(note.duration);
+    this.sixteenths += note.sixteenths();
   }
 
   canAccommodate(note) {
-    return this.sixteenths + Duration.time(note.duration) <= 16;
+    return this.sixteenths + note.sixteenths() <= SixteenthsCapacity;
   }
 
   isFull() {
-    return this.sixteenths === 16;
+    return this.sixteenths === SixteenthsCapacity;
+  }
+
+  positionsRequired() {
+    const smallestIncrement = Math.min(...this.notes.map(note => {
+      if (note.isDotted())
+        return note.dotSixteenths();
+      else
+        return note.sixteenths()
+    }));
+    return SixteenthsCapacity / smallestIncrement;
   }
 };
