@@ -4,7 +4,6 @@ import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpsArea, notePad, noteDistance, sharpWidth, sharpsInWidth } from './Note';
 import { addSharp } from './actions';
 import { isInSharpsMode, trackData } from './reducers/SongReducer';
-import Bar from './Bar';
 import * as Duration from './Duration';
 import { nearestNote, noteY } from './reducers/UIReducer';
 import * as UI from './util/UI';

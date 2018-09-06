@@ -1,5 +1,7 @@
 import * as Duration from './Duration';
 
+// TODO test this stuff directly
+
 export default class Bar {
   constructor() {
     this.notes = [];
