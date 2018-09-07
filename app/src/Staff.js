@@ -99,26 +99,19 @@ export class Staff extends Component {
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
-    let i = 0;
+    let currentPosition = 0;
     this.props.trackData.notes.bars()
       .forEach(bar => {
-        bar.notes.forEach(note => {
-          note.drawOn(this.staffContext(), i);
-          // this doesn't hold up terribly well.
-          if (note.duration === Duration.half)
-            i += 2;
-          else
-            i++;
-          // better algorithm: for all bars
-          // at an index in bars() return, 
-          // find the most positions that any one bar
-          // must display. E.g. if all notes are
-          // 16ths, then all bars at same index
-          // must display 16 positions.
-          // if all notes are whole, then all bars
-          // must display 1 position.
+        bar.layouts().forEach(({ start16th, note, position }) => {
+          console.log(`${note} pos: ${position}`);
+          const absolutePosition = currentPosition + position;
+          // NOTE! note getting updated here. awkward
+          note.position = absolutePosition;
+          note.drawOn(this.staffContext());
         });
-        this.drawBar(i++);
+        console.log('bar positions required;', bar.positionsRequired());
+        currentPosition += bar.positionsRequired();
+        this.drawBar(currentPosition++);
       });
   }
 

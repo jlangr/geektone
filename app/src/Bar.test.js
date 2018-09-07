@@ -117,5 +117,41 @@ describe('a bar', () => {
         expect(bar.positionsRequired()).toEqual(16);
       });
     });
-  })
+  });
+
+  describe('note layout', () => {
+    const eighth = new Note('E4', Duration.eighth);
+    const quarter = new Note('E4', Duration.quarter);
+    const half = new Note('E4', Duration.half);
+
+    it('is 0 for first note', () => {
+      bar.push(eighth);
+
+      expect(bar.layouts()).toEqual([{ start16th: 0, note: eighth, position: 0 }]);
+    });
+
+    it('bumps next start16th by current note', () => {
+      bar.push(quarter);
+      bar.push(eighth);
+
+      expect(bar.layouts()).toEqual([
+        { start16th: 0, note: quarter, position: 0 },
+        { start16th: 4, note: eighth, position: 2 }
+      ]);
+    });
+
+    // storing the start 16th is possibly redundant, maybe able to delete
+    it('bumps next position based on positions required', () => {
+      bar.push(quarter);
+      bar.push(half);
+      bar.push(quarter);
+      expect(bar.positionsRequired()).toEqual(4);
+
+      expect(bar.layouts()).toEqual([
+        { start16th: 0, note: quarter, position: 0 },
+        { start16th: 4, note: half, position: 1 },
+        { start16th: 12, note: quarter, position: 3 }
+      ]);
+    });
+  });
 });

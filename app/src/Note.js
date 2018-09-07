@@ -60,6 +60,9 @@ export default class Note {
     return { name: this.name(), duration: this.duration };
   }
 
+  toString() {
+    return `${this.name()} ${this.duration}`;
+  }
 
   // TODO test
   isDotted() {
@@ -112,9 +115,8 @@ export default class Note {
   }
 
   // TODO externalize below ... to Staff?
-
-  isHit(mousePosition, position) {
-    const centerX = this.x(position);
+  isHit(mousePosition) {
+    const centerX = this.x();
     const centerY = this.y();
     return new Rect(
       centerX - noteWidth, centerY - noteHeight,
@@ -122,8 +124,9 @@ export default class Note {
       .contains(mousePosition);
   }
 
-  x(position) {
-    return sharpsArea + notePad + (position * (noteDistance + notePad));
+  // should be relative to bar start
+  x() {
+    return sharpsArea + notePad + (this.position * (noteDistance + notePad));
   }
 
   // dup with noteY from staff
@@ -225,9 +228,9 @@ export default class Note {
     context.stroke();
   }
 
-  drawOn(context, position) {
-    this.drawNoteOn(context, position);
+  drawOn(context) {
+    this.drawNoteOn(context, this.position);
     if (this.isSelected)
-      this.highlightNote(context, position);
+      this.highlightNote(context, this.position);
   }
 }

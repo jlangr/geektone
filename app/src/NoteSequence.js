@@ -23,7 +23,7 @@ export default class NoteSequence {
         this.add(new Note(noteName));
       }
     });
-    this.currentNote = -1;
+    this.currentNoteSequenceIndex = -1;
   }
 
   add(note) {
@@ -52,6 +52,7 @@ export default class NoteSequence {
     return this.notes[0];
   }
 
+sHit
   lastNote() {
     return this.notes[this.notes.length - 1];
   }
@@ -65,49 +66,49 @@ export default class NoteSequence {
   // ==
 
   isNoteSelected() {
-    return this.currentNote !== -1;
+    return this.currentNoteSequenceIndex !== -1;
   }
 
   selectedNote() {
-    if (this.currentNote === -1) return nullNote;
-    return this.notes[this.currentNote];
+    if (this.currentNoteSequenceIndex === -1) return nullNote;
+    return this.notes[this.currentNoteSequenceIndex];
   }
 
-  isSelected(position) {
-    return this.note(position).isSelected;
+  isSelected(sequenceIndex) {
+    return this.note(sequenceIndex).isSelected;
   }
 
   clickHitNote(clickPoint) {
-    for (let i = 0; i < this.notes.length; i++)
-      if (this.notes[i].isHit(clickPoint, i)) {
-        this.click(i);
+    for (let sequenceIndex = 0; sequenceIndex < this.notes.length; sequenceIndex++)
+      if (this.notes[sequenceIndex].isHit(clickPoint)) {
+        this.click(sequenceIndex);
         return true;
       }
     return false;
   }
 
-  click(position) {
-    if (this.isSelected(position))
-      this.deselect(position);
+  click(sequenceIndex) {
+    if (this.isSelected(sequenceIndex))
+      this.deselect(sequenceIndex);
     else {
       this.deselectAll();
-      this.select(position);
+      this.select(sequenceIndex);
     }
   }
 
-  deselect(position) {
-    this.note(position).deselect();
-    this.currentNote = -1;
+  deselect(sequenceIndex) {
+    this.note(sequenceIndex).deselect();
+    this.currentNoteSequenceIndex = -1;
   }
 
   deselectAll() {
     this.selectedNote().deselect();
-    this.currentNote = -1;
+    this.currentNoteSequenceIndex = -1;
   }
 
-  select(position) {
-    this.currentNote = position;
-    this.notes[position].select();
+  select(sequenceIndex) {
+    this.currentNoteSequenceIndex = sequenceIndex;
+    this.notes[sequenceIndex].select();
   }
 
   selectFirst() {
@@ -120,27 +121,27 @@ export default class NoteSequence {
 
   selectNext() {
     this.selectedNote().deselect();
-    this.currentNote = next(this.notes, this.currentNote);
+    this.currentNoteSequenceIndex = next(this.notes, this.currentNoteSequenceIndex);
     this.selectedNote().select();
   }
 
   selectPrev() {
     this.selectedNote().deselect();
-    this.currentNote = prev(this.notes, this.currentNote);
+    this.currentNoteSequenceIndex = prev(this.notes, this.currentNoteSequenceIndex);
     this.selectedNote().select();
   }
 
   deleteSelected() {
-    this.notes.splice(this.currentNote, 1);
-    this.currentNote = Math.max(0, this.currentNote - 1);
-    this.select(this.currentNote);
+    this.notes.splice(this.currentNoteSequenceIndex, 1);
+    this.currentNoteSequenceIndex = Math.max(0, this.currentNoteSequenceIndex - 1);
+    this.select(this.currentNoteSequenceIndex);
   }
 
   duplicateNote() {
     const note = this.selectedNote();
     const copy = new Note(note.name());
     copy.duration = note.duration;
-    this.notes.splice(this.currentNote + 1, 0, copy);
+    this.notes.splice(this.currentNoteSequenceIndex + 1, 0, copy);
     this.selectNext();
   }
 

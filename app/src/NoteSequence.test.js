@@ -123,7 +123,8 @@ describe('NoteSequence', () => {
         expect(sequence.selectedNote().name()).toEqual('E4');
       });
 
-      it('removes selection on deselectAll', () => {
+      // TODO incomplete test
+      xit('removes selection on deselectAll', () => {
         sequence.selectFirst();
 
       });

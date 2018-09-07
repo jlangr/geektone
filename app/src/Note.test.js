@@ -103,9 +103,9 @@ describe('note', () => {
 
     it('is true when click is a hit', () => {
       const note = new Note('D4');
-      const position = 0;
+      note.position = 0;
 
-      const isHit = note.isHit({ x: note.x(position), y: note.y() }, position);
+      const isHit = note.isHit({ x: note.x(note.position), y: note.y() });
 
       expect(isHit).toBeTruthy();
     });
