@@ -18,7 +18,7 @@ export class App extends Component {
   }
 
   render() {
-    const tracks = this.props.song.tracks.map((track, i) => <Track key={i} id={i} />);
+    const tracks = this.props.song.tracks.map((_track, i) => <Track key={i} id={i} />);
     return (
       <div className="App">
         <Label>{this.props.song.name}</Label>
@@ -54,7 +54,7 @@ export class App extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, _ownProps) => {
   return { 
     song: state.composition.song,
     synthState: state.samples

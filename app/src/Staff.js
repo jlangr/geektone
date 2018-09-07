@@ -4,7 +4,6 @@ import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpsArea, notePad, noteDistance, sharpWidth, sharpsInWidth } from './Note';
 import { addSharp } from './actions';
 import { isInSharpsMode, trackData } from './reducers/SongReducer';
-import * as Duration from './Duration';
 import { nearestNote, noteY } from './reducers/UIReducer';
 import * as UI from './util/UI';
 
@@ -97,6 +96,8 @@ export class Staff extends Component {
   }
 
   draw() {
+    // TODO sync bars across song
+    console.log('tracks: ', this.props.song.tracks, '--', this.props.song.tracks.length);
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
     let currentPosition = 0;
@@ -179,7 +180,7 @@ export class Staff extends Component {
     if (this.props.trackData.sharps)
       this.props.trackData.sharps.forEach((note, i) => {
         this.drawSharp(note, i);
-    });
+      });
   }
 }
 

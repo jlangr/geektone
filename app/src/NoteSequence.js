@@ -2,7 +2,6 @@ import Note from './Note';
 import * as Duration from './Duration';
 import { prev, next } from './js/ArrayUtil';
 import Bar from './Bar';
-import Tie from './Tie';
 
 const nullNote = {
   name: () => 'null',

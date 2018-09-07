@@ -1,7 +1,3 @@
-import * as Duration from './Duration';
-
-// TODO test this stuff directly
-
 const SixteenthsCapacity = 16;
 
 export default class Bar {
