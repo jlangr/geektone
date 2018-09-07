@@ -73,16 +73,6 @@ describe('NoteSequence', () => {
       expect(bars[0].notes).toEqual([e, e, fHalf]);
       expect(bars[1].notes).toEqual([e]);
     });
-
-    xit('creates a tie for notes crossing bar', () => {
-      const fHalf = new Note('F4', '2n');
-      sequence.addAll(e, e, e, fHalf);
-
-      const bars = sequence.bars();
-
-      expect(bars.length).toEqual(2);
-      expect(bars).toEqual([e, e, e, new Tie(fHalf)]);
-    });
   });
 
   describe('sequence with 3 notes', () => {
@@ -123,10 +113,12 @@ describe('NoteSequence', () => {
         expect(sequence.selectedNote().name()).toEqual('E4');
       });
 
-      // TODO incomplete test
-      xit('removes selection on deselectAll', () => {
+      it('removes selection on deselectAll', () => {
         sequence.selectFirst();
 
+        sequence.deselectAll();
+
+        expect(sequence.isNoteSelected()).toBeFalsy();
       });
     });
 

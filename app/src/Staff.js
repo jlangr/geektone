@@ -102,14 +102,11 @@ export class Staff extends Component {
     let currentPosition = 0;
     this.props.trackData.notes.bars()
       .forEach(bar => {
-        bar.layouts().forEach(({ start16th, note, position }) => {
-          console.log(`${note} pos: ${position}`);
+        bar.layouts().forEach(({ note, position }) => {
           const absolutePosition = currentPosition + position;
-          // NOTE! note getting updated here. awkward
-          note.position = absolutePosition;
+          note.position = absolutePosition; // note! update to note
           note.drawOn(this.staffContext());
         });
-        console.log('bar positions required;', bar.positionsRequired());
         currentPosition += bar.positionsRequired();
         this.drawBar(currentPosition++);
       });

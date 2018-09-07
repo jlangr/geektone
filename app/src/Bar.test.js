@@ -127,7 +127,7 @@ describe('a bar', () => {
     it('is 0 for first note', () => {
       bar.push(eighth);
 
-      expect(bar.layouts()).toEqual([{ start16th: 0, note: eighth, position: 0 }]);
+      expect(bar.layouts()).toEqual([{ note: eighth, position: 0 }]);
     });
 
     it('bumps next start16th by current note', () => {
@@ -135,8 +135,8 @@ describe('a bar', () => {
       bar.push(eighth);
 
       expect(bar.layouts()).toEqual([
-        { start16th: 0, note: quarter, position: 0 },
-        { start16th: 4, note: eighth, position: 2 }
+        { note: quarter, position: 0 },
+        { note: eighth, position: 2 }
       ]);
     });
 
@@ -148,9 +148,9 @@ describe('a bar', () => {
       expect(bar.positionsRequired()).toEqual(4);
 
       expect(bar.layouts()).toEqual([
-        { start16th: 0, note: quarter, position: 0 },
-        { start16th: 4, note: half, position: 1 },
-        { start16th: 12, note: quarter, position: 3 }
+        { note: quarter, position: 0 },
+        { note: half, position: 1 },
+        { note: quarter, position: 3 }
       ]);
     });
   });

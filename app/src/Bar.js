@@ -34,12 +34,10 @@ export default class Bar {
   }
 
   layouts() {
-    let sixteenths = 0;
     let sixteenthsPerPosition = 16 / this.positionsRequired();
     let currentNotePosition = 0;
     return this.notes.map((note, i) => {
-      const layout = { start16th: sixteenths, note, position: currentNotePosition };
-      sixteenths += note.sixteenths();
+      const layout = { note, position: currentNotePosition };
       const positionIncrement = note.sixteenths() / sixteenthsPerPosition;
       currentNotePosition += positionIncrement;
       return layout;
