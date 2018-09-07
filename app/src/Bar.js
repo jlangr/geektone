@@ -29,10 +29,12 @@ export default class Bar {
     return SixteenthsCapacity / smallestIncrement;
   }
 
-  layouts() {
-    let sixteenthsPerPosition = 16 / this.positionsRequired();
+  // pass in positions required!
+  // once that is working, remove as default arg
+  layouts(positionsRequired = this.positionsRequired()) {
+    let sixteenthsPerPosition = 16 / positionsRequired;
     let currentNotePosition = 0;
-    return this.notes.map((note, i) => {
+    return this.notes.map(note => {
       const layout = { note, position: currentNotePosition };
       const positionIncrement = note.sixteenths() / sixteenthsPerPosition;
       currentNotePosition += positionIncrement;

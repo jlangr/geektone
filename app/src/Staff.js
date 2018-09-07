@@ -96,21 +96,30 @@ export class Staff extends Component {
   }
 
   draw() {
-    // TODO sync bars across song
-    console.log('tracks: ', this.props.song.tracks, '--', this.props.song.tracks.length);
+    // TODO move to action on reducer
+    const barsForOtherTracks = this.props.song.tracks
+      .filter(track => track.name !== this.props.trackData.name)
+      .map(track => track.notes.bars());
+
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines();
-    let currentPosition = 0;
+    let barPosition = 0;
     this.props.trackData.notes.bars()
-      .forEach(bar => {
-        bar.layouts().forEach(({ note, position }) => {
-          const absolutePosition = currentPosition + position;
-          note.position = absolutePosition; // note! update to note
+      .forEach((bar, i) => {
+        const crossBars = barsForOtherTracks.map(bars => bars[i]).filter(bar => bar !== undefined);
+        const allPositionsRequiredForBar =
+          crossBars.map(bar => bar.positionsRequired());
+        const positionsRequired = Math.max(...allPositionsRequiredForBar, bar.positionsRequired());
+        bar.layouts(positionsRequired).forEach(({ note, position }) => {
+          note.position = barPosition + position; // note! update to note
           note.drawOn(this.staffContext());
         });
-        currentPosition += bar.positionsRequired();
-        this.drawBar(currentPosition++);
+        barPosition += positionsRequired;
+        this.drawBar(barPosition++);
       });
+
+      // TODO: redraw other staffs 
+      // should happen somehow automatically via reducer / state update
   }
 
   drawStaffLines() {
