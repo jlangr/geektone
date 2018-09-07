@@ -166,7 +166,8 @@ describe('NoteSequence', () => {
         beforeEach(() => {
           const position = 1;
           note = sequence.note(position);
-          firstNoteClickPoint = { x: note.x(position), y: note.y() };
+          note.position = position;
+          firstNoteClickPoint = { x: note.x(), y: note.y() };
         });
 
         it('returns true when note hit', () => {
