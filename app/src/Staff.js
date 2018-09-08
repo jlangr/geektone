@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as keyHandler from './KeyHandler';
 import { lineHeight, sharpArea, sharpsArea, notePad, noteDistance, sharpWidth, sharpsInWidth } from './Note';
-import { addSharp } from './actions';
+import { addSharp, updateTrack } from './actions';
 import { isInSharpsMode, trackData } from './reducers/SongReducer';
 import { nearestNote, noteY } from './reducers/UIReducer';
 import * as UI from './util/UI';
@@ -96,13 +96,12 @@ export class Staff extends Component {
   }
 
   draw() {
-    // TODO move to action on reducer
     const barsForOtherTracks = this.props.song.tracks
       .filter(track => track.name !== this.props.trackData.name)
       .map(track => track.notes.bars());
 
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
-    this.drawStaffLines();
+    this.drawStaffLines(); // TODO full length!
     let barPosition = 0;
     this.props.trackData.notes.bars()
       .forEach((bar, i) => {
@@ -117,6 +116,10 @@ export class Staff extends Component {
         barPosition += positionsRequired;
         this.drawBar(barPosition++);
       });
+
+      /*
+          barPos notePos notePos notePos notePos barPos ... */ 
+
 
       // TODO: redraw other staffs 
       // should happen somehow automatically via reducer / state update
@@ -195,14 +198,15 @@ export class Staff extends Component {
 
 const mapStateToProps = ({ ui, composition }, ownProps) => {
   const song = composition.song;
+  const trackId = ownProps.id;
   return { 
-    trackData: trackData(composition, ownProps.id),
-    isInSharpsMode: isInSharpsMode(song, ownProps.id),
+    trackData: trackData(composition, trackId),
+    isInSharpsMode: isInSharpsMode(song, trackId),
     nearestNote: point => nearestNote(ui, point),
     ui, 
     song };
 };
 
-const mapDispatchToProps = { addSharp };
+const mapDispatchToProps = { addSharp, updateTrack };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Staff);

@@ -8,6 +8,8 @@ export const addSharp = (trackIndex, note) => ({ type: type.ADD_SHARP, payload: 
 
 export const addTrack = newTrack => ({ type: type.ADD_TRACK, payload: newTrack });
 
+export const updateTrack = trackIndex => ({ type: type.UPDATE_TRACK, payload: trackIndex });
+
 export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm });
 
 export const changeSongName = newName => ({ type: type.CHANGE_SONG_NAME, payload: 'new name' });

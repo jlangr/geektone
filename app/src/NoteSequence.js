@@ -16,21 +16,28 @@ export default class NoteSequence {
     this.notes = [];
     noteNames.forEach(n => {
       if (Array.isArray(n))
-        this.add(new Note(n[0], n[1]));
+        this.baseAdd(new Note(n[0], n[1]));
       else {
         const noteName = n;
-        this.add(new Note(noteName));
+        this.baseAdd(new Note(noteName));
       }
     });
+    if (noteNames.length > 0) this.rebar();
     this.currentNoteSequenceIndex = -1;
   }
 
   add(note) {
+    this.baseAdd(note);
+    this.rebar();
+  }
+  
+  baseAdd(note) {
     this.notes.push(note);
   }
 
   addAll() {
     this.notes = Array.prototype.concat.apply(this.notes, arguments);
+    this.rebar();
   }
 
   // ==
@@ -51,7 +58,6 @@ export default class NoteSequence {
     return this.notes[0];
   }
 
-sHit
   lastNote() {
     return this.notes[this.notes.length - 1];
   }
@@ -110,6 +116,16 @@ sHit
     this.notes[sequenceIndex].select();
   }
 
+  selectX(sequenceIndex) {
+    console.log('SEQ INDEX: ',sequenceIndex);
+    this.currentNoteSequenceIndex = sequenceIndex;
+    console.log('this.notes index',  this.notes)
+   const n = this.notes[sequenceIndex]
+   console.log(`n: ${n}`);
+    n.select();
+    console.log('done selected')
+  }
+
   selectFirst() {
     this.select(0);
   }
@@ -134,6 +150,7 @@ sHit
     this.notes.splice(this.currentNoteSequenceIndex, 1);
     this.currentNoteSequenceIndex = Math.max(0, this.currentNoteSequenceIndex - 1);
     this.select(this.currentNoteSequenceIndex);
+    this.rebar();
   }
 
   duplicateNote() {
@@ -142,6 +159,7 @@ sHit
     copy.duration = note.duration;
     this.notes.splice(this.currentNoteSequenceIndex + 1, 0, copy);
     this.selectNext();
+    this.rebar();
   }
 
   setSelectedTo(duration) {
@@ -150,14 +168,17 @@ sHit
 
   halveSelectedDuration() {
     this.selectedNote().duration = Duration.halveDuration(this.selectedNote().duration);
+    this.rebar();
   }
 
   doubleSelectedDuration() {
     this.selectedNote().duration = Duration.doubleDuration(this.selectedNote().duration);
+    this.rebar();
   }
 
   toggleDotForSelected() {
     this.selectedNote().toggleDot();
+    this.rebar();
   }
 
   incrementSelected() {
@@ -168,7 +189,9 @@ sHit
     this.selectedNote().decrement();
   }
 
-  bars() {
+  boo() {}
+
+  rebar() {
     const barSequence = [];
     let bar = new Bar();
     this.notes.forEach(note => {
@@ -181,6 +204,10 @@ sHit
       }
     });
     if (!bar.isEmpty()) barSequence.push(bar);
-    return barSequence;
+    this.barSequence = barSequence;
+  }
+
+  bars() {
+    return this.barSequence;
   }
 }

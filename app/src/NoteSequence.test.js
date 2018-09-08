@@ -74,6 +74,81 @@ describe('NoteSequence', () => {
       expect(bars[1].notes).toEqual([e]);
     });
   });
+  
+  describe('a rebar', () => {
+    const e = new Note('E4', '4n');
+    let sequence;
+    let rebar;
+    let existingRebar;
+
+    beforeEach(() => {
+      // TODO better way in Jest?
+      existingRebar = NoteSequence.prototype.rebar;
+    });
+
+    afterEach(() => {
+      NoteSequence.prototype.rebar = existingRebar;
+    });
+
+    describe('on construction', () => {
+      it('triggers once with any notes', () => {
+        rebar = jest.fn();
+        NoteSequence.prototype.rebar = rebar;
+        sequence = new NoteSequence(['E4', 'E5']);
+        expect(rebar).toHaveBeenCalledTimes(1);
+      });
+
+      it('does not trigger if no notes added', () => {
+        rebar = jest.fn();
+        NoteSequence.prototype.rebar = rebar;
+        sequence = new NoteSequence([]);
+        expect(rebar).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('after construction', () => {
+      beforeEach(() => {
+        sequence = new NoteSequence(['E4', 'F4', 'G4']);
+        sequence.selectFirst();
+        rebar = jest.fn();
+        NoteSequence.prototype.rebar = rebar;
+      });
+
+      it('triggers on call to add', () => {
+        sequence.add(e);
+        expect(rebar).toHaveBeenCalled();
+      });
+
+      it('triggers on call to deleteSelected', () => {
+        sequence.deleteSelected();
+
+        expect(rebar).toHaveBeenCalled();
+      });
+
+      it('triggers on call to duplicateNote', () => {
+        sequence.duplicateNote();
+
+        expect(rebar).toHaveBeenCalled();
+      });
+
+      it('triggers on call to halveSelectedDuration', () => {
+        sequence.halveSelectedDuration();
+
+        expect(rebar).toHaveBeenCalled();
+      });
+
+      it('triggers on call to doubleSelectedDuration', () => {
+        sequence.doubleSelectedDuration();
+
+        expect(rebar).toHaveBeenCalled();
+      });
+
+      it('triggers on call to toggleDotForSelected', () => {
+        sequence.toggleDotForSelected();
+        expect(rebar).toHaveBeenCalled();
+      });
+    });
+  });
 
   describe('sequence with 3 notes', () => {
     beforeEach(() => {
@@ -300,13 +375,6 @@ describe('NoteSequence', () => {
         sequence.decrementSelected();
 
         expect(sequence.selectedNote().name()).toEqual('D4');
-      });
-
-    });
-
-    describe('splitting into bars', () => {
-      it('does so', () => {
-
       });
 
     });

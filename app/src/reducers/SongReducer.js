@@ -37,6 +37,12 @@ const updateState_toggleSharpsMode = (state, trackIndex) => {
   });
 };
 
+const updateState_rebar = (state, trackIndex) => {
+  return updateStateForTrack(state, trackIndex, changedTrack => {
+    console.log('update state for track', trackIndex);
+  });
+};
+
 const updateState_addSharp = (state, trackIndex, note) => {
   if (!note) return state;
 
@@ -113,6 +119,12 @@ export default(state = INITIAL_STATE, action) => {
     {
       const trackIndex = action.payload;
       return updateState_toggleMute(state, trackIndex);
+    }
+
+    case type.UPDATE_TRACK:
+    {
+      const trackIndex = action.payload;
+      return updateState_rebar(state, trackIndex);
     }
 
     default:
