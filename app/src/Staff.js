@@ -23,7 +23,6 @@ export class Staff extends Component {
     this.draw();
   }
 
-  // check what changed?
   componentDidUpdate() {
     this.draw();
   }
@@ -31,7 +30,7 @@ export class Staff extends Component {
   render() {
     return (
       <div>
-        <canvas id={this.props.id} 
+        <canvas ref='canvas' id={this.props.id}
           tabIndex={this.props.id}
           border='0' width={staffWidth} height='144'
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
@@ -40,7 +39,7 @@ export class Staff extends Component {
   }
 
   canvas() {
-    return document.getElementById(this.props.id);
+    return this.refs.canvas;
   }
 
   staffContext() {
@@ -56,7 +55,10 @@ export class Staff extends Component {
   }
 
   handleKeyPress(e) {
-    if (keyHandler.handleKey(e, this.props.trackData.notes)) this.draw();
+    if (keyHandler.handleKey(e, this.props.trackData.notes)) {
+      this.props.updateTrack(this.props.id); // TODO only if it's a rebar change? or not.
+      // this.draw();
+    }
   }
 
   click(e) {
@@ -96,6 +98,7 @@ export class Staff extends Component {
   }
 
   draw() {
+    console.log(`redraw canvas id: ${this.props.id}`);
     const barsForOtherTracks = this.props.song.tracks
       .filter(track => track.name !== this.props.trackData.name)
       .map(track => track.notes.bars());
@@ -103,13 +106,16 @@ export class Staff extends Component {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines(); // TODO full length!
     let barPosition = 0;
+    console.log(`in draw; bar count: ${this.props.trackData.notes.bars().length}`)
     this.props.trackData.notes.bars()
       .forEach((bar, i) => {
+        console.log(`\t\tbar ${i}`)
         const crossBars = barsForOtherTracks.map(bars => bars[i]).filter(bar => bar !== undefined);
         const allPositionsRequiredForBar =
           crossBars.map(bar => bar.positionsRequired());
         const positionsRequired = Math.max(...allPositionsRequiredForBar, bar.positionsRequired());
         bar.layouts(positionsRequired).forEach(({ note, position }) => {
+          console.log(`\t\t\t${note} ${position}`)
           note.position = barPosition + position; // note! update to note
           note.drawOn(this.staffContext());
         });

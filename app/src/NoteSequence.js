@@ -183,13 +183,11 @@ export default class NoteSequence {
     const barSequence = []
     let bar = new Bar()
     this.notes.forEach(note => {
-      if (bar.canAccommodate(note)) {
-        bar.push(note)
-        if (bar.isFull()) {
-          barSequence.push(bar)
-          bar = new Bar()
-        }
+      if (!bar.canAccommodate(note)) {
+        barSequence.push(bar)
+        bar = new Bar()
       }
+      bar.push(note)
     })
     if (!bar.isEmpty()) barSequence.push(bar)
     this.barSequence = barSequence

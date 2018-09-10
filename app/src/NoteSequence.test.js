@@ -71,6 +71,20 @@ describe('NoteSequence', () => {
       expect(bars[0].notes).toEqual([e, e, fHalf])
       expect(bars[1].notes).toEqual([e])
     })
+
+    it('creates new bar when needed', () => {
+      const fQuarter = new Note('F4', '4n.')
+      const fQuarterDup = new Note('F4', '4n.')
+      const eEighth = new Note('E4', '8n')
+      const eHalf = new Note('E4', '2n')
+      sequence.addAll(fQuarter, fQuarterDup, eEighth, eHalf)
+
+      const bars = sequence.bars()
+
+      expect(bars.length).toEqual(2)
+      expect(bars[0].notes).toEqual([fQuarter, fQuarter, eEighth])
+      expect(bars[1].notes).toEqual([eHalf])
+    })
   })
   
   describe('a rebar', () => {
