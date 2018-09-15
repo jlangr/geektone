@@ -90,6 +90,7 @@ export class Staff extends Component {
     return this.y(trebleStaffLines[0]);
   }
 
+  // remove
   drawBar(position) {
     const x = this.x(position);
     this.staffContext().beginPath();
@@ -97,38 +98,37 @@ export class Staff extends Component {
     this.staffContext().stroke();
   }
 
-  draw() {
-    console.log(`redraw canvas id: ${this.props.id}`);
+  barsAndSuch() {
     const barsForOtherTracks = this.props.song.tracks
       .filter(track => track.name !== this.props.trackData.name)
       .map(track => track.notes.bars());
 
-    this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
-    this.drawStaffLines(); // TODO full length!
+    const stuffToDraw = [];
+
     let barPosition = 0;
-    console.log(`in draw; bar count: ${this.props.trackData.notes.bars().length}`)
     this.props.trackData.notes.bars()
       .forEach((bar, i) => {
-        console.log(`\t\tbar ${i}`)
         const crossBars = barsForOtherTracks.map(bars => bars[i]).filter(bar => bar !== undefined);
         const allPositionsRequiredForBar =
           crossBars.map(bar => bar.positionsRequired());
         const positionsRequired = Math.max(...allPositionsRequiredForBar, bar.positionsRequired());
         bar.layouts(positionsRequired).forEach(({ note, position }) => {
-          console.log(`\t\t\t${note} ${position}`)
           note.position = barPosition + position; // note! update to note
-          note.drawOn(this.staffContext());
+          stuffToDraw.push(note);
         });
         barPosition += positionsRequired;
-        this.drawBar(barPosition++);
+        bar.position = barPosition;
+        bar.topLineY = this.topLineY;
+        bar.staffHeight = this.staffHeight;
+        stuffToDraw.push(bar);
       });
+      return stuffToDraw;
+  }
 
-      /*
-          barPos notePos notePos notePos notePos barPos ... */ 
-
-
-      // TODO: redraw other staffs 
-      // should happen somehow automatically via reducer / state update
+  draw() {
+    this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
+    this.drawStaffLines(); // TODO full length!
+    this.barsAndSuch().forEach(x => x.drawOn(this.staffContext(), this.x));
   }
 
   drawStaffLines() {
@@ -209,6 +209,7 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
     trackData: trackData(composition, trackId),
     isInSharpsMode: isInSharpsMode(song, trackId),
     nearestNote: point => nearestNote(ui, point),
+    // barsAndNotes: 
     ui, 
     song };
 };

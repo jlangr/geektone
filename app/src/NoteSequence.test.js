@@ -157,6 +157,7 @@ describe('NoteSequence', () => {
 
       it('triggers on call to toggleDotForSelected', () => {
         sequence.toggleDotForSelected()
+
         expect(rebar).toHaveBeenCalled()
       })
     })

@@ -1,3 +1,5 @@
+import * as Draw from './util/Draw';
+
 const SixteenthsCapacity = 16
 
 export default class Bar {
@@ -40,5 +42,12 @@ export default class Bar {
       currentNotePosition += positionIncrement
       return layout
     })
+  }
+
+  drawOn(context, xFunc) {
+    const x = xFunc(this.position);
+    context.beginPath();
+    Draw.drawLine(context, x, this.topLineY, x, this.staffHeight);
+    context.stroke();
   }
 }

@@ -124,6 +124,7 @@ export default class Note {
       .contains(mousePosition)
   }
 
+  // pass in from drawOn
   // should be relative to bar start
   x() {
     return sharpsArea + notePad + (this.position * (noteDistance + notePad))

@@ -50,6 +50,13 @@ it ('doubles durations', () => {
   expect(Duration.doubleDuration('2n')).toEqual('1n');
 });
 
+it ('doubles dotted durations', () => {
+  expect(Duration.doubleDuration('4n.')).toEqual('2n.');
+});
+
+// TODO double dotted limit at half-dotted?
+// TODO: half dotted?
+
 it ('does not double the largest duration', () => {
   expect(Duration.doubleDuration('1n')).toEqual('1n');
 });
