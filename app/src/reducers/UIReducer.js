@@ -1,37 +1,21 @@
-import Range from '../Range'; // TODO location?
+import Range from '../Range';
 import Rect from '../Rect';
-
-// ugh
-import { lineHeight, sharpArea, sharpsInWidth } from '../Note';
+import * as Draw from '../util/Draw'
 
 export const MiddleC = 'C4';
 
-// DUP
-const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
-const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
-const trebleStaffInterlineIndices = [ 3, 5, 7, 9 ];
 export const lineClickTolerance = 3;
-
-// DUP
-export const verticalIndex = noteName => {
-  return trebleStaffNotes.indexOf(noteName);
-};
-
-// DUP 
-export const noteY = noteName => {
-  return (verticalIndex(noteName) * lineHeight / 2);
-}
 
 export const staffNoteLineRanges = () => {
   const ranges = {};
-  trebleStaffLines.forEach(note => {
-    const y = noteY(note);
+  Draw.trebleStaffLines.forEach(note => {
+    const y = Draw.y(note);
     ranges[note] = new Range(y - lineClickTolerance, y + lineClickTolerance);
   });
-  trebleStaffInterlineIndices.forEach(i => {
-    const note = trebleStaffNotes[i];
-    const higherNote = trebleStaffNotes[i - 1];
-    const lowerNote = trebleStaffNotes[i + 1];
+  Draw.trebleStaffInterlineIndices.forEach(i => {
+    const note = Draw.trebleStaffNotes[i];
+    const higherNote = Draw.trebleStaffNotes[i - 1];
+    const lowerNote = Draw.trebleStaffNotes[i + 1];
     ranges[note] = 
       new Range(ranges[higherNote].end + 1, ranges[lowerNote].start - 1);
   });
@@ -47,10 +31,10 @@ export const nearestNote = (uiState, point) => {
 export const INITIAL_STATE = {
   staff: {
     noteLineRanges: staffNoteLineRanges(),
-    accidentalsRect:  new Rect(0, 0, sharpArea  * sharpsInWidth, noteY(MiddleC))
+    accidentalsRect:  new Rect(0, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(MiddleC))
   }
 };
 
-export default(state = INITIAL_STATE, action) => {
+export default(state = INITIAL_STATE, _action) => {
   return state;
 }

@@ -67,7 +67,7 @@ const updateState_toggleSharpsMode = (state, trackIndex) => {
 }
 
 const updateState_rebar = (state, trackIndex) => {
-  return updateStateForTrack(state, trackIndex, changedTrack => {
+  return updateStateForTrack(state, trackIndex, _changedTrack => {
     console.log('update state for track', trackIndex)
   })
 }

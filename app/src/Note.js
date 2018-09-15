@@ -1,26 +1,15 @@
 import Rect from './Rect'
-import { verticalIndex } from './util/Draw'
+import * as Draw from './util/Draw'
 import * as Duration from './Duration'
 import { next, prev } from './js/ArrayUtil'
 
-export const height = 64
-export const lineHeight = height / 4
-
 const stemHeight = 36
 
-export const notePad = 25
-export const noteDistance = 8
 const noteWidth = 7
 const noteHeight = 5
 const noteStroke = 2
 const highlightStroke = 4
 const rotation = 0
-
-export const sharpsInWidth = 3
-const sharpPad = 8
-export const sharpWidth = 20
-export const sharpArea = sharpWidth + 4
-export const sharpsArea = (sharpsInWidth * sharpArea) + sharpPad
 
 const lineColor = 'black'
 const highlightColor = 'red'
@@ -124,20 +113,14 @@ export default class Note {
       .contains(mousePosition)
   }
 
-  // pass in from drawOn
   // should be relative to bar start
-  x() {
-    return sharpsArea + notePad + (this.position * (noteDistance + notePad))
-  }
+  x() { return Draw.x(this.position) }
 
-  // dup with noteY from staff
-  y() {
-    return (verticalIndex(this.name()) * lineHeight / 2)
-  }
+  y() { return Draw.y(this.name()); }
 
   drawEllipse(context, extraRadius=0) {
     context.ellipse(
-      this.x(), this.y(),
+      this.x(), this.y(this.name()),
       noteWidth + extraRadius, noteHeight + extraRadius,
       rotation, 0, 2 * Math.PI)
   }

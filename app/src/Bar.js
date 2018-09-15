@@ -47,7 +47,6 @@ export default class Bar {
   drawOn(context) {
     const x = Draw.x(this.position)
     context.beginPath()
-    console.log(`bar at ${this.position} y ${this.topLineY}`);
     Draw.drawLine(context, x, this.topLineY, x, this.staffHeight)
     context.stroke()
   }
