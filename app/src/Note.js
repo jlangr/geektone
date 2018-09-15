@@ -1,5 +1,5 @@
 import Rect from './Rect'
-import { verticalIndex } from './Staff'
+import { verticalIndex } from './util/Draw'
 import * as Duration from './Duration'
 import { next, prev } from './js/ArrayUtil'
 

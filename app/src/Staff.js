@@ -1,20 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import * as keyHandler from './KeyHandler';
-import { lineHeight, sharpArea, sharpsArea, notePad, noteDistance, sharpWidth, sharpsInWidth } from './Note';
-import { addSharp, updateTrack } from './actions';
-import { isInSharpsMode, trackData } from './reducers/SongReducer';
-import { nearestNote, noteY } from './reducers/UIReducer';
-import * as UI from './util/UI';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import * as keyHandler from './KeyHandler'
+import { sharpArea, sharpWidth, sharpsInWidth } from './Note'
+import { addSharp, updateTrack } from './actions'
+import { isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
+import { nearestNote, noteY } from './reducers/UIReducer'
+import * as UI from './util/UI'
+import * as Draw from './util/Draw'
 
 const staffWidth = 1600;
 const highlightColor = 'red'; // move to ui constants source
-const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
-const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
 
-export const verticalIndex = noteName => {
-  return trebleStaffNotes.indexOf(noteName);
-};
 
 export class Staff extends Component {
   componentDidMount() {
@@ -74,81 +70,29 @@ export class Staff extends Component {
   }
 
   // TODO test
+  // TODO move to query on props
   isClickInAccidentals(point) {
     return this.props.ui.staff.accidentalsRect.contains(point);
-  }
-
-  y(noteName) {
-    return (verticalIndex(noteName) * lineHeight / 2);
-  }
-
-  x(position) {
-    return sharpsArea + notePad + (position * (noteDistance + notePad));
-  }
-
-  topLineY() {
-    return this.y(trebleStaffLines[0]);
-  }
-
-  // remove
-  drawBar(position) {
-    const x = this.x(position);
-    this.staffContext().beginPath();
-    this.drawLine(x, this.topLineY(), x, this.staffHeight);
-    this.staffContext().stroke();
-  }
-
-  barsAndSuch() {
-    const barsForOtherTracks = this.props.song.tracks
-      .filter(track => track.name !== this.props.trackData.name)
-      .map(track => track.notes.bars());
-
-    const stuffToDraw = [];
-
-    let barPosition = 0;
-    this.props.trackData.notes.bars()
-      .forEach((bar, i) => {
-        const crossBars = barsForOtherTracks.map(bars => bars[i]).filter(bar => bar !== undefined);
-        const allPositionsRequiredForBar =
-          crossBars.map(bar => bar.positionsRequired());
-        const positionsRequired = Math.max(...allPositionsRequiredForBar, bar.positionsRequired());
-        bar.layouts(positionsRequired).forEach(({ note, position }) => {
-          note.position = barPosition + position; // note! update to note
-          stuffToDraw.push(note);
-        });
-        barPosition += positionsRequired;
-        bar.position = barPosition;
-        bar.topLineY = this.topLineY;
-        bar.staffHeight = this.staffHeight;
-        stuffToDraw.push(bar);
-      });
-      return stuffToDraw;
   }
 
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height);
     this.drawStaffLines(); // TODO full length!
-    this.barsAndSuch().forEach(x => x.drawOn(this.staffContext(), this.x));
+    this.props.barsAndNotes.forEach(x => 
+      x.drawOn(this.staffContext()));
   }
 
   drawStaffLines() {
     this.staffContext().beginPath();
 
-    for (let i = 0; i < trebleStaffLines.length; i++) {
-      const currentY = this.y(trebleStaffLines[i]);
-      this.drawLine(0, currentY, staffWidth, currentY);
+    // forEach
+    for (let i = 0; i < Draw.trebleStaffLines.length; i++) {
+      const currentY = Draw.y(Draw.trebleStaffLines[i]);
+      Draw.drawLine(this.staffContext(), 0, currentY, staffWidth, currentY);
     }
-    this.staffHeight = trebleStaffLines.length * lineHeight;
-    this.drawLine(staffWidth, this.topLineY(), staffWidth, this.staffHeight);
+    Draw.drawLine(this.staffContext(), staffWidth, Draw.topLineY(), staffWidth, Draw.staffHeight);
     this.staffContext().stroke();
     this.drawAccidentalsArea();
-  }
-
-  drawLine(xStart, yStart, xEnd, yEnd, weight=1, color='black') {
-    this.staffContext().strokeStyle = color;
-    this.staffContext().lineWidth = weight;
-    this.staffContext().moveTo(xStart, yStart);
-    this.staffContext().lineTo(xEnd, yEnd);
   }
 
   drawSharp(note, sharpIndex) {
@@ -168,8 +112,8 @@ export class Staff extends Component {
     let verticalOffset = sharpHeight / 3;
 
     let weight = 2;
-    this.drawLine(upstrokeLeft, top, upstrokeLeft, bottom, weight);
-    this.drawLine(upstrokeRight, top - verticalOffset, upstrokeRight, bottom - verticalOffset, weight);
+    Draw.drawLine(this.staffContext(), upstrokeLeft, top, upstrokeLeft, bottom, weight);
+    Draw.drawLine(this.staffContext(), upstrokeRight, top - verticalOffset, upstrokeRight, bottom - verticalOffset, weight);
 
     this.staffContext().stroke();
 
@@ -179,11 +123,11 @@ export class Staff extends Component {
     let right = x + (sharpWidth / 2);
     let upslashYstart = y - (sharpHeight / 4);
     let upslashYend = upslashYstart - verticalOffset;
-    this.drawLine(left, upslashYstart, right, upslashYend, weight);
+    Draw.drawLine(this.staffContext(), left, upslashYstart, right, upslashYend, weight);
 
     upslashYstart = y + (sharpHeight / 4);
     upslashYend = upslashYstart - verticalOffset;
-    this.drawLine(left, upslashYstart, right, upslashYend, weight);
+    Draw.drawLine(this.staffContext(), left, upslashYstart, right, upslashYend, weight);
     this.staffContext().stroke();
   }
 
@@ -205,11 +149,12 @@ export class Staff extends Component {
 const mapStateToProps = ({ ui, composition }, ownProps) => {
   const song = composition.song;
   const trackId = ownProps.id;
+  const dataForTrack = trackData(composition, trackId);
   return { 
-    trackData: trackData(composition, trackId),
+    trackData: dataForTrack,
     isInSharpsMode: isInSharpsMode(song, trackId),
     nearestNote: point => nearestNote(ui, point),
-    // barsAndNotes: 
+    barsAndNotes: barsAndNotes(song, dataForTrack),
     ui, 
     song };
 };
