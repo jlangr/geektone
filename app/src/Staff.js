@@ -7,7 +7,6 @@ import { nearestNote } from './reducers/UIReducer'
 import * as UI from './util/UI'
 import * as Draw from './util/Draw'
 
-const staffWidth = 1600
 const highlightColor = 'red' // move to ui constants source
 
 export class Staff extends Component {
@@ -26,7 +25,7 @@ export class Staff extends Component {
       <div>
         <canvas ref='canvas' id={this.props.id}
           tabIndex={this.props.id}
-          border='0' width={staffWidth} height='144'
+          border='0' width={this.staffWidth()} height='144'
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
       </div>
     )  // note: tabIndex needed for key events
@@ -49,22 +48,18 @@ export class Staff extends Component {
   }
 
   handleKeyPress(e) {
-    if (keyHandler.handleKey(e, this.props.trackData.notes)) {
+    if (keyHandler.handleKey(e, this.props.trackData.notes))
       this.props.updateTrack(this.props.id) // TODO only if it's a rebar change? or not.
-      // this.draw()
-    }
   }
 
   click(e) {
     const clickPoint = UI.mousePosition(this.canvas(), e)
     if (this.props.isInSharpsMode) {
-      if (this.isClickInAccidentals(clickPoint)) {
+      if (this.isClickInAccidentals(clickPoint))
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
-        this.draw()
-      }
     } else
       if (this.props.trackData.notes.clickHitNote(clickPoint))
-        this.draw()
+        this.props.updateTrack(this.props.id)
   }
 
   // TODO test
@@ -73,20 +68,25 @@ export class Staff extends Component {
     return this.props.ui.staff.accidentalsRect.contains(point)
   }
 
+  staffWidth() {
+    const lastNotePosition = this.props.barsAndNotes[this.props.barsAndNotes.length - 1].position
+    return Draw.x(2 + lastNotePosition)
+  }
+
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height)
-    this.drawStaffLines() // TODO full length!
     this.props.barsAndNotes.forEach(x => 
       x.drawOn(this.staffContext()))
+
+    this.drawStaffLines()
   }
 
   drawStaffLines() {
     this.staffContext().beginPath()
     Draw.trebleStaffLines.forEach(line => {
       const currentY = Draw.y(line)
-      Draw.drawLine(this.staffContext(), 0, currentY, staffWidth, currentY)
+      Draw.drawLine(this.staffContext(), 0, currentY, this.staffWidth(), currentY)
     })
-    Draw.drawLine(this.staffContext(), staffWidth, Draw.topLineY(), staffWidth, Draw.staffHeight)
     this.staffContext().stroke()
     this.drawAccidentalsArea()
   }
