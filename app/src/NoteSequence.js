@@ -171,6 +171,10 @@ export default class NoteSequence {
     this.rebar()
   }
 
+  toggleRestForSelected() {
+    this.selectedNote().restToggle()
+  }
+
   incrementSelected() {
     this.selectedNote().increment()
   }

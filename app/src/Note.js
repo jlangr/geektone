@@ -19,6 +19,8 @@ const quarterFill = 'black'
 const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"]
 
+const RestNoteName = 'R'
+
 export default class Note {
   constructor(name, duration = Duration.quarter) {
     this.octave = parseInt(name.slice(-1), 10)
@@ -27,14 +29,23 @@ export default class Note {
     this.noteIndex = ascendingWholeNoteScale.indexOf(note)
     this.isSelected = false
     this.duration = duration // objectify?
+    this.isNote = (name !== RestNoteName)
   }
 
   static note(name) {
     return name.slice(0, -1)
   }
 
-  static isOnLine(name) {
-    return Note.note(name).charCodeAt() % 2 === 1
+  static Rest(duration) {
+    return new Note(RestNoteName, duration)
+  }
+
+  restToggle() {
+    this.isNote = !this.isNote;
+  }
+
+  isRest() {
+    return !this.isNote;
   }
 
   dotSixteenths() {
@@ -196,19 +207,32 @@ export default class Note {
     context.stroke()
   }
 
+  drawRest(context) {
+    const x = this.x() - noteWidth
+    const y = this.y() - 10
+    context.moveTo(x, y)
+    context.lineTo(x + noteWidth, y + 10)
+  }
+
   drawNoteOn(context) {
     context.beginPath()
     context.lineWidth = noteStroke
     context.strokeStyle = lineColor
-    // TODO inject function into note instead
-    if (Duration.isWholeBase(this.duration)) this.drawWhole(context)
-    else if (Duration.isHalfBase(this.duration)) this.drawHalf(context)
-    else if (Duration.isQuarterBase(this.duration)) this.drawQuarter(context)
-    else if (Duration.isEighthBase(this.duration)) this.drawEighth(context)
-    else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenth(context)
+
+    if (this.isRest())
+      this.drawRest(context)
+    else {
+      // TODO inject function into note instead
+      if (Duration.isWholeBase(this.duration)) this.drawWhole(context)
+      else if (Duration.isHalfBase(this.duration)) this.drawHalf(context)
+      else if (Duration.isQuarterBase(this.duration)) this.drawQuarter(context)
+      else if (Duration.isEighthBase(this.duration)) this.drawEighth(context)
+      else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenth(context)
+    }
 
     if (this.isDotted())
       this.drawDot(context)
+
     context.stroke()
   }
 

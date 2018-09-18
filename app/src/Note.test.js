@@ -1,113 +1,150 @@
-import Note from './Note';
-import * as Duration from './Duration';
+import Note from './Note'
+import * as Duration from './Duration'
 
 describe('note', () => {
   describe('a note', () => {
     it('defaults to quarter note', () => {
-      expect(new Note('F3').duration).toEqual(Duration.quarter);
-    });
+      expect(new Note('F3').duration).toEqual(Duration.quarter)
+    })
 
     it('answers number of sixteenths', () => {
-      expect(new Note('F3', Duration.quarter).sixteenths()).toEqual(4);
-      expect(new Note('F3', '4n.').sixteenths()).toEqual(6);
-    });
-  });
+      expect(new Note('F3', Duration.quarter).sixteenths()).toEqual(4)
+      expect(new Note('F3', '4n.').sixteenths()).toEqual(6)
+    })
+  })
 
   describe('whole note increment/decrement', () => {
     it('bumps up', () => {
-      const note = new Note('C4');
-      note.increment();
-      expect(note.name()).toEqual('D4');
-    });
+      const note = new Note('C4')
+      note.increment()
+      expect(note.name()).toEqual('D4')
+    })
 
     it('increments octave when necessary', () => {
-      const note = new Note('B4');
-      note.increment();
-      expect(note.name()).toEqual('C5');
-    });
+      const note = new Note('B4')
+      note.increment()
+      expect(note.name()).toEqual('C5')
+    })
 
     it('bumps down a half note', () => {
-      const note = new Note('D4');
-      note.decrement();
-      expect(note.name()).toEqual('C4');
-    });
+      const note = new Note('D4')
+      note.decrement()
+      expect(note.name()).toEqual('C4')
+    })
 
     it('decrements octave when necessary', () => {
-      const note = new Note('C4');
-      note.decrement();
-      expect(note.name()).toEqual('B3');
-    });
+      const note = new Note('C4')
+      note.decrement()
+      expect(note.name()).toEqual('B3')
+    })
 
     it('ignores attempts to go below octave 1', () => {
-      const note = new Note('C1');
-      note.decrement();
-      expect(note.name()).toEqual('C1');
-    });
+      const note = new Note('C1')
+      note.decrement()
+      expect(note.name()).toEqual('C1')
+    })
 
     it('ignores attempts to go above octave 8', () => {
-      const note = new Note('C8');
-      note.increment();
-      expect(note.name()).toEqual('C8');
-    });
+      const note = new Note('C8')
+      note.increment()
+      expect(note.name()).toEqual('C8')
+    })
   })
 
   describe('to JSON', () => {
-    expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n'});
-  });
+    expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n'})
+  })
 
   describe('dotted notes', () => {
     describe('toggle', () => {
       it('toggles dot to non dotted note', () => {
-        const note = new Note('F2', '4n');
+        const note = new Note('F2', '4n')
 
-        note.toggleDot();
+        note.toggleDot()
 
-        expect(note.duration).toEqual('4n.');
-      });
+        expect(note.duration).toEqual('4n.')
+      })
 
       it('removes dot from dotted note', () => {
-        const note = new Note('F2', '2n.');
+        const note = new Note('F2', '2n.')
 
-        note.toggleDot();
+        note.toggleDot()
 
-        expect(note.duration).toEqual('2n');
-      });
+        expect(note.duration).toEqual('2n')
+      })
 
       it('does not toggle whole notes', () => {
-        const note = new Note('G4', '1n');
+        const note = new Note('G4', '1n')
 
-        note.toggleDot();
+        note.toggleDot()
 
-        expect(note.duration).toEqual('1n');
-      });
+        expect(note.duration).toEqual('1n')
+      })
 
       it('does not toggle 16th notes', () => {
-        const note = new Note('G4', '16n');
+        const note = new Note('G4', '16n')
 
-        note.toggleDot();
+        note.toggleDot()
 
-        expect(note.duration).toEqual('16n');
-      });
-    });
-  });
+        expect(note.duration).toEqual('16n')
+      })
+    })
+  })
 
   describe('hit testing', () => {
     it('is false when click does not hit', () => {
-      const note = new Note('D4');
-      const position = 0;
+      const note = new Note('D4')
+      const position = 0
 
-      const isHit = note.isHit({ x: note.x(position) + 1000, y: note.y() }, position);
+      const isHit = note.isHit({ x: note.x(position) + 1000, y: note.y() }, position)
 
-      expect(isHit).toBeFalsy();
-    });
+      expect(isHit).toBeFalsy()
+    })
 
     it('is true when click is a hit', () => {
-      const note = new Note('D4');
-      note.position = 0;
+      const note = new Note('D4')
+      note.position = 0
 
-      const isHit = note.isHit({ x: note.x(note.position), y: note.y() });
+      const isHit = note.isHit({ x: note.x(note.position), y: note.y() })
 
-      expect(isHit).toBeTruthy();
-    });
-  });
-});
+      expect(isHit).toBeTruthy()
+    })
+  })
+
+  describe('rest', () => {
+    it('is not rest by default', () => {
+      const note = new Note('D5')
+
+      expect(note.isRest()).toBeFalsy()
+    })
+
+    it('converts note to rest on toggle', () => {
+      const note = new Note('D5')
+
+      note.restToggle()
+
+      expect(note.isRest()).toBeTruthy()
+    })
+
+    it('can be created via factory method', () => {
+      const rest = Note.Rest(Duration.half)
+
+      expect(rest.isRest()).toBeTruthy()
+      expect(rest.duration).toEqual(Duration.half)
+    })
+
+    it('defaults to quarter rest by default', () => {
+      const rest = Note.Rest()
+
+      expect(rest.duration).toEqual(Duration.quarter)
+    })
+
+    it('converts from rest to note on toggle', () => {
+      const rest = Note.Rest()
+
+      rest.restToggle()
+
+      expect(rest.isRest()).toBeFalsy()
+    })
+  })
+})

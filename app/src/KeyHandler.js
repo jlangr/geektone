@@ -17,6 +17,7 @@ export const handleKey = (e, noteSequence) => {
     case '.': noteSequence.toggleDotForSelected(); return true;
     case '/': noteSequence.halveSelectedDuration(); return true;
     case '*': noteSequence.doubleSelectedDuration(); return true;
+    case 'r': noteSequence.toggleRestForSelected(); return true;
     default: return false;
   }
 }

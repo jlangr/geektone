@@ -145,4 +145,13 @@ describe('keystrokes', () => {
 
     expect(noteSequence.firstNote().duration).toEqual('1n');
   });
+
+  it('converts note to rest on r', () => {
+    noteSequence.add(new Note('E4', '4n'));
+    noteSequence.selectFirst();
+
+    handleKey({key: 'r'}, noteSequence);
+
+    expect(noteSequence.firstNote().isRest()).toBeTruthy();
+  });
 });
