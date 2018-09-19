@@ -20,6 +20,7 @@ const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"]
 
 const RestNoteName = 'R'
+const RestY = Draw.y('E4') - 6
 
 export default class Note {
   constructor(name, duration = Duration.quarter) {
@@ -200,6 +201,8 @@ export default class Note {
   }
 
   highlightNote(context) {
+    if (this.isRest())
+      context.moveTo(this.x(), RestY)
     context.beginPath()
     context.strokeStyle = highlightColor
     context.lineWidth = highlightStroke
@@ -207,28 +210,47 @@ export default class Note {
     context.stroke()
   }
 
-  drawRest(context) {
-    const x = this.x() - noteWidth
-    const y = this.y() - 10
+  drawQuarterRest(context) {
+    let x = this.x()
+    let y = RestY
+    context.lineWidth = 3
     context.moveTo(x, y)
-    context.lineTo(x + noteWidth, y + 10)
+    context.bezierCurveTo(x - 8, y - 4, x - 3, y - 10, x + 5, y - 5)
+    x = x + 5
+    y = y - 5
+    context.moveTo(x, y)
+    context.bezierCurveTo(x - 20, y - 18, x + 6, y - 16, x - 5, y - 22)
+  }
+//  experiment w/ beziers: http://jsfiddle.net/halfsoft/Gsz2a/
+
+  drawRest(context) {
+    if (Duration.isQuarterBase(this.duration)) this.drawQuarterRest(context)
+    else {
+      const x = this.x() - noteWidth
+      const y = this.y() - 10
+      context.moveTo(x, y)
+      context.lineTo(x + noteWidth, y + 10)
+    }
   }
 
-  drawNoteOn(context) {
+  drawNote(context) {
+      // TODO inject function into note instead
+    if (Duration.isWholeBase(this.duration)) this.drawWhole(context)
+    else if (Duration.isHalfBase(this.duration)) this.drawHalf(context)
+    else if (Duration.isQuarterBase(this.duration)) this.drawQuarter(context)
+    else if (Duration.isEighthBase(this.duration)) this.drawEighth(context)
+    else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenth(context)
+  }
+
+  drawElementOn(context) {
     context.beginPath()
     context.lineWidth = noteStroke
     context.strokeStyle = lineColor
 
     if (this.isRest())
       this.drawRest(context)
-    else {
-      // TODO inject function into note instead
-      if (Duration.isWholeBase(this.duration)) this.drawWhole(context)
-      else if (Duration.isHalfBase(this.duration)) this.drawHalf(context)
-      else if (Duration.isQuarterBase(this.duration)) this.drawQuarter(context)
-      else if (Duration.isEighthBase(this.duration)) this.drawEighth(context)
-      else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenth(context)
-    }
+    else
+      this.drawNote(context)
 
     if (this.isDotted())
       this.drawDot(context)
@@ -237,7 +259,7 @@ export default class Note {
   }
 
   drawOn(context) {
-    this.drawNoteOn(context)
+    this.drawElementOn(context)
     if (this.isSelected)
       this.highlightNote(context)
   }
