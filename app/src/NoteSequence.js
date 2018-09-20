@@ -154,6 +154,7 @@ export default class NoteSequence {
 
   setSelectedTo(duration) {
     this.selectedNote().duration = duration
+    this.rebar()
   }
 
   halveSelectedDuration() {

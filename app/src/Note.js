@@ -200,13 +200,22 @@ export default class Note {
     context.fill()
   }
 
+  drawRestHighlight(context, extraRadius=0) {
+    // replace with tall rectangle
+    context.ellipse(
+      this.x(), RestY - 12,
+      noteWidth + extraRadius, 20,
+      rotation, 0, 2 * Math.PI)
+  }
+
   highlightNote(context) {
-    if (this.isRest())
-      context.moveTo(this.x(), RestY)
     context.beginPath()
     context.strokeStyle = highlightColor
     context.lineWidth = highlightStroke
-    this.drawEllipse(context, highlightStroke)
+    if (this.isRest())
+      this.drawRestHighlight(context, highlightStroke)
+    else
+      this.drawEllipse(context, highlightStroke)
     context.stroke()
   }
 

@@ -1,5 +1,6 @@
 import NoteSequence from './NoteSequence'
-import Note, { half } from './Note'
+import * as Duration from './Duration'
+import Note from './Note'
 
 describe('NoteSequence', () => {
   let sequence
@@ -159,6 +160,12 @@ describe('NoteSequence', () => {
         sequence.toggleDotForSelected()
 
         expect(rebar).toHaveBeenCalled()
+      })
+
+      it('triggers on call to setSelectedTo', () => {
+        sequence.setSelectedTo(Duration.half)
+
+        expect(rebar).toHaveBeenCalled()       
       })
     })
   })
@@ -363,9 +370,9 @@ describe('NoteSequence', () => {
       it('sets to half note', () => {
         sequence.selectFirst()
 
-        sequence.setSelectedTo(half)
+        sequence.setSelectedTo(Duration.half)
 
-        expect(sequence.selectedNote().duration).toEqual(half)
+        expect(sequence.selectedNote().duration).toEqual(Duration.half)
       })
     })
 
