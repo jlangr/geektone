@@ -6,6 +6,7 @@ import { next, prev } from './js/ArrayUtil'
 const stemHeight = 36
 
 const noteWidth = 7
+const restWidth = 20
 const noteHeight = 5
 const noteStroke = 2
 const highlightStroke = 4
@@ -15,13 +16,12 @@ const lineColor = 'black'
 const highlightColor = 'red'
 const wholeFill = 'white'
 const quarterFill = 'black'
+const solidFill = 'black'
 
 const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"]
 
 const RestNoteName = 'R'
-const RestY = Draw.y('E4') - 6
-
 export default class Note {
   constructor(name, duration = Duration.quarter) {
     this.octave = parseInt(name.slice(-1), 10)
@@ -121,7 +121,7 @@ export default class Note {
     const centerY = this.y()
     return new Rect(
       centerX - noteWidth, centerY - noteHeight,
-      centerX + noteWidth, centerX + noteHeight)
+      noteWidth * 2, noteHeight * 2)
       .contains(mousePosition)
   }
 
@@ -130,15 +130,15 @@ export default class Note {
 
   y() { return Draw.y(this.name()); }
 
-  drawEllipse(context, extraRadius=0) {
+  drawNoteEllipse(context, extraRadius=0) {
     context.ellipse(
       this.x(), this.y(this.name()),
       noteWidth + extraRadius, noteHeight + extraRadius,
       rotation, 0, 2 * Math.PI)
   }
 
-  drawFilledEllipse(context, color, extraRadius=0) {
-    this.drawEllipse(context, extraRadius)
+  drawFilledNoteEllipse(context, color, extraRadius=0) {
+    this.drawNoteEllipse(context, extraRadius)
     context.fillStyle = color
     context.fill()
   }
@@ -163,27 +163,27 @@ export default class Note {
   }
 
   drawWhole(context) {
-    this.drawFilledEllipse(context, wholeFill)
+    this.drawFilledNoteEllipse(context, wholeFill)
   }
 
   drawHalf(context) {
-    this.drawFilledEllipse(context, wholeFill)
+    this.drawFilledNoteEllipse(context, wholeFill)
     this.drawStem(context)
   }
 
   drawQuarter(context) {
-    this.drawFilledEllipse(context, quarterFill)
+    this.drawFilledNoteEllipse(context, quarterFill)
     this.drawStem(context)
   }
 
   drawEighth(context) {
-    this.drawFilledEllipse(context, quarterFill)
+    this.drawFilledNoteEllipse(context, quarterFill)
     this.drawStem(context)
     this.drawFlag(context)
   }
 
   drawSixteenth(context) {
-    this.drawFilledEllipse(context, quarterFill)
+    this.drawFilledNoteEllipse(context, quarterFill)
     this.drawStem(context)
     this.drawFlag(context)
     this.drawLowerFlag(context)
@@ -197,15 +197,13 @@ export default class Note {
     const y = this.y() + dotDescension
     context.moveTo(x, y)
     context.ellipse(x, y, dotSize, dotSize, rotation, 0, 2 * Math.PI)
-    context.fill()
   }
 
   drawRestHighlight(context, extraRadius=0) {
-    // replace with tall rectangle
-    context.ellipse(
-      this.x(), RestY - 12,
-      noteWidth + extraRadius, 20,
-      rotation, 0, 2 * Math.PI)
+    const y = Draw.y('F5')
+    const height = Draw.y('E4') - y
+    const width = (restWidth + 8)
+    context.rect(this.x() - width / 2, y, width, height)
   }
 
   highlightNote(context) {
@@ -215,14 +213,83 @@ export default class Note {
     if (this.isRest())
       this.drawRestHighlight(context, highlightStroke)
     else
-      this.drawEllipse(context, highlightStroke)
+      this.drawNoteEllipse(context, highlightStroke)
     context.stroke()
+  }
+
+  drawEighthRest(context) {
+    let x = this.x() - noteWidth / 2
+    const restY = Draw.y('E4') - 6
+    let y = restY - 20
+    
+    const radius = 4
+    context.ellipse(x, y, radius, radius, rotation, 0, 2 * Math.PI)
+    context.fillStyle = quarterFill
+    context.fill()
+    y += radius - 2
+    context.moveTo(x, y)
+    context.bezierCurveTo(x, y + 6, x + 6, y, x + 16, y - 10)
+    x += 16
+    y -= 10
+    context.moveTo(x, y)
+    context.lineTo(x - 8, y + 30)
+  }
+
+  r16ball(context, x, y, radius) {
+    context.moveTo(x, y)
+    context.ellipse(x, y, radius, radius, rotation, 0, 2 * Math.PI)
+    context.fillStyle = quarterFill
+    context.fill()
+  }
+
+  r16swoop(context, x, y, radius) {
+    y += radius - 2
+    context.moveTo(x, y)
+    context.bezierCurveTo(x, y + 6, x + 6, y, x + 16, y - 10)
+  }
+
+  drawSixteenthRest(context) {
+    const radius = 4
+    let x = this.x() - noteWidth / 2
+    let y = Draw.y('G4') - 16
+    
+    this.r16ball(context, x, y, radius)
+    this.r16swoop(context, x, y, radius)
+
+    this.r16ball(context, x - 4, y + radius + 8, radius)
+    this.r16swoop(context, x - 4, y + radius + 8, radius)
+
+    // ew hardcoded, use trig funcs instead
+    x += 16
+    y -= 10
+    context.moveTo(x, y)
+    context.lineTo(x - 8, y + 30)
+  }
+
+  drawWholeOrHalfRest(context, heightOffset=0) {
+    const width = 20
+    const height = 8
+    let x = this.x()
+    let y = Draw.y('B4')
+    context.rect(
+      x - (width / 2), y + (heightOffset * height), 
+      width, height);
+    context.fillStyle = solidFill
+    context.fill()
+  }
+
+  drawWholeRest(context) {
+    this.drawWholeOrHalfRest(context, 0)
+  }
+
+  drawHalfRest(context) {
+    this.drawWholeOrHalfRest(context, -1)
   }
 
   drawQuarterRest(context) {
     let x = this.x()
-    let y = RestY
-    context.lineWidth = 3
+    let y = Draw.y('E4') - 6
+    context.lineWidth = 4
     context.moveTo(x, y)
     context.bezierCurveTo(x - 8, y - 4, x - 3, y - 10, x + 5, y - 5)
     x = x + 5
@@ -234,12 +301,10 @@ export default class Note {
 
   drawRest(context) {
     if (Duration.isQuarterBase(this.duration)) this.drawQuarterRest(context)
-    else {
-      const x = this.x() - noteWidth
-      const y = this.y() - 10
-      context.moveTo(x, y)
-      context.lineTo(x + noteWidth, y + 10)
-    }
+    else if (Duration.isEighthBase(this.duration)) this.drawEighthRest(context)
+    else if (Duration.isHalfBase(this.duration)) this.drawHalfRest(context)
+    else if (Duration.isWholeBase(this.duration)) this.drawWholeRest(context)
+    else if (Duration.isSixteenthBase(this.duration)) this.drawSixteenthRest(context)
   }
 
   drawNote(context) {

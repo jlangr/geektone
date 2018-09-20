@@ -1,8 +1,7 @@
-bars
+don't lose changes on page reload. "this page has unsaved changes"
+rests
 undo / redo
 flats
-rests
-mute
 save song by name
 delete last note
 repeat section
@@ -11,7 +10,8 @@ note insert mode
 mouse insert note
 delete / copy / paste multiple notes
 
-move from track-to-track using ctrl-keys
+move from track-to-track using ctrl-keys (shift arrow up down)
+move from bar-to-bar using shift right/left
 
 time signature
 flats / sharps in proper order on accidentals area

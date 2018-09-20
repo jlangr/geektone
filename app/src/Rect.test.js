@@ -21,4 +21,10 @@ describe('contains', () => {
 
     expect(rect.contains({x: width + 1, y: height + 1})).toBeFalsy();
   });
+
+  it('contains a point realizing that it is origin and extent not start and end', () => {
+    const rect = new Rect(100, 100, 10, 10)
+
+    expect(rect.contains({ x: 101, y: 101 })).toBeTruthy();
+  });
 });
