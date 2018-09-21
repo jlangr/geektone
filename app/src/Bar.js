@@ -8,6 +8,11 @@ export default class Bar {
     this.sixteenths = 0
   }
 
+  // TODO test directly
+  length() {
+    return this.notes.length
+  }
+
   isEmpty() {
     return this.notes.length === 0
   }

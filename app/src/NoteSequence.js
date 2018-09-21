@@ -138,6 +138,18 @@ export default class NoteSequence {
     this.selectedNote().select()
   }
 
+  currentBarIndex() {
+    return this.bars().findIndex(bar => 
+      bar.startIndex + bar.length() > this.currentNoteSequenceIndex)
+  }
+
+  selectNextBar() {
+    this.selectedNote().deselect()
+    const barIndex = next(this.bars(), this.currentBarIndex())
+    this.currentNoteSequenceIndex = this.bars()[barIndex].startIndex
+    this.selectedNote().select()
+  }
+
   deleteSelected() {
     if (this.notes.length === 1) return
 
@@ -191,10 +203,12 @@ export default class NoteSequence {
   rebar() {
     const barSequence = []
     let bar = new Bar()
-    this.notes.forEach(note => {
+    bar.startIndex = 0
+    this.notes.forEach((note, i) => {
       if (!bar.canAccommodate(note)) {
         barSequence.push(bar)
         bar = new Bar()
+        bar.startIndex = i
       }
       bar.push(note)
     })

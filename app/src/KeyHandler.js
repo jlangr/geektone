@@ -7,7 +7,12 @@ export const handleKey = (e, noteSequence) => {
     case 'ArrowUp': noteSequence.incrementSelected(); return true;
     case 'ArrowDown': noteSequence.decrementSelected(); return true;
     case 'ArrowLeft': noteSequence.selectPrev(); return true;
-    case 'ArrowRight':noteSequence.selectNext(); return true;
+    case 'ArrowRight': 
+      if (e.shiftKey) 
+        noteSequence.selectNextBar() 
+      else 
+        noteSequence.selectNext(); 
+      return true;
     case 'd': noteSequence.duplicateNote(); return true;
     case 'x': noteSequence.deleteSelected(); return true;
     case '8': noteSequence.setSelectedTo(Duration.eighth); return true;
@@ -18,6 +23,7 @@ export const handleKey = (e, noteSequence) => {
     case '/': noteSequence.halveSelectedDuration(); return true;
     case '*': noteSequence.doubleSelectedDuration(); return true;
     case 'r': noteSequence.toggleRestForSelected(); return true;
-    default: return false;
+    default: 
+      return false;
   }
 }

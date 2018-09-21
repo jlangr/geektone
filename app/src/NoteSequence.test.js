@@ -34,7 +34,7 @@ describe('NoteSequence', () => {
     })
   })
 
-  describe('bar sequence', () => {
+  describe('bar sequence after rebar', () => {
     const e = new Note('E4', '4n')
     let sequence
 
@@ -60,6 +60,16 @@ describe('NoteSequence', () => {
       expect(bars[0].notes).toEqual([e, e, e, e])
       expect(bars[1].notes).toEqual([e, e, e, e])
       expect(bars[2].notes).toEqual([e])
+    })
+
+    it('tracks the start index for each bar', () => {
+      sequence.addAll(e, e, e, e, e, e, e, e, e)
+
+      const bars = sequence.bars()
+
+      expect(bars[0].startIndex).toEqual(0)
+      expect(bars[1].startIndex).toEqual(4)
+      expect(bars[2].startIndex).toEqual(8)
     })
 
     it('handles all notes', () => {
@@ -268,6 +278,44 @@ describe('NoteSequence', () => {
 
           expect(note.isSelected)
         })
+      })
+    })
+
+    describe('next/prev bar', () => {
+      const bar1Note1 = 'E4'
+      const bar2Note1 = 'F4'
+      const bar3Note1 = 'F4'
+      const other = 'C1'
+      beforeEach(() => {
+        sequence = new NoteSequence(
+          [bar1Note1, other, other, other, 
+          bar2Note1, other, other, other,
+          bar3Note1, other, other, other
+        ])
+      })
+
+      it('sets selected to first note of next bar', () => {
+        sequence.selectFirst();
+
+        sequence.selectNextBar();
+
+        expect(sequence.selectedNote().name()).toEqual(bar2Note1)
+      })
+
+      it('works when selected is last note of bar', () => {
+        sequence.select(3);
+
+        sequence.selectNextBar();
+
+        expect(sequence.selectedNote().name()).toEqual(bar2Note1)
+      })
+
+      it('selects first note when selected is in last bar', () => {
+        sequence.selectLast();
+
+        sequence.selectNextBar();
+
+        expect(sequence.selectedNote().name()).toEqual(bar1Note1)
       })
     })
 
