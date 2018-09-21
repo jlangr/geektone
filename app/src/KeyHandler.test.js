@@ -63,18 +63,32 @@ describe('keystrokes', () => {
     expect(noteSequence.selectedNote().name()).toEqual('F4');
   });
 
-  it('selects next bar on shift-right arrow', () => {
-    noteSequence.add(new Note('C4'));
-    noteSequence.add(new Note('D4'));
-    noteSequence.add(new Note('E4'));
-    noteSequence.add(new Note('F4'));
-    noteSequence.add(new Note('G4'));
-    noteSequence.selectFirst()
+  describe('selects next/prev bar', () => {
+    beforeEach(() => {
+      noteSequence.add(new Note('C4'))
+      noteSequence.add(new Note('D4'))
+      noteSequence.add(new Note('E4'))
+      noteSequence.add(new Note('F4'))
+      noteSequence.add(new Note('G4'))
+    })
 
-    handleKey({key: 'ArrowRight', shiftKey: true}, noteSequence)
+    it('selects next bar on shift-right arrow', () => {
+      noteSequence.selectFirst()
 
-    expect(noteSequence.selectedNote().name()).toEqual('G4')
+      handleKey({key: 'ArrowRight', shiftKey: true}, noteSequence)
+
+      expect(noteSequence.selectedNote().name()).toEqual('G4')
+    })
+
+    it('selects next bar on shift-right arrow', () => {
+      noteSequence.selectLast()
+
+      handleKey({key: 'ArrowLeft', shiftKey: true}, noteSequence)
+
+      expect(noteSequence.selectedNote().name()).toEqual('C4')
+    })
   })
+
 
   it('duplicates selected note on d', () => {
     noteSequence.add(new Note('E4'));

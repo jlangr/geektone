@@ -150,6 +150,13 @@ export default class NoteSequence {
     this.selectedNote().select()
   }
 
+  selectPrevBar() {
+    this.selectedNote().deselect()
+    const barIndex = prev(this.bars(), this.currentBarIndex())
+    this.currentNoteSequenceIndex = this.bars()[barIndex].startIndex
+    this.selectedNote().select()
+  }
+
   deleteSelected() {
     if (this.notes.length === 1) return
 

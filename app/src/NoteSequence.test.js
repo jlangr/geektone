@@ -294,7 +294,31 @@ describe('NoteSequence', () => {
         ])
       })
 
-      it('sets selected to first note of next bar', () => {
+      it('selects first of prev', () => {
+        sequence.selectLast();
+
+        sequence.selectPrevBar();
+
+        expect(sequence.selectedNote().name()).toEqual(bar2Note1)
+      })
+
+      it('selects first of prev when selected is last note of bar', () => {
+        sequence.select(3);
+
+        sequence.selectPrevBar();
+
+        expect(sequence.selectedNote().name()).toEqual(bar3Note1)
+      })
+
+      it('selects first of last bar when selected is in first bar', () => {
+        sequence.selectFirst();
+
+        sequence.selectPrevBar();
+
+        expect(sequence.selectedNote().name()).toEqual(bar3Note1)
+      })
+
+      it('selects first of next bar', () => {
         sequence.selectFirst();
 
         sequence.selectNextBar();
@@ -302,7 +326,7 @@ describe('NoteSequence', () => {
         expect(sequence.selectedNote().name()).toEqual(bar2Note1)
       })
 
-      it('works when selected is last note of bar', () => {
+      it('selects first of next bar when selected is last note of bar', () => {
         sequence.select(3);
 
         sequence.selectNextBar();
