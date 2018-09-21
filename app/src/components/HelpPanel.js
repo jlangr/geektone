@@ -5,6 +5,7 @@ class HelpPanel extends Component{
     return (
       <div>
         &lt;- prev  -&gt; next  ^ up  v down<br />
+        shift&lt;- prev bar  shift-&gt; next bar  ^ up  v down<br />
         d dup  x del  . toggle<br />
         1: whole 2: half 4: quarter 8: eighth *: double /: halve<br />
         r: rest<br />
