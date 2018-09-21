@@ -40,7 +40,9 @@ export default class NoteSequence {
     this.rebar()
   }
 
-  // ==
+  length() {
+    return this.notes.length
+  }
 
   allNotes() {
     return this.notes
@@ -137,6 +139,8 @@ export default class NoteSequence {
   }
 
   deleteSelected() {
+    if (this.notes.length === 1) return
+
     this.notes.splice(this.currentNoteSequenceIndex, 1)
     this.currentNoteSequenceIndex = Math.max(0, this.currentNoteSequenceIndex - 1)
     this.select(this.currentNoteSequenceIndex)

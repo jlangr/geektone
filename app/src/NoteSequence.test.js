@@ -351,6 +351,15 @@ describe('NoteSequence', () => {
         expect(sequence.allNoteNames()).toEqual(['E4', 'G4'])
       })
 
+      it('does not remove the last remaining note', () => {
+        sequence = new NoteSequence(['E4'])
+        sequence.selectFirst()
+
+        sequence.deleteSelected()
+        
+        expect(sequence.allNoteNames()).toEqual(['E4'])
+      })
+
       it('selects the previous note', () => {
         sequence.select(1)
         sequence.deleteSelected()

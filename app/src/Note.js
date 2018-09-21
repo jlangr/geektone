@@ -308,7 +308,7 @@ export default class Note {
   }
 
   drawNote(context) {
-      // TODO inject function into note instead
+      // TODO inject function into note instead?
     if (Duration.isWholeBase(this.duration)) this.drawWhole(context)
     else if (Duration.isHalfBase(this.duration)) this.drawHalf(context)
     else if (Duration.isQuarterBase(this.duration)) this.drawQuarter(context)
