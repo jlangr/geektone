@@ -1,6 +1,5 @@
 import * as actions from '../actions/SongActions'
 import SongReducer, { isInSharpsMode, trackData } from './SongReducer'
-import NoteSequence from '../NoteSequence'
 
 describe('song reducer', () => {
   it('replaces the song', () => {
@@ -15,11 +14,11 @@ describe('song reducer', () => {
   })
 
   it('allows changing the song name', () => {
-    const state = SongReducer(undefined, actions.changeSongName('newName'))
+    const state = SongReducer(undefined, actions.changeSongName('new Name'))
 
-    expect(state.song.name).toEqual('new name')
+    expect(state.song.name).toEqual('new Name')
   })
-  
+
   it('allows changing the BPM', () => {
     const state = { song: { bpm: 120 }}
 
@@ -28,14 +27,17 @@ describe('song reducer', () => {
     expect(newState.song.bpm).toEqual(140)
   })
 
-  it('adds a track', () => {
-    const noteSequence = new NoteSequence(['A3'])
-    const newTrack = { id: 'track2', name: 'track2', notes: noteSequence }
-
-    const state = SongReducer(undefined, actions.addTrack(newTrack))
+  it('creates a new track', () => {
+    const state = SongReducer(undefined, actions.newTrack())
 
     expect(state.song.tracks.length).toEqual(1)
-    expect(state.song.tracks[0].name).toEqual('track2')
+    expect(state.song.tracks[0].name).toEqual('track1')
+  })
+
+  it('deletes a track', () => {
+    const state = SongReducer({ song: { tracks: [{name: 'x', id: 0}]}}, actions.deleteTrack(0))
+
+    expect(state.song.tracks.length).toEqual(0);
   })
 
   it('changes track instrument', () => {

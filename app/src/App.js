@@ -18,11 +18,9 @@ export class App extends Component {
   }
 
   render() {
-    const tracks = this.props.song.tracks.map((_track, i) => <Track key={i} id={i} />);
     return (
       <div className="App">
         <Label>{this.props.song.name}</Label>
-        { tracks }
         <Form>
           <Grid>
             <Row className='show-grid'>
@@ -49,6 +47,8 @@ export class App extends Component {
 
           <HelpPanel />
         </Form>
+        { this.props.song.tracks.map((_track, i) => 
+          <Track key={i} id={i} />) }
       </div>
     );
   }

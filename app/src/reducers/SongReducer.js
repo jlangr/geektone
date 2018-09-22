@@ -68,7 +68,7 @@ const updateState_toggleSharpsMode = (state, trackIndex) => {
 
 const updateState_rebar = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, _changedTrack => {
-    // console.log('update state for track', trackIndex)
+    //  NOOP
   })
 }
 
@@ -99,19 +99,17 @@ export default(state = INITIAL_STATE, action) => {
       const { trackIndex, note } = action.payload
       return updateState_addSharp(state, trackIndex, note)
     }
-    case type.ADD_TRACK:
-    {
-      const track = action.payload
-      return { ...state, song: { ...state.song, tracks: [...state.song.tracks, track] } }
-    }
+
     case type.CHANGE_BPM:
     {
       return { ...state, song: { ...state.song, bpm: action.payload }}
     }
+
     case type.CHANGE_SONG_NAME:
     {
       return { ...state, song: { ...state.song, name: action.payload }}
     }
+
     case type.CHANGE_TRACK_INSTRUMENT:
     {
       const trackId = action.payload.trackId
@@ -122,12 +120,20 @@ export default(state = INITIAL_STATE, action) => {
 
       return { ...state, song: {...state.song, tracks: tracks }}
     }
+
+    case type.DELETE_TRACK:
+    {
+      const trackIndexToDelete = action.payload
+      state.song.tracks.splice(trackIndexToDelete, 1)
+      return { ...state, song: {...state.song, tracks: state.song.tracks }}
+    }
+
     case type.NEW_TRACK:
     {
-      return state
-  // const updatedSong = {...this.state.song,
-  //   tracks: [...this.state.song.tracks, { name: 'track 2', notes: new NoteSequence() }]}
+      const newTrack = { name: `track${state.song.tracks.length + 1}`, notes: new NoteSequence(['E4']) }
+      return { ...state, song: { ...state.song, tracks: [...state.song.tracks, newTrack] } }
     }
+
     case type.REPLACE_SONG:
     {
       const newSong = action.payload

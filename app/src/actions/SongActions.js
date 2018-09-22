@@ -6,17 +6,17 @@ export const request = path => `${server}${path}`;
 
 export const addSharp = (trackIndex, note) => ({ type: type.ADD_SHARP, payload: { trackIndex, note }});
 
-export const addTrack = newTrack => ({ type: type.ADD_TRACK, payload: newTrack });
-
 export const updateTrack = trackIndex => ({ type: type.UPDATE_TRACK, payload: trackIndex });
 
 export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm });
 
-export const changeSongName = newName => ({ type: type.CHANGE_SONG_NAME, payload: 'new name' });
+export const changeSongName = newName => ({ type: type.CHANGE_SONG_NAME, payload: newName });
 
 export const changeTrackInstrument = (instrument, id) => {
   return { type: type.CHANGE_TRACK_INSTRUMENT, payload: {instrument: instrument, trackId: id }};
 };
+
+export const deleteTrack = trackIndex => ({ type: type.DELETE_TRACK, payload: trackIndex });
 
 export const loadSong = () => {
   return dispatch => {
@@ -37,7 +37,7 @@ export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song });
 export const saveSong = (song) => {
   return dispatch => {
     return axios.post(request('/song'), song)
-      .then(response => { 
+      .then(_response => { 
         dispatch({ type: type.MESSAGE, payload: 'song saved'});
       })
       .catch(error => { 
