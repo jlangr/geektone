@@ -207,17 +207,36 @@ export default class NoteSequence {
     this.selectedNote().decrement()
   }
 
+  createTies(note) {
+    const start = new Note(note.name(), Duration.quarter)
+    const end = new Note(note.name(), Duration.quarter)
+    return [start, end]
+  }
+
   rebar() {
     const barSequence = []
     let bar = new Bar()
     bar.startIndex = 0
     this.notes.forEach((note, i) => {
       if (!bar.canAccommodate(note)) {
-        barSequence.push(bar)
-        bar = new Bar()
-        bar.startIndex = i
+        if (bar.isFull()) {
+          barSequence.push(bar)
+          bar = new Bar()
+          bar.startIndex = i
+          bar.push(note)
+        }
+        else {
+          const [tieStart, tieEnd] = this.createTies(note)
+          bar.push(tieStart)
+          barSequence.push(bar)
+          bar = new Bar()
+          bar.startIndex = i
+          bar.push(tieEnd)
+        }
       }
-      bar.push(note)
+      else {
+        bar.push(note)
+      }
     })
     if (!bar.isEmpty()) barSequence.push(bar)
     this.barSequence = barSequence

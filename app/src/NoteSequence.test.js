@@ -36,10 +36,21 @@ describe('NoteSequence', () => {
 
   describe('bar sequence after rebar', () => {
     const e = new Note('E4', '4n')
+    const f4Half = new Note('F4', '2n')
     let sequence
 
     beforeEach(() => {
       sequence = new NoteSequence()
+    })
+
+    it('creates a tie for notes that do not fit', () => {
+      sequence.addAll(e, e, e, f4Half)
+
+      const bars = sequence.bars()
+
+      const firstBarNotes = bars[0].notes
+      const lastNoteOfFirstBar = firstBarNotes[firstBarNotes.length - 1]
+      expect(lastNoteOfFirstBar.name()).toEqual('F4')
     })
 
     it('fills a bar with four beats', () => {
@@ -81,20 +92,6 @@ describe('NoteSequence', () => {
       expect(bars.length).toEqual(2)
       expect(bars[0].notes).toEqual([e, e, fHalf])
       expect(bars[1].notes).toEqual([e])
-    })
-
-    it('creates new bar when needed', () => {
-      const fQuarter = new Note('F4', '4n.')
-      const fQuarterDup = new Note('F4', '4n.')
-      const eEighth = new Note('E4', '8n')
-      const eHalf = new Note('E4', '2n')
-      sequence.addAll(fQuarter, fQuarterDup, eEighth, eHalf)
-
-      const bars = sequence.bars()
-
-      expect(bars.length).toEqual(2)
-      expect(bars[0].notes).toEqual([fQuarter, fQuarter, eEighth])
-      expect(bars[1].notes).toEqual([eHalf])
     })
   })
   
