@@ -1,14 +1,15 @@
 don't lose changes on page reload. "this page has unsaved changes"
-rests
 undo / redo
 flats
 save song by name
-delete last note
 repeat section
 clear staff
 note insert mode
 mouse insert note
 delete / copy / paste multiple notes
+notes longer than 1 bar
+other time signatures
+play-along marker
 
 move from track-to-track using ctrl-keys (shift arrow up down)
 move from bar-to-bar using shift right/left

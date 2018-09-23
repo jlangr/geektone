@@ -34,6 +34,41 @@ describe('NoteSequence', () => {
     })
   })
 
+  describe('create ties for too-long note', () => {
+    let sequence
+    const halfNote = new Note('E4', '2n')
+    const quarterNote = new Note('E4', '4n')
+    const dottedEighthNote = new Note('E4', '8n.')
+    const eighthNote = new Note('E4', '8n')
+    const sixteenthNote = new Note('E4', '16n')
+
+    beforeEach(() => {
+      sequence = new NoteSequence()
+    })
+
+    it('splits a half', () => {
+      const sixteenthsAvailable = 4
+      const ties = sequence.createTies(halfNote, sixteenthsAvailable)
+
+      expect(ties).toEqual([quarterNote, quarterNote])
+    })
+
+    it('splits to timeremaining plus new note', () => {
+      const sixteenthsAvailable = 2
+      const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
+
+      expect(ties).toEqual([eighthNote, eighthNote])
+    })
+
+    it('creates ties for dotted notes too', () => {
+      const sixteenthsAvailable = 3
+      const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
+
+      expect(ties).toEqual([dottedEighthNote, sixteenthNote])
+    })
+
+  })
+
   describe('bar sequence after rebar', () => {
     const e = new Note('E4', '4n')
     const f4Half = new Note('F4', '2n')

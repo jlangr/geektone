@@ -207,9 +207,10 @@ export default class NoteSequence {
     this.selectedNote().decrement()
   }
 
-  createTies(note) {
-    const start = new Note(note.name(), Duration.quarter)
-    const end = new Note(note.name(), Duration.quarter)
+  createTies(note, timeRemaining) {
+    const excessTime = note.sixteenths() - timeRemaining
+    const start = new Note(note.name(), Duration.noteForSixteenths(timeRemaining))
+    const end = new Note(note.name(), Duration.noteForSixteenths(excessTime))
     return [start, end]
   }
 
@@ -221,17 +222,13 @@ export default class NoteSequence {
       if (!bar.canAccommodate(note)) {
         if (bar.isFull()) {
           barSequence.push(bar)
-          bar = new Bar()
-          bar.startIndex = i
-          bar.push(note)
+          bar = new Bar(i, note)
         }
         else {
-          const [tieStart, tieEnd] = this.createTies(note)
+          const [tieStart, tieEnd] = this.createTies(note, bar.sixteenthsAvailable())
           bar.push(tieStart)
           barSequence.push(bar)
-          bar = new Bar()
-          bar.startIndex = i
-          bar.push(tieEnd)
+          bar = new Bar(i, tieEnd)
         }
       }
       else {
