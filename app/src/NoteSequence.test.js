@@ -50,23 +50,29 @@ describe('NoteSequence', () => {
       const sixteenthsAvailable = 4
       const ties = sequence.createTies(halfNote, sixteenthsAvailable)
 
-      expect(ties).toEqual([quarterNote, quarterNote])
+      expect(ties.map(t => t.duration)).toEqual([Duration.quarter, Duration.quarter])
     })
 
     it('splits to timeremaining plus new note', () => {
       const sixteenthsAvailable = 2
       const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
 
-      expect(ties).toEqual([eighthNote, eighthNote])
+      expect(ties.map(t => t.duration)).toEqual([Duration.eighth, Duration.eighth])
     })
 
     it('creates ties for dotted notes too', () => {
       const sixteenthsAvailable = 3
       const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
 
-      expect(ties).toEqual([dottedEighthNote, sixteenthNote])
+      expect(ties.map(t => t.duration)).toEqual(['8n.', Duration.sixteenth])
     })
 
+    it('stores start tie in end tie', () => {
+      const sixteenthsAvailable = 4
+      const [startTie, endTie] = sequence.createTies(halfNote, sixteenthsAvailable)
+
+      expect(endTie.startTie).toBe(startTie)
+    })
   })
 
   describe('bar sequence after rebar', () => {

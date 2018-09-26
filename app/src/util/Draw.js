@@ -3,6 +3,7 @@ export const lineHeight = height / 4
 
 const notePad = 25
 const noteDistance = 8
+export const defaultLineWeight = 1
 
 export const sharpsInWidth = 3
 export const sharpHeight = 20
@@ -18,7 +19,7 @@ export const trebleStaffInterlineIndices = [ 3, 5, 7, 9 ]; // move to Draw
 export const staffHeight = trebleStaffLines.length * lineHeight
 export const staffWidthBetweenUpstrokes = sharpWidth / 4
 
-export const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=1, color='black') => {
+export const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=defaultLineWeight, color='black') => {
   context.strokeStyle = color
   context.lineWidth = weight
   context.moveTo(xStart, yStart)

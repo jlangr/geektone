@@ -1,4 +1,5 @@
 import Note from './Note'
+import Tie from './Tie'
 import * as Duration from './Duration'
 import { prev, next } from './js/ArrayUtil'
 import Bar from './Bar'
@@ -209,11 +210,13 @@ export default class NoteSequence {
 
   createTies(note, timeRemaining) {
     const excessTime = note.sixteenths() - timeRemaining
-    const start = new Note(note.name(), Duration.noteForSixteenths(timeRemaining))
-    const end = new Note(note.name(), Duration.noteForSixteenths(excessTime))
+    const start = new Tie(note.name(), Duration.noteForSixteenths(timeRemaining))
+    const end = new Tie(note.name(), Duration.noteForSixteenths(excessTime))
+    end.startTie = start
     return [start, end]
   }
 
+  // TODO: optimization if needed: rebar from changed location only
   rebar() {
     const barSequence = []
     let bar = new Bar()
