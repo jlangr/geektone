@@ -2,7 +2,6 @@ import Note from './Note'
 import * as Draw from './util/Draw'
 
 export default class Tie extends Note {
-
   drawNote(context) {
     super.drawNote(context)
     if (this.startTie) {
@@ -21,9 +20,3 @@ export default class Tie extends Note {
     }
   }
 }
-
-// TODO fix stroke problems etc throughout
-
-// TODO delete either tie deletes the other
-
-// TODO delete note should delete forward

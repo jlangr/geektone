@@ -31,6 +31,7 @@ export default class Note {
     this.isSelected = false
     this.duration = duration // objectify?
     this.isNote = (name !== RestNoteName)
+    this.clearTie()
   }
 
   static note(name) {
@@ -42,11 +43,33 @@ export default class Note {
   }
 
   restToggle() {
-    this.isNote = !this.isNote;
+    this.isNote = !this.isNote
+  }
+
+  setPosition(position) {
+    console.log(`set position to ${position}`)
+    this.position = position
+  }
+
+  // TODO test next 3 in context?
+  isRepresentedAsTie() {
+    return this.startTie !== undefined
+  }
+
+  setTie(start, end) {
+    console.log(`set tie ${this.position} ${start} ${end}`)
+    this.startTie = start
+    this.endTie = end
+  }
+
+  clearTie() {
+    console.log(`position: ${this.position} clear tie`)
+    this.startTie = undefined
+    this.endTie = undefined
   }
 
   isRest() {
-    return !this.isNote;
+    return !this.isNote
   }
 
   dotSixteenths() {
@@ -81,10 +104,20 @@ export default class Note {
   }
 
   select() {
+    // TODO test
+    if (this.isRepresentedAsTie()) {
+      this.startTie.isSelected = true
+      this.endTie.isSelected = true
+    }
     this.isSelected = true
   }
 
   deselect() {
+    // TODO test
+    if (this.isRepresentedAsTie()) {
+      this.startTie.isSelected = false
+      this.endTie.isSelected = false
+    }
     this.isSelected = false
   }
 
@@ -117,12 +150,21 @@ export default class Note {
 
   // TODO externalize below ... to Staff?
   isHit(mousePosition) {
-    const centerX = this.x()
-    const centerY = this.y()
-    return new Rect(
-      centerX - noteWidth, centerY - noteHeight,
-      noteWidth * 2, noteHeight * 2)
-      .contains(mousePosition)
+// TODO test Tie stuff
+    if (this.isRepresentedAsTie()) {
+      console.log(`in isHit; startTie: ${this.startTie} endTie: ${this.endTie}`)
+      console.log(`  position: ${this.position} note: ${this}`)
+      return this.startTie.isHit(mousePosition) ||
+             this.endTie.isHit(mousePosition)
+    }
+    else {
+      const centerX = this.x()
+      const centerY = this.y()
+      return new Rect(
+        centerX - noteWidth, centerY - noteHeight,
+        noteWidth * 2, noteHeight * 2)
+        .contains(mousePosition)
+    }
   }
 
   // should be relative to bar start
@@ -334,7 +376,13 @@ export default class Note {
 
   drawOn(context) {
     this.drawElementOn(context)
-    if (this.isSelected)
+    if (this.isRepresentedAsTie()) {
+      console.log(`note drawon of Tie; isSelected = ${this.isSelected}`)
+      console.log(`  position: ${this.position}`)
+    }
+    if (this.isSelected) {
+      console.log('highlighting', this)
       this.highlightNote(context)
+    }
   }
 }

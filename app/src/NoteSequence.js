@@ -89,6 +89,7 @@ export default class NoteSequence {
   clickHitNote(clickPoint) {
     for (let sequenceIndex = 0; sequenceIndex < this.notes.length; sequenceIndex++)
       if (this.notes[sequenceIndex].isHit(clickPoint)) {
+        console.log(`is hit seq index ${sequenceIndex}`)
         this.click(sequenceIndex)
         return true
       }
@@ -96,10 +97,14 @@ export default class NoteSequence {
   }
 
   click(sequenceIndex) {
-    if (this.isSelected(sequenceIndex))
+    console.log(`isSelected ${sequenceIndex}: ${this.isSelected(sequenceIndex)}`)
+    if (this.isSelected(sequenceIndex)) {
+      console.log(`deselecting ${sequenceIndex}`)
       this.deselect(sequenceIndex)
+    }
     else {
       this.deselectAll()
+      console.log(`selecting ${sequenceIndex}`)
       this.select(sequenceIndex)
     }
   }
@@ -116,6 +121,7 @@ export default class NoteSequence {
 
   select(sequenceIndex) {
     this.currentNoteSequenceIndex = sequenceIndex
+    console.log(`selecting ${this.notes[sequenceIndex]}`)
     this.notes[sequenceIndex].select()
   }
 
@@ -211,10 +217,58 @@ export default class NoteSequence {
   createTies(note, timeRemaining) {
     const excessTime = note.sixteenths() - timeRemaining
     const start = new Tie(note.name(), Duration.noteForSixteenths(timeRemaining))
+    start.isSelected = note.isSelected // necessary?
     const end = new Tie(note.name(), Duration.noteForSixteenths(excessTime))
+    end.isSelected = note.isSelected // necessary?
     end.startTie = start
+    note.setTie(start, end) // TODO test
     return [start, end]
   }
+
+
+  // The challenge:
+  // drawing is involved with bars.
+  // A note might span two bars in which case it needs a tie
+  // A tie is a visual representation (view) of a note only relevant
+  // for drawing purposes. The note still retains the same pitch and duration
+  // for playing purposes
+
+  // A note sequence is a list of Note objects, each of
+  // which has a 0 based position
+
+  // A rebar() creates a barSequence, which is
+  // a list of Note objects, Bar objects, and Tie
+  // Objects--so it is a view on a NoteSequence
+
+  // Clicking on things and changing pitch or duration
+  // involves the view and its representation.
+
+  // To mesh the two... into a note sequence.
+  // This would require that a tie note know how
+  // to draw itself by drawing the start and end tie.
+  // The rebar logic would need to change to support
+  // the notion of a note, which goes in one bar,
+  // and then that would alter the capacity for 
+  // the subsequent bar
+
+  // New concept: if a Note is a tie, it handles
+  // the logic for drawing the two note images,
+  // as well as handling interaction with them.
+  // It does so by encapsulating two sub-note
+  // instances. Everything goes through the Note,
+  // and there is not a first-level Tie object
+  // visible externally.
+
+  // The logic in SongReducer.barsAndNotes will
+  // need to be updated but that shouldn't be bad
+
+  // Rebar: A note gets added to a bar if there is
+  // any room. If too big, it is marked as a tie
+  // and set up to store the two pieces of info needed
+  // to draw start and end note symbols
+  // 
+  // The subsequent bar has to be updated to 
+  // represent diminished capacity in rebar()
 
   // TODO: optimization if needed: rebar from changed location only
   rebar() {
@@ -222,6 +276,7 @@ export default class NoteSequence {
     let bar = new Bar()
     bar.startIndex = 0
     this.notes.forEach((note, i) => {
+      note.clearTie() // TODO test in context
       if (!bar.canAccommodate(note)) {
         if (bar.isFull()) {
           barSequence.push(bar)

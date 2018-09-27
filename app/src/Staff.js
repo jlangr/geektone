@@ -58,9 +58,17 @@ export class Staff extends Component {
       if (this.isClickInAccidentals(clickPoint))
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
     } else
-      if (this.props.trackData.notes.clickHitNote(clickPoint))
+    console.log(`click ${clickPoint}`)
+      if (this.props.trackData.notes.clickHitNote(clickPoint)) {
+        console.log(`click hit note`)
         this.props.updateTrack(this.props.id)
+      }
   }
+
+  // TODO the click is based on the note sequence... however,
+  // the ties are only part of the bar sequence... so clickHitNote should be
+  // called in interaction w/ the barSequence()
+  // Maybe BarSequence becomes the first-class type
 
   // TODO test
   // TODO move to query on props
