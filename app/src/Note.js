@@ -137,21 +137,27 @@ export default class Note {
     this.noteIndex = prev(ascendingWholeNoteScale, this.noteIndex)
   }
 
+  isHitForElement(element, mousePosition) {
+    const centerX = element.x()
+    const centerY = element.y()
+    return new Rect(
+      centerX - noteWidth, centerY - noteHeight,
+      noteWidth * 2, noteHeight * 2)
+      .contains(mousePosition)
+  }
+
   // TODO externalize below ... to Staff?
+  // since Tie is a Note...
+  // and we are iterating through notes, we have
+  // to know if either of a notes' tie elements
+  // have been hit. Awkward
   isHit(mousePosition) {
 // TODO test Tie stuff
-    if (this.isRepresentedAsTie()) {
-      return this.startTie.isHit(mousePosition) ||
-             this.endTie.isHit(mousePosition)
-    }
-    else {
-      const centerX = this.x()
-      const centerY = this.y()
-      return new Rect(
-        centerX - noteWidth, centerY - noteHeight,
-        noteWidth * 2, noteHeight * 2)
-        .contains(mousePosition)
-    }
+    if (this.isRepresentedAsTie())
+      return this.isHitForElement(this.startTie, mousePosition) ||
+             this.isHitForElement(this.endTie, mousePosition)
+
+    return this.isHitForElement(this, mousePosition)
   }
 
   x() { return Draw.x(this.position) }

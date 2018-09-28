@@ -89,7 +89,6 @@ export default class NoteSequence {
   clickHitNote(clickPoint) {
     for (let sequenceIndex = 0; sequenceIndex < this.notes.length; sequenceIndex++)
       if (this.notes[sequenceIndex].isHit(clickPoint)) {
-        console.log(`is hit seq index ${sequenceIndex}`)
         this.click(sequenceIndex)
         return true
       }
@@ -97,14 +96,10 @@ export default class NoteSequence {
   }
 
   click(sequenceIndex) {
-    console.log(`isSelected ${sequenceIndex}: ${this.isSelected(sequenceIndex)}`)
-    if (this.isSelected(sequenceIndex)) {
-      console.log(`deselecting ${sequenceIndex}`)
+    if (this.isSelected(sequenceIndex))
       this.deselect(sequenceIndex)
-    }
     else {
       this.deselectAll()
-      console.log(`selecting ${sequenceIndex}`)
       this.select(sequenceIndex)
     }
   }

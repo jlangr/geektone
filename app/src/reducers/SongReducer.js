@@ -19,6 +19,9 @@ export const trackData = (state, trackId) => state.song.tracks[trackId]
 // TODO test
 // barsAndNotes are derived from bars(), 
 // which are updated by a rebar() operation
+
+// TODO make part of state
+
 export const barsAndNotes = (song, trackData) => {
   const barsForOtherTracks = song.tracks
     .filter(track => track.name !== trackData.name)
