@@ -83,9 +83,7 @@ export class Staff extends Component {
 
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height)
-    this.props.barsAndNotes.forEach(x => 
-      x.drawOn(this.staffContext()))
-
+    this.props.barsAndNotes.forEach(x => x.drawOn(this.staffContext()))
     this.drawStaffLines()
   }
 
