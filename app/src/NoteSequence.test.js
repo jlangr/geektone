@@ -515,7 +515,6 @@ describe('NoteSequence', () => {
 
         expect(sequence.selectedNote().name()).toEqual('D4')
       })
-
     })
 
     describe('toggleDotForSelected', () => {

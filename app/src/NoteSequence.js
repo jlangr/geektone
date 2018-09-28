@@ -116,7 +116,6 @@ export default class NoteSequence {
 
   select(sequenceIndex) {
     this.currentNoteSequenceIndex = sequenceIndex
-    console.log(`selecting ${this.notes[sequenceIndex]}`)
     this.notes[sequenceIndex].select()
   }
 
@@ -214,7 +213,6 @@ export default class NoteSequence {
     const start = new Tie(note.name(), Duration.noteForSixteenths(timeRemaining))
     start.isSelected = note.isSelected // necessary?
     const end = new Tie(note.name(), Duration.noteForSixteenths(excessTime))
-    console.log('created END; is a tie? ', end.isATie())
     end.isSelected = note.isSelected // necessary?
     end.startTie = start
     note.setTie(start, end) // TODO test

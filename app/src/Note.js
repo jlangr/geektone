@@ -42,7 +42,6 @@ export default class Note {
     this.position = position
   }
 
-  // TODO test next 3 in context?
   isRepresentedAsTie() {
     return this.startTie !== undefined
   }

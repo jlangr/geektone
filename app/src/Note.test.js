@@ -111,6 +111,41 @@ describe('note', () => {
     })
   })
 
+  describe('ties', () => {
+    let note
+    beforeEach(() => {
+      note = new Note('G4', Duration.half)
+      note.setTie(new Note('G4', Duration.quarter),
+                  new Note('G4', Duration.quarter))
+    })
+
+    it('is tie when first (from) Tie exists', () => {
+      expect(note.isRepresentedAsTie()).toBeTruthy()
+    })
+
+    it('is not a tie when cleared', () => {
+      note.clearTie()
+
+      expect(note.isRepresentedAsTie()).toBeFalsy()
+    })
+
+    it('increments the tie value', () => {
+      note.increment()
+
+      expect(note.name()).toEqual('A4')
+      expect(note.startTie.name()).toEqual('A4')
+      expect(note.endTie.name()).toEqual('A4')
+    })
+
+    it('decrements the tie value', () => {
+      note.decrement()
+
+      expect(note.name()).toEqual('F4')
+      expect(note.startTie.name()).toEqual('F4')
+      expect(note.endTie.name()).toEqual('F4')
+    })
+  })
+
   describe('rest', () => {
     it('is not rest by default', () => {
       const note = new Note('D5')
