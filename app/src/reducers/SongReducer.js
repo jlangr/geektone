@@ -20,7 +20,7 @@ export const trackData = (state, trackId) => state.song.tracks[trackId]
 // barsAndNotes are derived from bars(), 
 // which are updated by a rebar() operation
 
-// TODO make part of state
+// TODO make part of state?
 
 export const barsAndNotes = (song, trackData) => {
   const barsForOtherTracks = song.tracks
@@ -38,7 +38,6 @@ export const barsAndNotes = (song, trackData) => {
         crossBars.map(bar => bar.positionsRequired())
       const positionsRequired = Math.max(...allPositionsRequiredForBar, bar.positionsRequired())
       bar.layouts(positionsRequired).forEach(({ note, position }) => {
-        console.log('lAYOUT; note is a tie? ', note.isATie())
         note.setPosition(barPosition + position)
         stuffToDraw.push(note);
       })

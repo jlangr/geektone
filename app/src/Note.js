@@ -119,11 +119,22 @@ export default class Note {
     return this.name() === 'C8'
   }
 
+  updateTiePitch() {
+    if (this.isRepresentedAsTie()) {
+      this.startTie.noteIndex = this.noteIndex
+      this.endTie.noteIndex = this.noteIndex
+      this.startTie.octave = this.octave
+      this.endTie.octave = this.octave
+    }
+  }
+
   increment() {
     if (this.isHighestNote()) return
 
     if (this.noteIndex + 1 === ascendingWholeNoteScale.length) this.octave++
     this.noteIndex = next(ascendingWholeNoteScale, this.noteIndex)
+    // TODO test
+    this.updateTiePitch()
   }
 
   isLowestNote() {
@@ -135,6 +146,8 @@ export default class Note {
 
     if (this.noteIndex === 0) this.octave--
     this.noteIndex = prev(ascendingWholeNoteScale, this.noteIndex)
+    // TODO test
+    this.updateTiePitch()
   }
 
   isHitForElement(element, mousePosition) {
