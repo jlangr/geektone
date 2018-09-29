@@ -12,6 +12,55 @@ const nullNote = {
   isSelected: false
 }
 
+class Command {
+  constructor(noteSequence) {
+    this.seq = noteSequence
+  }
+}
+
+class ToggleDotCommand extends Command {
+  do() {
+    this.storeForUndo()
+
+    this.seq.selectedNote().toggleDot()
+    this.seq.rebar()
+  }
+
+  storeForUndo() {
+    this.noteIndex = this.seq.currentNoteSequenceIndex
+  }
+
+  undo() {
+    this.seq.select(this.noteIndex)
+    this.seq.toggleDotForSelected()
+  }
+}
+
+// rebarcommand
+
+class DuplicateNoteCommand extends Command {
+  do() {
+    this.storeForUndo()
+
+    const note = this.seq.selectedNote()
+    const copy = new Note(note.name())
+    copy.duration = note.duration
+    this.seq.notes.splice(this.seq.currentNoteSequenceIndex + 1, 0, copy)
+    this.seq.selectNext()
+    this.seq.rebar()
+  }
+
+  storeForUndo() {
+    this.noteIndex = this.seq.currentNoteSequenceIndex
+  }
+
+  undo() {
+    this.seq.select(this.noteIndex)
+    this.seq.deleteSelected()
+    this.seq.rebar()
+  }
+}
+
 export default class NoteSequence {
   constructor(noteNames = []) {
     this.notes = []
@@ -25,6 +74,8 @@ export default class NoteSequence {
     })
     if (noteNames.length > 0) this.rebar()
     this.currentNoteSequenceIndex = -1
+
+    this.commands = []
   }
 
   add(note) {
@@ -164,12 +215,20 @@ export default class NoteSequence {
   }
 
   duplicateNote() {
-    const note = this.selectedNote()
-    const copy = new Note(note.name())
-    copy.duration = note.duration
-    this.notes.splice(this.currentNoteSequenceIndex + 1, 0, copy)
-    this.selectNext()
-    this.rebar()
+    const command = new DuplicateNoteCommand(this)
+    command.do()
+    this.commands.push(command)
+  }
+
+  toggleDotForSelected() {
+    const command = new ToggleDotCommand(this)
+    command.do()
+    this.commands.push(command)
+  }
+
+  undo() {
+    const command = this.commands[this.commands.length - 1]
+    command.undo()
   }
 
   setSelectedTo(duration) {
@@ -184,11 +243,6 @@ export default class NoteSequence {
 
   doubleSelectedDuration() {
     this.selectedNote().duration = Duration.doubleDuration(this.selectedNote().duration)
-    this.rebar()
-  }
-
-  toggleDotForSelected() {
-    this.selectedNote().toggleDot()
     this.rebar()
   }
 

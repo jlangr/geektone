@@ -424,6 +424,15 @@ describe('NoteSequence', () => {
     })
 
     describe('duplicate note', () => {
+      it('can be undone', () => {
+        sequence.selectFirst()
+        sequence.duplicateNote()
+
+        sequence.undo()
+
+        expect(sequence.allNoteNames()).toEqual(['E4', 'F4', 'G4'])
+      })
+
       it('introduces new note following selected', () => {
         sequence.selectFirst()
 
@@ -542,6 +551,15 @@ describe('NoteSequence', () => {
           sequence.toggleDotForSelected()
 
           expect(sequence.firstNote().duration).toEqual('8n')
+        })
+
+        it('can be undone', () => {
+          sequence.firstNote().duration = '8n.'
+          sequence.toggleDotForSelected()
+
+          sequence.undo()
+
+          expect(sequence.firstNote().duration).toEqual('8n.')
         })
       })
     })

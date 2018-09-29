@@ -28,6 +28,11 @@ export const handleKey = (e, noteSequence) => {
     case '/': noteSequence.halveSelectedDuration(); return true
     case '*': noteSequence.doubleSelectedDuration(); return true
     case 'r': noteSequence.toggleRestForSelected(); return true
+
+    // TODO test
+    case 'y': noteSequence.redo(); return true
+    case 'z': noteSequence.undo(); return true
+
     default: 
       return false
   }
