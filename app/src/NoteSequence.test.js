@@ -470,18 +470,19 @@ describe('NoteSequence', () => {
         expect(sequence.allNoteNames()).toEqual(['E4'])
       })
 
-      it('selects the previous note', () => {
+      it('selects next note', () => {
         sequence.select(1)
         sequence.deleteSelected()
 
-        expect(sequence.isSelected(0)).toBeTruthy()
+        expect(sequence.isSelected(1)).toBeTruthy()
       })
 
-      it('re-selects if the first note is selected', () => {
-        sequence.selectFirst()
+      it('selects previous note if the last note is selected', () => {
+        const lastIndex = sequence.length() - 1
+        sequence.selectLast()
         sequence.deleteSelected()
 
-        expect(sequence.isSelected(0)).toBeTruthy()
+        expect(sequence.isSelected(lastIndex - 1)).toBeTruthy()
       })
     })
 

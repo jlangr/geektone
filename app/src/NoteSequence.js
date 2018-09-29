@@ -65,13 +65,9 @@ export default class NoteSequence {
     return this.notes[this.notes.length - 1]
   }
 
-  // ==
-
   toJSON() {
     return this.allNotes().map(note => note.toJSON())
   }
-
-  // ==
 
   isNoteSelected() {
     return this.currentNoteSequenceIndex !== -1
@@ -162,7 +158,7 @@ export default class NoteSequence {
     if (this.notes.length === 1) return
 
     this.notes.splice(this.currentNoteSequenceIndex, 1)
-    this.currentNoteSequenceIndex = Math.max(0, this.currentNoteSequenceIndex - 1)
+    this.currentNoteSequenceIndex = Math.min(this.length() - 1, this.currentNoteSequenceIndex)
     this.select(this.currentNoteSequenceIndex)
     this.rebar()
   }
@@ -211,58 +207,13 @@ export default class NoteSequence {
   createTies(note, timeRemaining) {
     const excessTime = note.sixteenths() - timeRemaining
     const start = new Tie(note.name(), Duration.noteForSixteenths(timeRemaining))
-    start.isSelected = note.isSelected // necessary?
+    start.isSelected = note.isSelected
     const end = new Tie(note.name(), Duration.noteForSixteenths(excessTime))
-    end.isSelected = note.isSelected // necessary?
+    end.isSelected = note.isSelected
     end.startTie = start
     note.setTie(start, end) // TODO test
     return [start, end]
   }
-
-
-  // The challenge:
-  // drawing is involved with bars.
-  // A note might span two bars in which case it needs a tie
-  // A tie is a visual representation (view) of a note only relevant
-  // for drawing purposes. The note still retains the same pitch and duration
-  // for playing purposes
-
-  // A note sequence is a list of Note objects, each of
-  // which has a 0 based position
-
-  // A rebar() creates a barSequence, which is
-  // a list of Note objects, Bar objects, and Tie
-  // Objects--so it is a view on a NoteSequence
-
-  // Clicking on things and changing pitch or duration
-  // involves the view and its representation.
-
-  // To mesh the two... into a note sequence.
-  // This would require that a tie note know how
-  // to draw itself by drawing the start and end tie.
-  // The rebar logic would need to change to support
-  // the notion of a note, which goes in one bar,
-  // and then that would alter the capacity for 
-  // the subsequent bar
-
-  // New concept: if a Note is a tie, it handles
-  // the logic for drawing the two note images,
-  // as well as handling interaction with them.
-  // It does so by encapsulating two sub-note
-  // instances. Everything goes through the Note,
-  // and there is not a first-level Tie object
-  // visible externally.
-
-  // The logic in SongReducer.barsAndNotes will
-  // need to be updated but that shouldn't be bad
-
-  // Rebar: A note gets added to a bar if there is
-  // any room. If too big, it is marked as a tie
-  // and set up to store the two pieces of info needed
-  // to draw start and end note symbols
-  // 
-  // The subsequent bar has to be updated to 
-  // represent diminished capacity in rebar()
 
   // TODO: optimization if needed: rebar from changed location only
   rebar() {
