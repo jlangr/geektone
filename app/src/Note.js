@@ -15,11 +15,11 @@ const RestNoteName = 'R'
 export default class Note {
   constructor(name, duration = Duration.quarter) {
     this.octave = parseInt(name.slice(-1), 10)
-    let note = Note.note(name) //name.slice(0, -1);
+    let note = Note.note(name)
     this.baseName = note
     this.noteIndex = ascendingWholeNoteScale.indexOf(note)
     this.isSelected = false
-    this.duration = duration // objectify?
+    this.duration = duration
     this.isNote = (name !== RestNoteName)
     this.clearTie()
   }
@@ -76,7 +76,6 @@ export default class Note {
     return `${this.name()} ${this.duration}`
   }
 
-  // TODO test
   isDotted() {
     return Duration.isDotted(this.duration)
   }
@@ -92,7 +91,6 @@ export default class Note {
   }
 
   select() {
-    // TODO test
     if (this.isRepresentedAsTie()) {
       this.startTie.isSelected = true
       this.endTie.isSelected = true
@@ -101,7 +99,6 @@ export default class Note {
   }
 
   deselect() {
-    // TODO test
     if (this.isRepresentedAsTie()) {
       this.startTie.isSelected = false
       this.endTie.isSelected = false
@@ -132,7 +129,6 @@ export default class Note {
 
     if (this.noteIndex + 1 === ascendingWholeNoteScale.length) this.octave++
     this.noteIndex = next(ascendingWholeNoteScale, this.noteIndex)
-    // TODO test
     this.updateTiePitch()
   }
 
@@ -145,29 +141,20 @@ export default class Note {
 
     if (this.noteIndex === 0) this.octave--
     this.noteIndex = prev(ascendingWholeNoteScale, this.noteIndex)
-    // TODO test
     this.updateTiePitch()
   }
 
   isHitForElement(element, mousePosition) {
-    const centerX = element.x()
-    const centerY = element.y()
-    return new Rect(
-      centerX - noteWidth, centerY - noteHeight,
+    const rect = new Rect(
+      element.x() - noteWidth, element.y() - noteHeight,
       noteWidth * 2, noteHeight * 2)
-      .contains(mousePosition)
+    return rect.contains(mousePosition)
   }
 
-  // TODO externalize below ... to Staff?
-  // since Tie is a Note...
-  // and we are iterating through notes, we have
-  // to know if either of a notes' tie elements
-  // have been hit. Awkward
   isHit(mousePosition) {
-// TODO test Tie stuff
     if (this.isRepresentedAsTie())
       return this.isHitForElement(this.startTie, mousePosition) ||
-             this.isHitForElement(this.endTie, mousePosition)
+        this.isHitForElement(this.endTie, mousePosition)
 
     return this.isHitForElement(this, mousePosition)
   }

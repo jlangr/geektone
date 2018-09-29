@@ -1,5 +1,6 @@
 import Note from './Note'
 import * as Duration from './Duration'
+import Tie from './Tie';
 
 describe('note', () => {
   describe('a note', () => {
@@ -56,6 +57,16 @@ describe('note', () => {
   })
 
   describe('dotted notes', () => {
+    describe('property', () => {
+      it('is false when not dotted', () => {
+        expect(new Note('F2', '4n').isDotted()).toBeFalsy()
+      })
+
+      it('is true when dotted', () => {
+        expect(new Note('F2', '4n.').isDotted()).toBeTruthy()
+      })
+    })
+
     describe('toggle', () => {
       it('toggles dot to non dotted note', () => {
         const note = new Note('F2', '4n')
@@ -94,9 +105,9 @@ describe('note', () => {
   describe('hit testing', () => {
     it('is false when click does not hit', () => {
       const note = new Note('D4')
-      const position = 0
+      note.position = 0
 
-      const isHit = note.isHit({ x: note.x(position) + 1000, y: note.y() }, position)
+      const isHit = note.isHit({ x: note.x() + 1000, y: note.y() })
 
       expect(isHit).toBeFalsy()
     })
@@ -105,7 +116,21 @@ describe('note', () => {
       const note = new Note('D4')
       note.position = 0
 
-      const isHit = note.isHit({ x: note.x(note.position), y: note.y() })
+      const isHit = note.isHit({ x: note.x(), y: note.y() })
+
+      expect(isHit).toBeTruthy()
+    })
+
+    it('is true when a tie is hit', () => {
+      const tieStart = new Tie('D4')
+      tieStart.setPosition(0)
+      const tieEnd = new Tie('D4')
+      tieEnd.setPosition(1)
+      const note = new Note('D4', Duration.half)
+      note.setTie(tieStart, tieEnd)
+      note.setPosition(0)
+
+      const isHit = note.isHit({ x: tieEnd.x(), y: note.y() })
 
       expect(isHit).toBeTruthy()
     })
@@ -180,6 +205,31 @@ describe('note', () => {
       rest.restToggle()
 
       expect(rest.isRest()).toBeFalsy()
+    })
+  })
+
+  describe('select / deselect', () => {
+    it('also selects any ties', () => {
+      const note = new Note('E4', Duration.half)
+      note.setTie(new Tie('E4'), new Tie('E4'))
+
+      note.select()
+      
+      expect(note.isSelected).toBeTruthy()
+      expect(note.startTie.isSelected).toBeTruthy()
+      expect(note.endTie.isSelected).toBeTruthy()
+    })
+    
+    it('also deselects any ties', () => {
+      const note = new Note('E4', Duration.half)
+      note.setTie(new Tie('E4'), new Tie('E4'))
+      note.select()
+
+      note.deselect()
+      
+      expect(note.isSelected).toBeFalsy()
+      expect(note.startTie.isSelected).toBeFalsy()
+      expect(note.endTie.isSelected).toBeFalsy()
     })
   })
 })
