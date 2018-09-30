@@ -32,6 +32,7 @@ describe('song reducer', () => {
 
     expect(state.song.tracks.length).toEqual(1)
     expect(state.song.tracks[0].name).toEqual('track1')
+    expect(state.song.tracks[0].instrument).toEqual('piano')
   })
 
   it('deletes a track', () => {

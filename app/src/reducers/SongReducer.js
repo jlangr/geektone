@@ -136,7 +136,7 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.NEW_TRACK:
     {
-      const newTrack = { name: `track${state.song.tracks.length + 1}`, notes: new NoteSequence(['E4']) }
+      const newTrack = { name: `track${state.song.tracks.length + 1}`, instrument: 'piano', notes: new NoteSequence(['E4']) }
       return { ...state, song: { ...state.song, tracks: [...state.song.tracks, newTrack] } }
     }
 
