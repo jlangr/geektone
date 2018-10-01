@@ -1,15 +1,9 @@
 import Command from './Command'
 
-class ToggleDotCommand extends Command {
+export default class ToggleDotCommand extends Command {
   do() {
-    this.storeForUndo()
-
     this.seq.selectedNote().toggleDot()
     this.seq.rebar()
-  }
-
-  storeForUndo() {
-    this.noteIndex = this.seq.currentNoteSequenceIndex
   }
 
   undo() {
@@ -17,5 +11,3 @@ class ToggleDotCommand extends Command {
     this.seq.toggleDotForSelected()
   }
 }
-
-export default ToggleDotCommand

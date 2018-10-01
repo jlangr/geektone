@@ -1,10 +1,8 @@
 import Command from './Command'
 import Note from '../Note'
 
-class DuplicateNoteCommand extends Command {
+export default class DuplicateNoteCommand extends Command {
   do() {
-    this.storeForUndo()
-
     const note = this.seq.selectedNote()
     const copy = new Note(note.name())
     copy.duration = note.duration
@@ -13,15 +11,9 @@ class DuplicateNoteCommand extends Command {
     this.seq.rebar()
   }
 
-  storeForUndo() {
-    this.noteIndex = this.seq.currentNoteSequenceIndex
-  }
-
   undo() {
     this.seq.select(this.noteIndex)
     this.seq.deleteSelected()
     this.seq.rebar()
   }
 }
-
-export default DuplicateNoteCommand
