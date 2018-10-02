@@ -1,12 +1,5 @@
-class Command {
-  constructor(noteSequence) {
-    this.seq = noteSequence
-    this.storeForUndo()
-  }
-
+export default class Command {
   storeForUndo() {
     this.noteIndex = this.seq.currentNoteSequenceIndex
   }
 }
-
-export default Command

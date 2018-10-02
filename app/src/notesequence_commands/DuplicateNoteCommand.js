@@ -1,7 +1,7 @@
-import Command from './Command'
+import RebarCommand from './RebarCommand'
 import Note from '../Note'
 
-export default class DuplicateNoteCommand extends Command {
+export default class DuplicateNoteCommand extends RebarCommand {
   do() {
     const note = this.seq.selectedNote()
     const copy = new Note(note.name())

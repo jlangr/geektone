@@ -75,6 +75,26 @@ describe('NoteSequence', () => {
     })
   })
 
+  describe('undo / redo', () => {
+    let sequence
+
+    beforeEach(() => {
+      sequence = new NoteSequence([['E4', '4n'], ['F4', '4n']])
+    })
+
+    it('supports multiple undo', () => {
+      sequence.selectFirst()
+      sequence.toggleDotForSelected()
+      sequence.selectFirst()
+      sequence.duplicateNote()
+
+      sequence.undo()
+      sequence.undo()
+
+      expect(sequence.allNoteNames()).toEqual(['E4', 'F4'])
+    })
+  })
+
   describe('bar sequence after rebar', () => {
     const e = new Note('E4', '4n')
     const f4Half = new Note('F4', '2n')
@@ -454,16 +474,6 @@ describe('NoteSequence', () => {
         sequence.deleteSelected()
 
         expect(sequence.isSelected(lastIndex - 1)).toBeTruthy()
-      })
-    })
-
-    describe('set note length', () => {
-      it('sets to half note', () => {
-        sequence.selectFirst()
-
-        sequence.setSelectedTo(Duration.half)
-
-        expect(sequence.selectedNote().duration).toEqual(Duration.half)
       })
     })
 

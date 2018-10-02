@@ -5,6 +5,8 @@ import { prev, next } from './js/ArrayUtil'
 import Bar from './Bar'
 import DuplicateNoteCommand from './notesequence_commands/DuplicateNoteCommand'
 import ToggleDotCommand from './notesequence_commands/ToggleDotCommand'
+import ChangeDurationCommand from './notesequence_commands/ChangeDurationCommand'
+import Commander from './Commander'
 
 const nullNote = {
   name: () => 'null',
@@ -13,8 +15,6 @@ const nullNote = {
   toggleDot: () => {},
   isSelected: false
 }
-
-// rebarcommand
 
 export default class NoteSequence {
   constructor(noteNames = []) {
@@ -30,7 +30,11 @@ export default class NoteSequence {
     if (noteNames.length > 0) this.rebar()
     this.currentNoteSequenceIndex = -1
 
-    this.commands = []
+    this.commander = new Commander(this)
+  }
+
+  undo() {
+    this.commander.undo()
   }
 
   add(note) {
@@ -160,34 +164,26 @@ export default class NoteSequence {
     this.selectedNote().select()
   }
 
+  // commands
+
+  setSelectedTo(duration) {
+    this.commander.execute(new ChangeDurationCommand(duration))
+  }
+
+  duplicateNote() {
+    this.commander.execute(new DuplicateNoteCommand())
+  }
+
+  toggleDotForSelected() {
+    this.commander.execute(new ToggleDotCommand())
+  }
+
   deleteSelected() {
     if (this.notes.length === 1) return
 
     this.notes.splice(this.currentNoteSequenceIndex, 1)
     this.currentNoteSequenceIndex = Math.min(this.length() - 1, this.currentNoteSequenceIndex)
     this.select(this.currentNoteSequenceIndex)
-    this.rebar()
-  }
-
-  duplicateNote() {
-    const command = new DuplicateNoteCommand(this)
-    command.do()
-    this.commands.push(command)
-  }
-
-  toggleDotForSelected() {
-    const command = new ToggleDotCommand(this)
-    command.do()
-    this.commands.push(command)
-  }
-
-  undo() {
-    const command = this.commands[this.commands.length - 1]
-    command.undo()
-  }
-
-  setSelectedTo(duration) {
-    this.selectedNote().duration = duration
     this.rebar()
   }
 
