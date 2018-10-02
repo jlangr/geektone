@@ -448,14 +448,6 @@ describe('NoteSequence', () => {
         sequence.selectFirst()
       })
 
-      it('increments selected', () => {
-        expect(sequence.firstNote().name()).toEqual('E4')
-
-        sequence.incrementSelected()
-
-        expect(sequence.selectedNote().name()).toEqual('F4')
-      })
-
       it('decrements selected', () => {
         expect(sequence.firstNote().name()).toEqual('E4')
 

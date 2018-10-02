@@ -44,11 +44,7 @@ describe('delete note', () => {
 
     sequence.undo()
 
-    const notes = sequence.allNotes().map(note => {
-      return [note.name(), note.duration]
-    }
-    );
-
-    expect(notes).toEqual([['E4', '4n'], ['F4', '8n'], ['G4', '16n']])
+    expect(sequence.allNotes().map(note => [note.name(), note.duration]))
+      .toEqual([['E4', '4n'], ['F4', '8n'], ['G4', '16n']])
   })
 })

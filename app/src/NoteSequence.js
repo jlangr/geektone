@@ -3,10 +3,13 @@ import Tie from './Tie'
 import * as Duration from './Duration'
 import { prev, next } from './js/ArrayUtil'
 import Bar from './Bar'
+// TODO index
 import DuplicateNoteCommand from './notesequence_commands/DuplicateNoteCommand'
 import ToggleDotCommand from './notesequence_commands/ToggleDotCommand'
 import ChangeDurationCommand from './notesequence_commands/ChangeDurationCommand'
 import DeleteCommand from './notesequence_commands/DeleteCommand'
+import IncrementCommand from './notesequence_commands/IncrementCommand'
+import DecrementCommand from './notesequence_commands/DecrementCommand'
 import Commander from './Commander'
 
 const nullNote = {
@@ -187,22 +190,24 @@ export default class NoteSequence {
     this.commander.execute(new ToggleDotCommand())
   }
 
+  incrementSelected() {
+    this.commander.execute(new IncrementCommand())
+  }
+
+  decrementSelected() {
+    this.commander.execute(new DecrementCommand())
+  }
+
   deleteSelected() {
     if (this.notes.length === 1) return
 
     this.commander.execute(new DeleteCommand())
   }
 
+  // ...
+
   toggleRestForSelected() {
     this.selectedNote().restToggle()
-  }
-
-  incrementSelected() {
-    this.selectedNote().increment()
-  }
-
-  decrementSelected() {
-    this.selectedNote().decrement()
   }
 
   createTies(note, timeRemaining) {
