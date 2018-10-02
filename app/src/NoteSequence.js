@@ -10,6 +10,7 @@ import ChangeDurationCommand from './notesequence_commands/ChangeDurationCommand
 import DeleteCommand from './notesequence_commands/DeleteCommand'
 import IncrementCommand from './notesequence_commands/IncrementCommand'
 import DecrementCommand from './notesequence_commands/DecrementCommand'
+import ToggleRestCommand from './notesequence_commands/ToggleRestCommand'
 import Commander from './Commander'
 
 const nullNote = {
@@ -204,11 +205,11 @@ export default class NoteSequence {
     this.commander.execute(new DeleteCommand())
   }
 
-  // ...
-
   toggleRestForSelected() {
-    this.selectedNote().restToggle()
+    this.commander.execute(new ToggleRestCommand())
   }
+
+  // ...
 
   createTies(note, timeRemaining) {
     const excessTime = note.sixteenths() - timeRemaining

@@ -9,8 +9,6 @@ describe('increment', () => {
   })
 
   it('increments selected', () => {
-    const sequence = new NoteSequence([['E4']])
-    sequence.selectFirst()
     sequence.incrementSelected()
 
     expect(sequence.selectedNote().name()).toEqual('F4')

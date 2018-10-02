@@ -187,6 +187,7 @@ describe('NoteSequence', () => {
       })
     })
 
+    // TODO move to command tests and maybe use abstract test
     describe('after construction', () => {
       beforeEach(() => {
         sequence = new NoteSequence(['E4', 'F4', 'G4'])
@@ -440,20 +441,6 @@ describe('NoteSequence', () => {
         sequence.selectPrev()
 
         expect(sequence.selectedNote().name()).toBe('null')
-      })
-    })
-
-    describe('increment/decrement selected', () => {
-      beforeEach(() => {
-        sequence.selectFirst()
-      })
-
-      it('decrements selected', () => {
-        expect(sequence.firstNote().name()).toEqual('E4')
-
-        sequence.decrementSelected()
-
-        expect(sequence.selectedNote().name()).toEqual('D4')
       })
     })
   })
