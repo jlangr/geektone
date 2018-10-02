@@ -1,6 +1,6 @@
 import Command from './Command'
 
-export default class DecrementCommand extends Command {
+export class DecrementCommand extends Command {
   do() {
     this.seq.selectedNote().decrement()
   }

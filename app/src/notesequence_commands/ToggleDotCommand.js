@@ -1,6 +1,6 @@
 import RebarCommand from './RebarCommand'
 
-export default class ToggleDotCommand extends RebarCommand {
+export class ToggleDotCommand extends RebarCommand {
   do() {
     this.seq.selectedNote().toggleDot()
   }

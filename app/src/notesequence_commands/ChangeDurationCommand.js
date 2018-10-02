@@ -1,6 +1,6 @@
 import RebarCommand from './RebarCommand'
 
-export default class ChangeDurationCommand extends RebarCommand {
+export class ChangeDurationCommand extends RebarCommand {
   constructor(duration) {
     super()
     this.newDuration = duration

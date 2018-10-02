@@ -1,6 +1,6 @@
 import Command from './Command'
 
-export default class ToggleRestCommand extends Command {
+export class ToggleRestCommand extends Command {
   do() {
     this.seq.selectedNote().restToggle()
   }

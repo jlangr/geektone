@@ -1,6 +1,6 @@
 import RebarCommand from './RebarCommand'
 
-export default class DeleteCommand extends RebarCommand {
+export class DeleteCommand extends RebarCommand {
   storeForUndo() {
     super.storeForUndo()
     this.deletedNote = this.seq.selectedNote()

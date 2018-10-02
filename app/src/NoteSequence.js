@@ -3,14 +3,13 @@ import Tie from './Tie'
 import * as Duration from './Duration'
 import { prev, next } from './js/ArrayUtil'
 import Bar from './Bar'
-// TODO index
-import DuplicateNoteCommand from './notesequence_commands/DuplicateNoteCommand'
-import ToggleDotCommand from './notesequence_commands/ToggleDotCommand'
-import ChangeDurationCommand from './notesequence_commands/ChangeDurationCommand'
-import DeleteCommand from './notesequence_commands/DeleteCommand'
-import IncrementCommand from './notesequence_commands/IncrementCommand'
-import DecrementCommand from './notesequence_commands/DecrementCommand'
-import ToggleRestCommand from './notesequence_commands/ToggleRestCommand'
+import { DuplicateNoteCommand,
+  ToggleDotCommand,
+  ChangeDurationCommand,
+  DeleteCommand,
+  IncrementCommand,
+  DecrementCommand,
+  ToggleRestCommand } from './notesequence_commands'
 import Commander from './Commander'
 
 const nullNote = {
