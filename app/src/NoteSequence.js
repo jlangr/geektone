@@ -6,6 +6,7 @@ import Bar from './Bar'
 import DuplicateNoteCommand from './notesequence_commands/DuplicateNoteCommand'
 import ToggleDotCommand from './notesequence_commands/ToggleDotCommand'
 import ChangeDurationCommand from './notesequence_commands/ChangeDurationCommand'
+import DeleteCommand from './notesequence_commands/DeleteCommand'
 import Commander from './Commander'
 
 const nullNote = {
@@ -170,6 +171,14 @@ export default class NoteSequence {
     this.commander.execute(new ChangeDurationCommand(duration))
   }
 
+  halveSelectedDuration() {
+    this.setSelectedTo(Duration.halveDuration(this.selectedNote().duration))
+  }
+
+  doubleSelectedDuration() {
+    this.setSelectedTo(Duration.doubleDuration(this.selectedNote().duration))
+  }
+
   duplicateNote() {
     this.commander.execute(new DuplicateNoteCommand())
   }
@@ -181,20 +190,7 @@ export default class NoteSequence {
   deleteSelected() {
     if (this.notes.length === 1) return
 
-    this.notes.splice(this.currentNoteSequenceIndex, 1)
-    this.currentNoteSequenceIndex = Math.min(this.length() - 1, this.currentNoteSequenceIndex)
-    this.select(this.currentNoteSequenceIndex)
-    this.rebar()
-  }
-
-  halveSelectedDuration() {
-    this.selectedNote().duration = Duration.halveDuration(this.selectedNote().duration)
-    this.rebar()
-  }
-
-  doubleSelectedDuration() {
-    this.selectedNote().duration = Duration.doubleDuration(this.selectedNote().duration)
-    this.rebar()
+    this.commander.execute(new DeleteCommand())
   }
 
   toggleRestForSelected() {

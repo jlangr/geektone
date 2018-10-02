@@ -1,4 +1,3 @@
-import DuplicateNoteCommand from './DuplicateNoteCommand'
 import NoteSequence from '../NoteSequence'
 
 describe('duplicate note', () => {
