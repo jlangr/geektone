@@ -49,7 +49,7 @@ export class Staff extends Component {
 
   handleKeyPress(e) {
     if (keyHandler.handleKey(e, this.props.trackData.notes))
-      this.props.updateTrack(this.props.id) // TODO only if it's a rebar change? or not.
+      this.props.updateTrack(this.props.id)
   }
 
   click(e) {
@@ -57,12 +57,8 @@ export class Staff extends Component {
     if (this.props.isInSharpsMode) {
       if (this.isClickInAccidentals(clickPoint))
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
-    } else
-    console.log(`click ${clickPoint}`)
-      if (this.props.trackData.notes.clickHitNote(clickPoint)) {
-        console.log(`click hit note`)
+    } else if (this.props.trackData.notes.clickHitNote(clickPoint)) 
         this.props.updateTrack(this.props.id)
-      }
   }
 
   // TODO the click is based on the note sequence... however,

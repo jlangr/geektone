@@ -6,7 +6,7 @@ export default class RebarCommand extends Command {
     this.seq.rebar()
   }
 
-  undo() {
+  executeUndo() {
     this.undo()
     this.seq.rebar()
   }

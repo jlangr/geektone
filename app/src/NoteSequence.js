@@ -39,7 +39,7 @@ export default class NoteSequence {
   }
 
   undo() {
-    this.commander.undo()
+    this.commander.executeUndo()
   }
 
   add(note) {
@@ -169,8 +169,6 @@ export default class NoteSequence {
     this.selectedNote().select()
   }
 
-  // commands
-
   setSelectedTo(duration) {
     this.commander.execute(new ChangeDurationCommand(duration))
   }
@@ -208,8 +206,6 @@ export default class NoteSequence {
   toggleRestForSelected() {
     this.commander.execute(new ToggleRestCommand())
   }
-
-  // ...
 
   createTies(note, timeRemaining) {
     const excessTime = note.sixteenths() - timeRemaining

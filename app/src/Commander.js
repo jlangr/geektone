@@ -11,8 +11,8 @@ export default class Commander {
     command.execute()
   }
 
-  undo() {
+  executeUndo() {
     const command = this.commands.pop()
-    command.undo()
+    command.executeUndo()
   }
 }

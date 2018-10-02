@@ -6,4 +6,8 @@ export default class Command {
   execute() {
     this.do()
   }
+
+  executeUndo() {
+    this.undo()
+  }
 }

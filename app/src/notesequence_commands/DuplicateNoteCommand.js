@@ -1,5 +1,4 @@
 import RebarCommand from './RebarCommand'
-import DeleteCommand from './DeleteCommand'
 import Note from '../Note'
 
 export default class DuplicateNoteCommand extends RebarCommand {
@@ -9,13 +8,12 @@ export default class DuplicateNoteCommand extends RebarCommand {
     copy.duration = note.duration
     this.seq.notes.splice(this.seq.currentNoteSequenceIndex + 1, 0, copy)
     this.seq.selectNext()
+
+    this.duplicatedNoteIndex = this.seq.currentNoteSequenceIndex
   }
 
   undo() {
+    this.seq.notes.splice(this.duplicatedNoteIndex, 1)
     this.seq.select(this.noteIndex)
-
-    const deleteCommand = new DeleteCommand()
-    deleteCommand.seq = this.seq
-    deleteCommand.do()
   }
 }
