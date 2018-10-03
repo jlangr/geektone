@@ -148,23 +148,23 @@ describe('key signature sharps and flats', () => {
   it('adds note to sharps', () => {
     const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addSharp(0, 'F5'))
+    const newState = SongReducer(state, actions.addSharp(0, 'F'))
 
-    expect(newState.song.tracks[0].sharps).toEqual(['F5'])
+    expect(newState.song.tracks[0].sharps).toEqual(['F'])
   })
 
   it('ignores undefined', () => {
-    const state = { song: { name: 'x', tracks: [{sharps: ['F5'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{sharps: ['F'], name: 'a'}]}}
 
     const newState = SongReducer(state, actions.addSharp(0, undefined))
 
-    expect(newState.song.tracks[0].sharps).toEqual(['F5'])
+    expect(newState.song.tracks[0].sharps).toEqual(['F'])
   })
 
   it('removes when already exists', () => {
-    const state = { song: { name: 'x', tracks: [{sharps: ['F5'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{sharps: ['F'], name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addSharp(0, 'F5'))
+    const newState = SongReducer(state, actions.addSharp(0, 'F'))
 
     expect(newState.song.tracks[0].sharps).toEqual([])
   })
@@ -172,23 +172,23 @@ describe('key signature sharps and flats', () => {
   it('adds note to flats', () => {
     const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addFlat(0, 'F5'))
+    const newState = SongReducer(state, actions.addFlat(0, 'F'))
 
-    expect(newState.song.tracks[0].flats).toEqual(['F5'])
+    expect(newState.song.tracks[0].flats).toEqual(['F'])
   })
 
   it('ignores undefined', () => {
-    const state = { song: { name: 'x', tracks: [{flats: ['F5'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{flats: ['F'], name: 'a'}]}}
 
     const newState = SongReducer(state, actions.addFlat(0, undefined))
 
-    expect(newState.song.tracks[0].flats).toEqual(['F5'])
+    expect(newState.song.tracks[0].flats).toEqual(['F'])
   })
 
   it('removes when already exists', () => {
-    const state = { song: { name: 'x', tracks: [{flats: ['F5'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{flats: ['F'], name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addFlat(0, 'F5'))
+    const newState = SongReducer(state, actions.addFlat(0, 'F'))
 
     expect(newState.song.tracks[0].flats).toEqual([])
   })
