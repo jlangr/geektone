@@ -1,5 +1,5 @@
 import * as actions from '../actions/SongActions'
-import SongReducer, { isInSharpsMode, trackData } from './SongReducer'
+import SongReducer, { isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
 
 describe('song reducer', () => {
   it('replaces the song', () => {
@@ -64,7 +64,25 @@ describe('toggle sharps mode', () => {
 
     const newState = SongReducer(state, actions.toggleSharpsMode(0))
 
-    expect(newState.song.tracks[1].sharpsMode).toBeFalsy()
+    expect(newState.song.tracks[0].sharpsMode).toBeFalsy()
+  })
+})
+
+describe('toggle flats mode', () => {
+  it('turns on with first toggle', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', flatsMode: false}, {name: 'y', flatsMode: false}]}}
+
+    const newState = SongReducer(state, actions.toggleFlatsMode(1))
+
+    expect(newState.song.tracks[1].flatsMode).toBeTruthy()
+  })
+
+  it('toggles off when on', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', flatsMode: true}, {name: 'y', flatsMode: false}]}}
+
+    const newState = SongReducer(state, actions.toggleFlatsMode(0))
+
+    expect(newState.song.tracks[0].flatsMode).toBeFalsy()
   })
 })
 
@@ -83,6 +101,20 @@ describe('toggle mute', () => {
     const newState = SongReducer(state, actions.toggleMute(0))
 
     expect(newState.song.tracks[0].isMuted).toBeFalsy()
+  })
+})
+
+describe('is in flats mode?', () => {
+  it('is true when flag is on for track', () => {
+    const song = { tracks: [ { flatsMode: true } ]}
+
+    expect(isInFlatsMode(song, 0)).toBeTruthy()
+  })
+
+  it('is false when flag is off for track', () => {
+    const song = { tracks: [ { flatsMode: true }, { flatsMode: false } ]}
+
+    expect(isInFlatsMode(song, 1)).toBeFalsy()
   })
 })
 

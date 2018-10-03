@@ -12,4 +12,5 @@ export const NEW_TRACK = 'new_track';
 export const REPLACE_SONG = 'replace_song';
 export const TOGGLE_MUTE = 'toggle_mute';
 export const TOGGLE_SHARPS_MODE = 'toggle_sharps_mode';
+export const TOGGLE_FLATS_MODE = 'toggle_flats_mode';
 export const UPDATE_TRACK = 'update_track';

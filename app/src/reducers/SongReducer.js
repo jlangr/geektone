@@ -14,6 +14,8 @@ export const INITIAL_STATE = {
 
 export const isInSharpsMode = (song, id) => song.tracks[id].sharpsMode
 
+export const isInFlatsMode = (song, id) => song.tracks[id].flatsMode
+
 export const trackData = (state, trackId) => state.song.tracks[trackId]
 
 // TODO test
@@ -63,6 +65,12 @@ const updateStateForTrack = (state, trackIndex, changeFn) => {
 const updateState_toggleMute = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, (changedTrack) => {
     changedTrack.isMuted = !changedTrack.isMuted
+  })
+}
+
+const updateState_toggleFlatsMode = (state, trackIndex) => {
+  return updateStateForTrack(state, trackIndex, (changedTrack) => {
+    changedTrack.flatsMode = !changedTrack.flatsMode
   })
 }
 
@@ -154,6 +162,12 @@ export default(state = INITIAL_STATE, action) => {
     {
       const trackIndex = action.payload
       return updateState_toggleSharpsMode(state, trackIndex)
+    }
+
+    case type.TOGGLE_FLATS_MODE: 
+    {
+      const trackIndex = action.payload
+      return updateState_toggleFlatsMode(state, trackIndex)
     }
 
     case type.TOGGLE_MUTE:

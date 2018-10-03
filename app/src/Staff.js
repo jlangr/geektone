@@ -52,6 +52,7 @@ export class Staff extends Component {
       this.props.updateTrack(this.props.id)
   }
 
+  // TODO test
   click(e) {
     const clickPoint = UI.mousePosition(this.canvas(), e)
     if (this.props.isInSharpsMode) {
