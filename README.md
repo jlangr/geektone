@@ -17,3 +17,9 @@ git clone http://github.com/jlangr/geektone
 ## Geektone Basics
 
 Geektone supports the keyboard for many actions.
+
+## Deficiencies
+
+Notes longer than one measure not yet supported.
+Sharps / flats in key signature are not ordered appropriately.
+No bass clef

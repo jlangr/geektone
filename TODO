@@ -1,22 +1,27 @@
-don't lose changes on page reload. "this page has unsaved changes"
+H DEFECT: new track too short--needs to left-align
+H bass clef
+H don't lose changes on page reload. "this page has unsaved changes"
+H flats overlap sharps in accidentals area
+H notes longer than 1 bar
+H save song by name
+H edit song by name
+H add a few more instruments
+M halve / double notes with dots
+M delete / copy / paste multiple notes
+M mouse insert note
+M note insert mode
+M play-along marker
+M repeat section
+L clear staff
+L fix stroke problems etc throughout
+L flats / sharps in proper order on accidentals area
+L move from track-to-track using ctrl-keys (shift arrow up down)
+L other time signatures
 
-DEFECT: duplicate of rest creates a note not a rest
-DEFECT: new track too short--needs to left-align
-flats overlap sharps in accidentals area
-save song by name
-repeat section
-clear staff
-note insert mode
-mouse insert note
-delete / copy / paste multiple notes
-notes longer than 1 bar
-other time signatures
-play-along marker
-fix stroke problems etc throughout
-
-move from track-to-track using ctrl-keys (shift arrow up down)
-
-time signature
-flats / sharps in proper order on accidentals area
-
-bass clef
+UI
+--
+Alignment of buttons, etc.
+Alignment of staffs
+Consistent sizing of stuff
+Show treble / bass indicator
+Make help a hideable popup
