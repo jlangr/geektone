@@ -6,6 +6,7 @@ export class DuplicateNoteCommand extends RebarCommand {
     const note = this.seq.selectedNote()
     const copy = new Note(note.name())
     copy.duration = note.duration
+    copy.isNote = note.isNote
     this.seq.notes.splice(this.seq.currentNoteSequenceIndex + 1, 0, copy)
     this.seq.selectNext()
 

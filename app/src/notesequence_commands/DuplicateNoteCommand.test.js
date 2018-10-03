@@ -24,6 +24,16 @@ describe('duplicate note', () => {
     expect(sequence.allNoteNames()).toEqual(['E4', 'E4', 'F4', 'G4'])
   })
 
+  it('duplicates rests', () => {
+    sequence.note(0).duration = '16n'
+    sequence.note(0).restToggle()
+    sequence.select(0)
+
+    sequence.duplicateNote()
+
+    expect(sequence.note(1).isRest()).toBeTruthy()
+  })
+
   it('includes duration', () => {
     sequence.note(0).duration = '16n'
     sequence.select(0)
