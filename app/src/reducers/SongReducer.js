@@ -82,8 +82,27 @@ const updateState_toggleSharpsMode = (state, trackIndex) => {
 
 const updateState_rebar = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, _changedTrack => {
-    //  NOOP
+    //  no-op
   })
+}
+
+const updateState_addFlat = (state, trackIndex, note) => {
+  if (!note) return state
+
+  const updatedTrack = state.song.tracks[trackIndex]
+  if (!updatedTrack.flats) updatedTrack.flats = []
+
+  if (updatedTrack.flats.includes(note)) 
+    remove(updatedTrack.flats, note)
+  else
+    updatedTrack.flats.push(note)
+
+  updatedTrack.flatsMode = false
+
+  const newTracks = 
+    [...state.song.tracks.slice(0, trackIndex), updatedTrack, ...state.song.tracks.slice(trackIndex+1) ]
+
+  return { ...state, song: {...state.song, tracks: newTracks} }
 }
 
 const updateState_addSharp = (state, trackIndex, note) => {
@@ -105,9 +124,14 @@ const updateState_addSharp = (state, trackIndex, note) => {
   return { ...state, song: {...state.song, tracks: newTracks} }
 }
 
-// refactor track update
 export default(state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case type.ADD_FLAT: 
+    {
+      const { trackIndex, note } = action.payload
+      return updateState_addFlat(state, trackIndex, note)
+    }
+
     case type.ADD_SHARP: 
     {
       const { trackIndex, note } = action.payload

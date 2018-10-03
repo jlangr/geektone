@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as keyHandler from './KeyHandler'
-import { addSharp, updateTrack } from './actions'
-import { isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
+import { addFlat, addSharp, updateTrack } from './actions'
+import { isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
 import { nearestNote } from './reducers/UIReducer'
 import * as UI from './util/UI'
 import * as Draw from './util/Draw'
@@ -58,7 +58,12 @@ export class Staff extends Component {
     if (this.props.isInSharpsMode) {
       if (this.isClickInAccidentals(clickPoint))
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
-    } else if (this.props.trackData.notes.clickHitNote(clickPoint)) 
+    } 
+    else if (this.props.isInFlatsMode) {
+      if (this.isClickInAccidentals(clickPoint))
+        this.props.addFlat(this.props.id, this.props.nearestNote(clickPoint))
+    }
+    else if (this.props.trackData.notes.clickHitNote(clickPoint)) 
         this.props.updateTrack(this.props.id)
   }
 
@@ -127,8 +132,44 @@ export class Staff extends Component {
     this.staffContext().stroke()
   }
 
+  drawFlat(note, sharpIndex) {
+    const height = 36
+    const width = 12
+
+    const y = Draw.y(note) - (height * 4 / 5)
+    const x = (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
+    
+    this.staffContext().beginPath()
+    this.staffContext().lineWidth = 3
+    this.staffContext().strokeStyle = 'black'
+    
+    this.staffContext().moveTo(x, y)
+    this.staffContext().lineTo(x, y + height)
+
+    this.staffContext().stroke()
+
+    this.staffContext().beginPath()
+    const startX = x
+    const startY = y + (height * 2 / 3)
+
+    const cp1x = x + width
+    const cp1y = startY - (height * 3 / 10)
+
+    const endX = x
+    const endY = y + height
+
+    const cp2x = x + (width * 2 / 3)
+    const cp2y = endY - (height * 1 / 10)
+
+    this.staffContext().moveTo(cp2x, cp2y)
+    this.staffContext().lineWidth = 5
+    this.staffContext().moveTo(startX, startY)
+    this.staffContext().bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY)
+    this.staffContext().stroke()
+  }
+
   drawAccidentalsArea() {
-    if (this.props.isInSharpsMode) {
+    if (this.props.isInSharpsMode || this.props.isInFlatsMode) {
       this.staffContext().beginPath()
       const lineWidth = 6
       this.props.ui.staff.accidentalsRect.drawOn(this.staffContext(), highlightColor, lineWidth)
@@ -138,6 +179,11 @@ export class Staff extends Component {
     if (this.props.trackData.sharps)
       this.props.trackData.sharps.forEach((note, i) => {
         this.drawSharp(note, i)
+      })
+
+    if (this.props.trackData.flats)
+      this.props.trackData.flats.forEach((note, i) => {
+        this.drawFlat(note, i)
       })
   }
 }
@@ -149,12 +195,13 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
   return { 
     trackData: dataForTrack,
     isInSharpsMode: isInSharpsMode(song, trackId),
+    isInFlatsMode: isInFlatsMode(song, trackId),
     nearestNote: point => nearestNote(ui, point),
     barsAndNotes: barsAndNotes(song, dataForTrack),
     ui, 
     song }
 }
 
-const mapDispatchToProps = { addSharp, updateTrack }
+const mapDispatchToProps = { addSharp, addFlat, updateTrack }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Staff)

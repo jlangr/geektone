@@ -1,6 +1,8 @@
 import * as Duration from './Duration';
 import { transportTime } from './TimeUtil';
 
+// TODO: play flats
+
 export const applyAccidentals = (noteName, sharps) => {
   return (sharps.includes(noteName))  // TODO note base really
     ? noteName.substring(0, 1) + '#' + noteName.substring(1)

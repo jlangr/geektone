@@ -144,7 +144,7 @@ describe('trackData', () => {
   })
 })
 
-describe('add accidental', () => {
+describe('key signature sharps and flats', () => {
   it('adds note to sharps', () => {
     const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
 
@@ -167,5 +167,29 @@ describe('add accidental', () => {
     const newState = SongReducer(state, actions.addSharp(0, 'F5'))
 
     expect(newState.song.tracks[0].sharps).toEqual([])
+  })
+
+  it('adds note to flats', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
+
+    const newState = SongReducer(state, actions.addFlat(0, 'F5'))
+
+    expect(newState.song.tracks[0].flats).toEqual(['F5'])
+  })
+
+  it('ignores undefined', () => {
+    const state = { song: { name: 'x', tracks: [{flats: ['F5'], name: 'a'}]}}
+
+    const newState = SongReducer(state, actions.addFlat(0, undefined))
+
+    expect(newState.song.tracks[0].flats).toEqual(['F5'])
+  })
+
+  it('removes when already exists', () => {
+    const state = { song: { name: 'x', tracks: [{flats: ['F5'], name: 'a'}]}}
+
+    const newState = SongReducer(state, actions.addFlat(0, 'F5'))
+
+    expect(newState.song.tracks[0].flats).toEqual([])
   })
 })

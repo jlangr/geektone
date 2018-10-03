@@ -1,3 +1,4 @@
+export const ADD_FLAT = 'add_flat';
 export const ADD_SHARP = 'add_sharp';
 export const ADD_SYNTH = 'add_synth';
 export const ADD_TRACK = 'add_track';

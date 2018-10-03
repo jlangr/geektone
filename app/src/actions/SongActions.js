@@ -4,6 +4,8 @@ import axios from 'axios'
 export const server = 'http://localhost:3001'
 export const request = path => `${server}${path}`
 
+export const addFlat = (trackIndex, note) => ({ type: type.ADD_FLAT, payload: { trackIndex, note }})
+
 export const addSharp = (trackIndex, note) => ({ type: type.ADD_SHARP, payload: { trackIndex, note }})
 
 export const updateTrack = trackIndex => ({ type: type.UPDATE_TRACK, payload: trackIndex })
