@@ -10,7 +10,7 @@ export const play = async (song, synths) => {
   const parts = tracks
     .filter(track => !track.isMuted)
     .map(track => {
-      const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps);
+      const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats);
       return new Tone.Part((time, note) => {
         synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
       }, toneNotes);

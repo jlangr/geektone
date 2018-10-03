@@ -2,7 +2,7 @@ don't lose changes on page reload. "this page has unsaved changes"
 
 DEFECT: duplicate of rest creates a note not a rest
 DEFECT: new track too short--needs to left-align
-flats
+flats overlap sharps in accidentals area
 save song by name
 repeat section
 clear staff
