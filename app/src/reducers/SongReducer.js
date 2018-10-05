@@ -4,9 +4,12 @@ import { remove } from '../js/ArrayUtil'
 import * as Draw from '../util/Draw'
 
 export const INITIAL_STATE = {
+  message: undefined,
+  errorMessage: undefined,
   song: {
     name: 'default',
-    tracks: []
+    tracks: [],
+    isDirty: false
   }
 }
 
@@ -125,6 +128,11 @@ const updateState_addSharp = (state, trackIndex, note) => {
 }
 
 export default(state = INITIAL_STATE, action) => {
+//  const incomingStateIsDirty = state.song.isDirty
+  state.song.isDirty = true
+  state.message = undefined
+  state.errorMessage = undefined
+
   switch (action.type) {
     case type.ADD_FLAT: 
     {
@@ -164,6 +172,21 @@ export default(state = INITIAL_STATE, action) => {
       const trackIndexToDelete = action.payload
       state.song.tracks.splice(trackIndexToDelete, 1)
       return { ...state, song: {...state.song, tracks: state.song.tracks }}
+    }
+
+    case type.ERROR:
+    {
+      return { ...state, errorMessage: action.payload }
+    }
+
+    case type.MARK_CLEAN:
+    {
+      return { ... state, message: action.payload, song: { ...state.song, isDirty: false } }
+    }
+
+    case type.MESSAGE:
+    {
+      return { ...state, message: action.payload }
     }
 
     case type.NEW_TRACK:
@@ -207,6 +230,8 @@ export default(state = INITIAL_STATE, action) => {
     }
 
     default:
-      return state
+//      return { ...state, song: { ...state.song, isDirty: false } }
+      state.song.isDirty = false
+      return state // should not trigger a state change
   }
 }

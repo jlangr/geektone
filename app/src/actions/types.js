@@ -8,6 +8,7 @@ export const CHANGE_TRACK_INSTRUMENT = 'change_track_instrument';
 export const DELETE_TRACK = 'delete_track';
 export const ERROR = 'error';
 export const LOAD_SAMPLES = 'load_samples';
+export const MARK_CLEAN = 'mark_clean';
 export const MESSAGE = 'message';
 export const NEW_TRACK = 'new_track';
 export const REPLACE_SONG = 'replace_song';

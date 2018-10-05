@@ -1,26 +1,33 @@
-import React, { Component } from 'react';
-import { Form, Button, Grid, Row, Col } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import NumericInput from 'react-numeric-input';
-import { Label } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { Form, Col, Button, Grid, Row } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import NumericInput from 'react-numeric-input'
+import { Label } from 'react-bootstrap'
+import Beforeunload from 'react-beforeunload'
 
-import './App.css';
+import './App.css'
 
-import Track from './Track';
-import HelpPanel from './components/HelpPanel';
-import * as ToneUtils from './ToneUtils';
-import { changeBpm, loadSong, loadSynths, newTrack, saveSong } from './actions';
-import { synthsLoaded } from './reducers/SynthReducer';
+import Track from './Track'
+import HelpPanel from './components/HelpPanel'
+import * as ToneUtils from './ToneUtils'
+import { changeBpm, loadSong, loadSynths, newTrack, saveSong } from './actions'
+import { synthsLoaded } from './reducers/SynthReducer'
 
 export class App extends Component {
   componentDidMount() {
-    this.props.loadSynths();
+    this.props.loadSynths()
   }
 
   render() {
+    let onBeforeUnload
+    if (this.props.song.isDirty)
+      onBeforeUnload = <Beforeunload onBeforeunload={() => 'You have unsaved changeds. Are you sure you want to navigate away from this page?'} />
     return (
       <div className="App">
-        <Label>{this.props.song.name}</Label>
+       {onBeforeUnload}
+        <h2><Label>{this.props.song.name}</Label></h2>
+        {this.props.message} <br />
+        <div className='text-danger'>{this.props.errorMessage}</div>
         <Form>
           <Grid>
             <Row className='show-grid'>
@@ -50,19 +57,21 @@ export class App extends Component {
         { this.props.song.tracks.map((_track, i) => 
           <Track key={i} id={i} />) }
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = (state, _ownProps) => {
   return { 
     song: state.composition.song,
+    message: state.composition.message,
+    errorMessage: state.composition.errorMessage,
     synthState: state.samples
-  };
-};
+  }
+}
 
 const mapDispatchToProps = { 
   changeBpm, loadSong, loadSynths, newTrack, saveSong
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App)

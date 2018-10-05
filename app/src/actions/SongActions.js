@@ -32,6 +32,8 @@ export const loadSong = () => {
   }
 }
 
+export const markClean = message => ({ type: type.MARK_CLEAN, payload: message })
+
 export const newTrack = () => ({ type: type.NEW_TRACK })
 
 export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song })
@@ -40,13 +42,14 @@ export const saveSong = (song) => {
   return dispatch => {
     return axios.post(request('/song'), song)
       .then(_response => { 
-        dispatch({ type: type.MESSAGE, payload: 'song saved'})
+        dispatch({ type: type.MARK_CLEAN, payload: 'song saved' })
       })
       .catch(error => { 
         dispatch({ type: type.ERROR, payload: `unable to save your song, sorry: ${error.toString()}` })
     })
   }
 }
+// TODO message not getting displayed
 
 export const toggleSharpsMode = trackIndex => ({ type: type.TOGGLE_SHARPS_MODE, payload: trackIndex })
 

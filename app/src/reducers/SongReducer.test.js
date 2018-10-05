@@ -1,7 +1,59 @@
 import * as actions from '../actions/SongActions'
+import * as type from '../actions/types'
 import SongReducer, { isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
 
-describe('song reducer', () => {
+describe('a song', () => {
+  describe('is either dirty or not', () => {
+    it('is not dirty by default', () => {
+      expect(SongReducer(undefined, 'whatever').song.isDirty).toBeFalsy()
+    })
+
+    it('is dirty after any update', () => {
+      const state = SongReducer(undefined, actions.changeSongName('y'))
+
+      expect(state.song.isDirty).toBeTruthy()
+    })
+
+    it('is not dirty after a save', () => {
+      const state = SongReducer({ song: { isDirty: true}}, actions.markClean('message'))
+
+      expect(state.song.isDirty).toBeFalsy()
+      expect(state.message).toEqual('message')
+    })
+
+    // TODO: it('is not dirty after undo to origin', () => { })
+  })
+
+  describe('manages UI messages', () => {
+    it('holds a message', () => {
+      const state = SongReducer(undefined, {type: type.MESSAGE, payload: 'a message'})
+
+      expect(state.message).toEqual('a message')
+    })
+
+    it('clears message by default for other types', () => {
+      const state = { message: 'something', song: {} }
+
+      const newState = SongReducer(state, {type: 'whatever'})
+
+      expect(newState.message).toEqual(undefined)
+    })
+
+    it('holds an error message', () => {
+      const state = SongReducer(undefined, {type: type.ERROR, payload: 'a message'})
+
+      expect(state.errorMessage).toEqual('a message')
+    })
+
+    it('clears message by default for other types', () => {
+      const state = { errorMessage: 'something', song: {} }
+
+      const newState = SongReducer(state, {type: 'whatever'})
+
+      expect(newState.errorMessage).toEqual(undefined)
+    })
+  })
+
   it('replaces the song', () => {
     const song = {name: 'new song', tracks: [
       {name: 'track1', notes: [{name: 'E4', duration: '4n'}, {name: 'F4', duration: '8n'}]}
@@ -14,9 +66,9 @@ describe('song reducer', () => {
   })
 
   it('allows changing the song name', () => {
-    const state = SongReducer(undefined, actions.changeSongName('new Name'))
+    const state = SongReducer(undefined, actions.changeSongName('new name'))
 
-    expect(state.song.name).toEqual('new Name')
+    expect(state.song.name).toEqual('new name')
   })
 
   it('allows changing the BPM', () => {
