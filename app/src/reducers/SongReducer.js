@@ -181,7 +181,7 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.MARK_CLEAN:
     {
-      return { ... state, message: action.payload, song: { ...state.song, isDirty: false } }
+      return { ...state, message: action.payload, song: { ...state.song, isDirty: false } }
     }
 
     case type.MESSAGE:
