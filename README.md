@@ -11,8 +11,8 @@ Upcoming: [Agile + DevOps EAST 2018 (Orlando)](https://agiledevopseast.techwell.
 git clone http://github.com/jlangr/geektone
 ```
 - Navigate to the `geektone` directory.
-- `npm start`
-- Open [http://localhost:3000](http://localhost:3000) to view Geektone in the browser.
+- in server, `node index.js`
+- in app, `npm start`
 
 ## Geektone Basics
 
