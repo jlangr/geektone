@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Staff from './Staff';
-import { 
-  changeTrackInstrument,
-  deleteTrack,
-  toggleMute,
-  toggleFlatsMode,
-  toggleSharpsMode 
-} from './actions';
+import { changeTrackInstrument, deleteTrack, toggleMute, toggleFlatsMode, toggleSharpsMode } from './actions';
 import { trackData } from './reducers/SongReducer';
 
 export class Track extends Component {
@@ -20,7 +14,14 @@ export class Track extends Component {
     return (
       <div style={{float: 'left'}}>
         <select value={this.props.trackData.instrument} onChange={this.instrumentChange.bind(this)}>
+          <option value='bass-electric'>Bass (electric)</option>
+          <option value='bassoon'>Bassoon</option>
+          <option value='cello'>Cello</option>
+          <option value='electric-guitar'>Electric guitar</option>
+          <option value='french-horn'>French horn</option>
+          <option value='organ'>Organ</option>
           <option value='piano'>Piano</option>
+          <option value='trumpet'>Trumpet</option>
           <option value='violin'>Violin</option>
         </select>
         <Button onClick={() => { this.props.toggleSharpsMode(this.props.id); } }>#</Button>
@@ -43,11 +44,5 @@ const mapStateToProps = ({composition, ui}, ownProps) => (
   }
 );
 
-const mapDispatchToProps = { 
-  changeTrackInstrument,
-  deleteTrack,
-  toggleMute,
-  toggleFlatsMode,
-  toggleSharpsMode
-};
+const mapDispatchToProps = { changeTrackInstrument, deleteTrack, toggleMute, toggleFlatsMode, toggleSharpsMode };
 export default connect(mapStateToProps, mapDispatchToProps)(Track);

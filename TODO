@@ -1,6 +1,5 @@
-H DEFECT: new track too short--needs to left-align
+H conditionally enabled buttons
 H bass clef
-H don't lose changes on page reload. "this page has unsaved changes"
 H flats overlap sharps in accidentals area
 H notes longer than 1 bar
 H save song by name
@@ -19,6 +18,7 @@ L move from track-to-track using ctrl-keys (shift arrow up down)
 L other time signatures
 
 DEFECTS:
+- saved rest restores as note
 - converting ties to rests
 - dotted rests??
 - changing a half note to a whole note in one case converts it to a ties with 1 + 1.5?

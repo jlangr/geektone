@@ -163,6 +163,7 @@ export default class Note {
   y() { return Draw.y(this.name()); }
 
   drawOn(context) {
+    this.context = context // TODO: UGH. To support draw from playback
     new NoteWidget(context, this).draw()
   }
 }

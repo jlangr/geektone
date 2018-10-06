@@ -6,7 +6,7 @@ export const synthsLoaded = synthState => {
 
 const INITIAL_STATE = {
   synths: {},
-  expectedSynthCount: 2
+  expectedSynthCount: 9
 };
 
 export default(state = INITIAL_STATE, action) => {

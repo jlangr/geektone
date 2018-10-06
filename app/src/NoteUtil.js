@@ -19,7 +19,8 @@ export const noteObjects = (notes, sharps = [], flats = []) => {
     if (!note.isRest()) {
       const startTime = transportTime(startSixteenths)
       const noteName = applyAccidentals(note.name(), sharps, flats)
-      result.push({ name: noteName, duration: note.duration, time: startTime })
+      // TODO changed--see ToneUtil
+      result.push({ name: noteName, duration: note.duration, time: startTime, context: note.context, x: note.x(), y: note.y() })
     }
     startSixteenths += Duration.time(note.duration)
   });
