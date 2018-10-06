@@ -4,7 +4,7 @@ import Note from './Note'
 describe('noteObjects', () => {
   it('creates note objects with time transports', () => {
     const notes = [ new Note('C4', '8n'), new Note('D4', '4n')]
-    const sharps = ['C'] 
+    const sharps = ['C4'] 
     expect(noteObjects(notes, sharps)).toEqual([
       { name: 'C#4', duration: '8n', time: '0:0:0'},
       { name: 'D4', duration: '4n', time: '0:0:2'}
@@ -13,8 +13,8 @@ describe('noteObjects', () => {
 
   it('includes flats', () => {
     const notes = [ new Note('C4', '8n'), new Note('D4', '4n'), new Note('E4')]
-    const flats = ['D']
-    const sharps = ['E']
+    const flats = ['D4']
+    const sharps = ['E4']
 
     expect(noteObjects(notes, sharps, flats)).toEqual([
       { name: 'C4', duration: '8n', time: '0:0:0'},

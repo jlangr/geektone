@@ -24,7 +24,8 @@ export const play = async (song, synths) => {
     .map(track => {
       const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats);
       return new Tone.Part((time, note) => {
-        drawSelect(note)
+        // TODO 
+//        drawSelect(note)
         synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
       }, toneNotes);
     });
