@@ -19,14 +19,11 @@ export const play = async (song, synths) => {
   if (Tone.context.state !== 'running')
       Tone.context.resume();
 
-  let x = 0
-
   const parts = tracks
     .filter(track => !track.isMuted)
     .map(track => {
       const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats);
       return new Tone.Part((time, note) => {
-console.log(x++)
         drawSelect(note)
         synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
       }, toneNotes);

@@ -92,13 +92,15 @@ const updateState_rebar = (state, trackIndex) => {
 const updateState_addFlat = (state, trackIndex, note) => {
   if (!note) return state
 
+  const noteBase = note.slice(0, 1)
+
   const updatedTrack = state.song.tracks[trackIndex]
   if (!updatedTrack.flats) updatedTrack.flats = []
 
-  if (updatedTrack.flats.includes(note)) 
-    remove(updatedTrack.flats, note)
+  if (updatedTrack.flats.includes(noteBase)) 
+    remove(updatedTrack.flats, noteBase)
   else
-    updatedTrack.flats.push(note)
+    updatedTrack.flats.push(noteBase)
 
   updatedTrack.flatsMode = false
 
@@ -111,13 +113,15 @@ const updateState_addFlat = (state, trackIndex, note) => {
 const updateState_addSharp = (state, trackIndex, note) => {
   if (!note) return state
 
+  const noteBase = note.slice(0, 1)
+
   const updatedTrack = state.song.tracks[trackIndex]
   if (!updatedTrack.sharps) updatedTrack.sharps = []
 
-  if (updatedTrack.sharps.includes(note)) 
-    remove(updatedTrack.sharps, note)
+  if (updatedTrack.sharps.includes(noteBase)) 
+    remove(updatedTrack.sharps, noteBase)
   else
-    updatedTrack.sharps.push(note)
+    updatedTrack.sharps.push(noteBase)
 
   updatedTrack.sharpsMode = false
 

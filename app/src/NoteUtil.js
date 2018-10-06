@@ -13,6 +13,8 @@ export const applyAccidentals = (noteName, sharps = [], flats = []) => {
 };
 
 export const noteObjects = (notes, sharps = [], flats = []) => {
+  console.log('sharps', sharps)
+  console.log('flats', flats)
   const result = []
   let startSixteenths = 0
   notes.forEach(note => {

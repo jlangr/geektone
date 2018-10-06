@@ -200,7 +200,7 @@ describe('key signature sharps and flats', () => {
   it('adds note to sharps', () => {
     const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addSharp(0, 'F'))
+    const newState = SongReducer(state, actions.addSharp(0, 'F4'))
 
     expect(newState.song.tracks[0].sharps).toEqual(['F'])
   })
@@ -216,7 +216,7 @@ describe('key signature sharps and flats', () => {
   it('removes when already exists', () => {
     const state = { song: { name: 'x', tracks: [{sharps: ['F'], name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addSharp(0, 'F'))
+    const newState = SongReducer(state, actions.addSharp(0, 'F5'))
 
     expect(newState.song.tracks[0].sharps).toEqual([])
   })
@@ -224,7 +224,7 @@ describe('key signature sharps and flats', () => {
   it('adds note to flats', () => {
     const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addFlat(0, 'F'))
+    const newState = SongReducer(state, actions.addFlat(0, 'F5'))
 
     expect(newState.song.tracks[0].flats).toEqual(['F'])
   })
@@ -240,7 +240,7 @@ describe('key signature sharps and flats', () => {
   it('removes when already exists', () => {
     const state = { song: { name: 'x', tracks: [{flats: ['F'], name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addFlat(0, 'F'))
+    const newState = SongReducer(state, actions.addFlat(0, 'F3'))
 
     expect(newState.song.tracks[0].flats).toEqual([])
   })
