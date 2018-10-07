@@ -4,7 +4,6 @@ H flats overlap sharps in accidentals area
 H notes longer than 1 bar
 H save song by name
 H edit song by name
-H add a few more instruments
 M halve / double notes with dots
 M delete / copy / paste multiple notes
 M mouse insert note
@@ -18,7 +17,6 @@ L move from track-to-track using ctrl-keys (shift arrow up down)
 L other time signatures
 
 DEFECTS:
-- saved rest restores as note
 - converting ties to rests
 - dotted rests??
 - changing a half note to a whole note in one case converts it to a ties with 1 + 1.5?

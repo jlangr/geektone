@@ -12,8 +12,8 @@ describe('a song', () => {
 
     expect(json).toEqual({
       name: 'default',
-      tracks: [{name: 'track 1', notes: [{name: 'E1', duration: '4n'}, {name: 'F1', duration: '4n'}]},
-               {name: 'track 2', notes: [{name: 'G2', duration: '4n'}, {name: 'A2', duration: '4n'}]}] });
+      tracks: [{name: 'track 1', notes: [{name: 'E1', duration: '4n', isNote: true}, {name: 'F1', duration: '4n', isNote: true}]},
+               {name: 'track 2', notes: [{name: 'G2', duration: '4n', isNote: true}, {name: 'A2', duration: '4n', isNote: true}]}] });
   });
 });
 

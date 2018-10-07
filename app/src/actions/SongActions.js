@@ -40,6 +40,7 @@ export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song })
 
 export const saveSong = (song) => {
   return dispatch => {
+    console.log('saving song ', song)
     return axios.post(request('/song'), song)
       .then(_response => { 
         dispatch({ type: type.MARK_CLEAN, payload: 'song saved' })

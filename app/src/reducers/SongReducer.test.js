@@ -54,15 +54,23 @@ describe('a song', () => {
     })
   })
 
-  it('replaces the song', () => {
+  describe('replace song', () => {
     const song = {name: 'new song', tracks: [
-      {name: 'track1', notes: [{name: 'E4', duration: '4n'}, {name: 'F4', duration: '8n'}]}
+      {name: 'track1', notes: [
+        {name: 'E4', duration: '4n', isNote: false}, 
+        {name: 'F4', duration: '8n'}]}
     ]}
 
     const state = SongReducer(undefined, actions.replaceSong(song))
-
     const noteSequence = state.song.tracks[0].notes
-    expect(noteSequence.note(1).name()).toEqual('F4')
+
+    it('restores basic note information', () => {
+      expect(noteSequence.note(1).name()).toEqual('F4')
+    })
+
+    it('restores rest boolean', () => {
+      expect(noteSequence.note(0).isNote).toBeFalsy()
+    })
   })
 
   it('allows changing the song name', () => {

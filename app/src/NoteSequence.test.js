@@ -11,9 +11,9 @@ describe('NoteSequence', () => {
         sequence = new NoteSequence([['E4', '4n'], ['F4', '8n'], ['G4', '16n']])
 
         expect(sequence.toJSON()).toEqual([
-          { name: 'E4', duration: '4n' },
-          { name: 'F4', duration: '8n' },
-          { name: 'G4', duration: '16n' }
+          { name: 'E4', duration: '4n', isNote: true },
+          { name: 'F4', duration: '8n', isNote: true },
+          { name: 'G4', duration: '16n', isNote: true }
         ])
       })
     })
@@ -30,6 +30,12 @@ describe('NoteSequence', () => {
 
         expect(sequence.note(0).duration).toEqual('4n')
         expect(sequence.note(1).duration).toEqual('8n')
+      })
+
+      it('restores rest boolean', () => {
+        sequence = new NoteSequence([['E4', '4n', false]])
+
+        expect(sequence.note(0).isNote).toBeFalsy()
       })
     })
   })

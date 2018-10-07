@@ -24,8 +24,10 @@ export default class NoteSequence {
   constructor(noteNames = []) {
     this.notes = []
     noteNames.forEach(n => {
-      if (Array.isArray(n))
-        this.baseAdd(new Note(n[0], n[1]))
+      if (Array.isArray(n)) {
+        const [name, duration, isNote] = n
+        this.baseAdd(new Note(name, duration), isNote)
+      }
       else {
         const noteName = n
         this.baseAdd(new Note(noteName))
@@ -46,7 +48,8 @@ export default class NoteSequence {
     this.rebar()
   }
   
-  baseAdd(note) {
+  baseAdd(note, isNote=true) {
+    note.isNote = isNote
     this.notes.push(note)
   }
 

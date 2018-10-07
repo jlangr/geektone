@@ -53,7 +53,18 @@ describe('note', () => {
   })
 
   describe('to JSON', () => {
-    expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n'})
+    it('converts a basic note', () => {
+      expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n', isNote: true})
+    })
+
+    it('includes whether or not it is a rest', () => {
+      const note = new Note('F3', '4#n')
+      note.restToggle()
+
+      const json = note.toJSON()
+
+      expect(json).toEqual({name: 'F3', duration: '4#n', isNote: false})
+    })
   })
 
   describe('dotted notes', () => {

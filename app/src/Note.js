@@ -69,7 +69,7 @@ export default class Note {
   }
 
   toJSON() {
-    return { name: this.name(), duration: this.duration }
+    return { name: this.name(), duration: this.duration, isNote: this.isNote }
   }
 
   toString() {
