@@ -211,9 +211,9 @@ export default class NoteSequence {
 
   createTies(note, timeRemaining) {
     const excessTime = note.sixteenths() - timeRemaining
-    const start = new Tie(note.name(), Duration.noteForSixteenths(timeRemaining))
+    const start = new Tie(note.name(), Duration.notesForSixteenths(timeRemaining), timeRemaining)
     start.isSelected = note.isSelected
-    const end = new Tie(note.name(), Duration.noteForSixteenths(excessTime))
+    const end = new Tie(note.name(), Duration.notesForSixteenths(excessTime), excessTime)
     end.isSelected = note.isSelected
     end.startTie = start
     note.setTie(start, end) // TODO test

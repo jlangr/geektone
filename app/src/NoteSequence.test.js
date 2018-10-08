@@ -44,9 +44,6 @@ describe('NoteSequence', () => {
     let sequence
     const halfNote = new Note('E4', '2n')
     const quarterNote = new Note('E4', '4n')
-    const dottedEighthNote = new Note('E4', '8n.')
-    const eighthNote = new Note('E4', '8n')
-    const sixteenthNote = new Note('E4', '16n')
 
     beforeEach(() => {
       sequence = new NoteSequence()
@@ -56,28 +53,28 @@ describe('NoteSequence', () => {
       const sixteenthsAvailable = 4
       const ties = sequence.createTies(halfNote, sixteenthsAvailable)
 
-      expect(ties.map(t => t.duration)).toEqual([Duration.quarter, Duration.quarter])
+      expect(ties.map(t => t.sixteenths())).toEqual([4, 4])
     })
 
     it('splits to timeremaining plus new note', () => {
       const sixteenthsAvailable = 2
       const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
 
-      expect(ties.map(t => t.duration)).toEqual([Duration.eighth, Duration.eighth])
+      expect(ties.map(t => t.sixteenths())).toEqual([2, 2])
     })
 
     it('creates ties for dotted notes too', () => {
       const sixteenthsAvailable = 3
       const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
 
-      expect(ties.map(t => t.duration)).toEqual(['8n.', Duration.sixteenth])
+      expect(ties.map(t => t.sixteenths())).toEqual([3, 1])
     })
 
     it('stores start tie in end tie', () => {
       const sixteenthsAvailable = 4
       const [startTie, endTie] = sequence.createTies(halfNote, sixteenthsAvailable)
 
-      expect(endTie.startTie).toBe(startTie)
+      expect(endTie.startTie).toEqual(startTie)
     })
   })
 
@@ -159,6 +156,20 @@ describe('NoteSequence', () => {
       expect(bars.length).toEqual(2)
       expect(bars[0].notes).toEqual([e, e, fHalf])
       expect(bars[1].notes).toEqual([e])
+    })
+
+    it('demonstrates defect with tie', () => {
+      const dottedQuarter = new Note('F4', '4n.')
+      const whole = new Note('F4', '1n')
+      sequence.addAll(dottedQuarter, whole);
+
+      const bars = sequence.bars()
+
+      expect(bars.length).toEqual(2)
+      const bar0Sixteenths = bars[0].notes.map(note => note.sixteenths())
+      expect(bar0Sixteenths).toEqual([6, 10])
+      const bar1Sixteenths = bars[1].notes.map(note => note.sixteenths())
+      expect(bar1Sixteenths).toEqual([6])
     })
   })
   

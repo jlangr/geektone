@@ -15,8 +15,6 @@ export default class Bar {
     return this.notes.length
   }
 
-  isATie() { return false } // deleteme
-
   isEmpty() {
     return this.notes.length === 0
   }

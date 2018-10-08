@@ -52,3 +52,25 @@ export const noteForSixteenths = sixteenths => {
     default: return quarter
   }
 }
+
+export const notesForSixteenths = sixteenths => {
+  switch (sixteenths) {
+    case 1: return [sixteenth]
+    case 2: return [eighth]
+    case 3: return [dot(eighth)]
+    case 4: return [quarter]
+    case 5: return [quarter, sixteenth]
+    case 6: return [dot(quarter)]
+    case 7: return [dot(quarter), sixteenth]
+    case 8: return [half]
+    case 9: return [half, sixteenth]
+    case 10: return [half, eighth]
+    case 11: return [half, dot(eighth)]
+    case 12: return [dot(half)]
+    case 13: return [dot(half), sixteenth]
+    case 14: return [half, dot(quarter)]
+    case 15: return [half, dot(quarter), sixteenth]
+    case 16: return [whole]
+    default: return [quarter]
+  }
+}
