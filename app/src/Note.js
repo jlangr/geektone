@@ -43,17 +43,17 @@ export default class Note {
   }
 
   isRepresentedAsTie() {
-    return this.startTie !== undefined
+    return this.startTies !== undefined
   }
 
-  setTie(start, end) {
-    this.startTie = start
-    this.endTie = end
+  setTies(startTies, endTies) {
+    this.startTies = startTies
+    this.endTies = endTies
   }
 
   clearTie() {
-    this.startTie = undefined
-    this.endTie = undefined
+    this.startTies = undefined
+    this.endTies = undefined
   }
 
   isRest() {
@@ -93,16 +93,16 @@ export default class Note {
 
   select() {
     if (this.isRepresentedAsTie()) {
-      this.startTie.isSelected = true
-      this.endTie.isSelected = true
+      this.startTies.forEach(t => t.isSelected = true)
+      this.endTies.forEach(t => t.isSelected = true)
     }
     this.isSelected = true
   }
 
   deselect() {
     if (this.isRepresentedAsTie()) {
-      this.startTie.isSelected = false
-      this.endTie.isSelected = false
+      this.startTies.forEach(t => t.isSelected = false)
+      this.endTies.forEach(t => t.isSelected = false)
     }
     this.isSelected = false
   }
@@ -118,10 +118,14 @@ export default class Note {
 
   updateTiePitch() {
     if (this.isRepresentedAsTie()) {
-      this.startTie.noteIndex = this.noteIndex
-      this.endTie.noteIndex = this.noteIndex
-      this.startTie.octave = this.octave
-      this.endTie.octave = this.octave
+      this.startTies.forEach(t => { 
+        t.noteIndex = this.noteIndex
+        t.octave = this.octave
+      })
+      this.endTies.forEach(t => { 
+        t.noteIndex = this.noteIndex
+        t.octave = this.octave
+      })
     }
   }
 
@@ -154,8 +158,8 @@ export default class Note {
 
   isHit(mousePosition) {
     if (this.isRepresentedAsTie())
-      return this.isHitForElement(this.startTie, mousePosition) ||
-        this.isHitForElement(this.endTie, mousePosition)
+      return this.isHitForElement(this.startTies, mousePosition) ||
+        this.isHitForElement(this.endTies, mousePosition)
 
     return this.isHitForElement(this, mousePosition)
   }

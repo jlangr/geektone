@@ -143,7 +143,7 @@ describe('note', () => {
       const tieEnd = new Tie('D4')
       tieEnd.setPosition(1)
       const note = new Note('D4', Duration.half)
-      note.setTie(tieStart, tieEnd)
+      note.setTies(tieStart, tieEnd)
       note.setPosition(0)
 
       const isHit = note.isHit({ x: tieEnd.x(), y: note.y() })
@@ -156,8 +156,8 @@ describe('note', () => {
     let note
     beforeEach(() => {
       note = new Note('G4', Duration.half)
-      note.setTie(new Note('G4', Duration.quarter),
-                  new Note('G4', Duration.quarter))
+      note.setTies([new Note('G4', Duration.quarter)],
+                   [new Note('G4', Duration.quarter)])
     })
 
     it('is tie when first (from) Tie exists', () => {
@@ -174,16 +174,16 @@ describe('note', () => {
       note.increment()
 
       expect(note.name()).toEqual('A4')
-      expect(note.startTie.name()).toEqual('A4')
-      expect(note.endTie.name()).toEqual('A4')
+      expect(note.startTies.every(t => t.name() === 'A4')).toBeTruthy()
+      expect(note.endTies.every(t => t.name() === 'A4')).toBeTruthy()
     })
 
     it('decrements the tie value', () => {
       note.decrement()
 
       expect(note.name()).toEqual('F4')
-      expect(note.startTie.name()).toEqual('F4')
-      expect(note.endTie.name()).toEqual('F4')
+      expect(note.startTies.every(t => t.name() === 'F4')).toBeTruthy()
+      expect(note.endTies.every(t => t.name() === 'F4')).toBeTruthy()
     })
   })
 
@@ -227,25 +227,25 @@ describe('note', () => {
   describe('select / deselect', () => {
     it('also selects any ties', () => {
       const note = new Note('E4', Duration.half)
-      note.setTie(new Tie('E4'), new Tie('E4'))
+      note.setTies([new Tie('E4'), new Tie('F5')], [new Tie('E4')])
 
       note.select()
       
       expect(note.isSelected).toBeTruthy()
-      expect(note.startTie.isSelected).toBeTruthy()
-      expect(note.endTie.isSelected).toBeTruthy()
+      expect(note.startTies.every(t => t.isSelected)).toBeTruthy()
+      expect(note.endTies.every(t => t.isSelected)).toBeTruthy()
     })
     
     it('also deselects any ties', () => {
       const note = new Note('E4', Duration.half)
-      note.setTie(new Tie('E4'), new Tie('E4'))
+      note.setTies([new Tie('E4')], [new Tie('E4')])
       note.select()
 
       note.deselect()
       
       expect(note.isSelected).toBeFalsy()
-      expect(note.startTie.isSelected).toBeFalsy()
-      expect(note.endTie.isSelected).toBeFalsy()
+      expect(note.startTies.every(t => t.isSelected)).toBeFalsy()
+      expect(note.endTies.every(t => t.isSelected)).toBeFalsy()
     })
   })
 })

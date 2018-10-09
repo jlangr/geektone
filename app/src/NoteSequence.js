@@ -222,7 +222,7 @@ export default class NoteSequence {
 
     endTies[endTies.length - 1].startTie = startTies[0]
 
-    note.setTie(startTies[0], endTies[endTies.length - 1]) // TODO test. THIS IS WRONG
+    note.setTies(startTies, endTies) // TODO test
 
     return [startTies, endTies]
   }
