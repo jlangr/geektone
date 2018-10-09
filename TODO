@@ -1,4 +1,5 @@
-H conditionally enabled buttons
+H set isPlaying to false when track ends
+H start song at selection point
 H bass clef
 H flats overlap sharps in accidentals area
 H save song by name

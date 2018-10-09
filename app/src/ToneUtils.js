@@ -1,5 +1,9 @@
-import Tone from 'tone';
-import * as NoteUtil from './NoteUtil';
+import Tone from 'tone'
+import * as NoteUtil from './NoteUtil'
+import * as TimeUtil from './TimeUtil'
+import * as Duration from './Duration'
+
+let scheduleEventId
 
 /*
   const drawSelect = (note) => {
@@ -22,17 +26,30 @@ export const play = async (song, synths) => {
   if (Tone.context.state !== 'running')
       Tone.context.resume();
 
+  let stopTimes = []
   const parts = tracks
     .filter(track => !track.isMuted)
     .map(track => {
       const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats);
+
+      const lastNote = toneNotes[toneNotes.length - 1]
+      stopTimes.push(TimeUtil.toSixteenths(lastNote.time) + Duration.time(lastNote.duration))
+
       return new Tone.Part((time, note) => {
 //        drawSelect(note)
         synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
       }, toneNotes);
     });
 
+  const stopTime = TimeUtil.transportTime(Math.max(...stopTimes))
+
   parts.forEach(part => part.start());
+
+  scheduleEventId = Tone.Transport.scheduleOnce(() => {
+    console.log('DONE ! ! ! ', )
+  }, stopTime)
+
+  // Pause: transport toggle function?
 
   Tone.Transport.bpm.value = song.bpm;
   const slightDelayToAvoidSchedulingErrors = '+0.1';
@@ -40,6 +57,8 @@ export const play = async (song, synths) => {
 }
 
 export const stop = () => {
+  if (scheduleEventId)
+    Tone.Transport.clear(scheduleEventId)
   Tone.Transport.stop();
   Tone.Transport.cancel();
 };

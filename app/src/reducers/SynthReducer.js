@@ -1,7 +1,6 @@
 import { ADD_SYNTH, PLAY_SONG, STOP_SONG } from '../actions/types'
 import { play, stop } from '../ToneUtils'
 
-// TODO test
 export const showPlayButton = synth => 
   Object.keys(synth.synths).length === synth.expectedSynthCount &&
     !synth.isPlaying

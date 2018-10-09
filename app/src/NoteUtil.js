@@ -25,6 +25,7 @@ export const noteObjects = (notes, sharps = [], flats = []) => {
       const noteName = applyAccidentals(note.name(), sharps, flats)
       // TODO changed--see ToneUtil
       result.push({ name: noteName, duration: note.duration, time: startTime /* , context: note.context, x: note.x(), y: note.y() */ })
+      console.log('start time', startTime, 'duration: ', note.duration)
     }
     startSixteenths += Duration.time(note.duration)
   });
