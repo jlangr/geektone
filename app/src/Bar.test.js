@@ -95,6 +95,18 @@ describe('a bar', () => {
       })
     })
 
+    /*
+    describe('if it has ties', () => {
+      const dottedHalf = new Note('E5', '2n.')
+      bar.push(dottedHalf)
+      const half = new note('F5', '2n')
+      
+      bar.push(half)
+      
+      // TODO!
+    })
+    */
+
     describe('with dotted notes', () => {
       it('is 4 if smallest note is dotted half', () => {
         bar.push(new Note('E5', Duration.whole));  // 16

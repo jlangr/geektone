@@ -1,5 +1,5 @@
-import Tone from 'tone';
-import * as type from './types';
+import Tone from 'tone'
+import * as type from './types'
 
 const sampleNotes = {
   'violin': ['C#1', 'D#1', 'F1', 'G1', 'A1', 'B1', 'C#2', 'D#2', 'F2', 'G2', 'A2', 'C#3', 'D#3', 'F3', 'G3', 'A3', 'B3', 'C#4', 'D#4', 'G4'],
@@ -20,10 +20,10 @@ const sampleNotes = {
 }
 
 const noteToFileMapping = (instrument) => {
-  const filename = noteName => `${noteName.replace('#', 's')}.mp3`;
-  var noteToFile = {};
+  const filename = noteName => `${noteName.replace('#', 's')}.mp3`
+  var noteToFile = {}
   sampleNotes[instrument].forEach((noteName, i) => noteToFile[noteName] = filename(noteName)); // could use lodash
-  return noteToFile;
+  return noteToFile
 }
 
 const createSynth = (instrument, dispatch) => {
@@ -31,11 +31,15 @@ const createSynth = (instrument, dispatch) => {
   const config = {
     'release' : 1, 
     'baseUrl' : `./samples/${instrument}/`,
-    'onload': buffers => dispatch(addSynthAction(instrument, synth))};
+    'onload': _buffers => dispatch(addSynthAction(instrument, synth))}
   var synth = new Tone.Sampler(mappings, config).toMaster()
 }
 
-export const addSynthAction = (instrument, synth) => ( { type: type.ADD_SYNTH, payload: { instrument, synth } } );;
+export const addSynthAction = (instrument, synth) => ({ type: type.ADD_SYNTH, payload: { instrument, synth }})
+
+export const playSong = song => ({ type: type.PLAY_SONG, payload: song })
+
+export const stopSong = () => ({ type: type.STOP_SONG })
 
 export const loadSynths = () => {
   return function(dispatch) {
@@ -48,5 +52,5 @@ export const loadSynths = () => {
     createSynth('french-horn', dispatch);
     createSynth('organ', dispatch);
     createSynth('trumpet', dispatch);
-  };
-};
+  }
+}

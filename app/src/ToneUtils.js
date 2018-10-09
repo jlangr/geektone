@@ -1,6 +1,7 @@
 import Tone from 'tone';
 import * as NoteUtil from './NoteUtil';
 
+/*
   const drawSelect = (note) => {
     if (note.context) {
       const context = note.context
@@ -13,6 +14,8 @@ import * as NoteUtil from './NoteUtil';
       context.stroke()
     }
   }
+  */
+
 // lots of this can be tested...
 export const play = async (song, synths) => {
   const tracks = song.tracks;
@@ -24,7 +27,6 @@ export const play = async (song, synths) => {
     .map(track => {
       const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats);
       return new Tone.Part((time, note) => {
-        // TODO 
 //        drawSelect(note)
         synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
       }, toneNotes);

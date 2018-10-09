@@ -5,7 +5,7 @@ import SongReducer from './SongReducer';
 import UIReducer from './UIReducer';
 
 export default combineReducers({
-  samples: SynthReducer,
+  synth: SynthReducer,
   composition: SongReducer,
   ui: UIReducer
 });

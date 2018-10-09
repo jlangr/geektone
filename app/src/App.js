@@ -9,9 +9,8 @@ import './App.css'
 
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
-import * as ToneUtils from './ToneUtils'
-import { changeBpm, loadSong, loadSynths, newTrack, saveSong } from './actions'
-import { synthsLoaded } from './reducers/SynthReducer'
+import { changeBpm, loadSong, loadSynths, newTrack, playSong, saveSong, stopSong } from './actions'
+import { showPlayButton } from './reducers/SynthReducer'
 
 export class App extends Component {
   componentDidMount() {
@@ -40,14 +39,14 @@ export class App extends Component {
                   value={this.props.song.bpm} 
                   onChange={this.props.changeBpm.bind(this)} />
               </Col>
-
               <Col>
-                <Button onClick={() => ToneUtils.play(this.props.song, this.props.synthState.synths)}  
-                  {...(synthsLoaded(this.props.synthState) ? {} : { disabled : true })}>Play</Button>
-                <Button onClick={() => ToneUtils.stop() }>Stop</Button>
+                <Button onClick={() => this.props.playSong(this.props.song)} 
+                  { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>Play</Button>
+                <Button onClick={this.props.stopSong}
+                  { ...this.props.synth.isPlaying ? {} : { disabled: true}}>Stop</Button>
                 <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
                 <Button onClick={this.props.loadSong}>Load</Button>
-                <Button onClick={() => this.props.newTrack() }>Add Track</Button>
+                <Button onClick={this.props.newTrack}>Add Track</Button>
               </Col>
             </Row>
           </Grid>
@@ -66,12 +65,12 @@ const mapStateToProps = (state, _ownProps) => {
     song: state.composition.song,
     message: state.composition.message,
     errorMessage: state.composition.errorMessage,
-    synthState: state.samples
+    synth: state.synth,
   }
 }
 
 const mapDispatchToProps = { 
-  changeBpm, loadSong, loadSynths, newTrack, saveSong
+  changeBpm, loadSong, loadSynths, newTrack, saveSong, playSong, stopSong
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
