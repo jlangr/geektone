@@ -143,7 +143,7 @@ describe('note', () => {
       const tieEnd = new Tie('D4')
       tieEnd.setPosition(1)
       const note = new Note('D4', Duration.half)
-      note.setTies(tieStart, tieEnd)
+      note.setTies([tieStart], [tieEnd])
       note.setPosition(0)
 
       const isHit = note.isHit({ x: tieEnd.x(), y: note.y() })

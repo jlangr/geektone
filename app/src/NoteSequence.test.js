@@ -190,7 +190,6 @@ describe('NoteSequence', () => {
 
         const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
 
-        console.log('END TIES', endTies)
         const lastNote = endTies[endTies.length - 1]
         expect(lastNote.startTie).toEqual(startTies[0])
       })

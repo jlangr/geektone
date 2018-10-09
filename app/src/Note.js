@@ -158,9 +158,9 @@ export default class Note {
 
   isHit(mousePosition) {
     if (this.isRepresentedAsTie())
-      return this.isHitForElement(this.startTies, mousePosition) ||
-        this.isHitForElement(this.endTies, mousePosition)
-
+      return this.startTies.concat(this.endTies).some(t => 
+        this.isHitForElement(t, mousePosition))
+      
     return this.isHitForElement(this, mousePosition)
   }
 
