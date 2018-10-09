@@ -1,15 +1,1 @@
-{"name":"ode to joy crud","bpm":132,"tracks":[{"name":"track 1","instrument":"violin","isMuted":false,"notes":[{"name":"E4","duration":"4n.","isNote":true},{"name":"G4","duration":"1n","isNote":true}],"sharpsMode":false,"sharps":["F4"]}],"isDirty":true}
-
-
-4n.
-1.
-
-6
-16
-
-6  => 4n.
-10 (8 = 1/2, 2 = 1/8)
-6 => 4n.
-
-
-
+{"name":"ode to joy crud","bpm":132,"tracks":[{"name":"track 1","instrument":"violin","isMuted":false,"notes":[{"name":"E4","duration":"4n.","isNote":true},{"name":"G4","duration":"2n","isNote":true}],"sharpsMode":false,"sharps":["F4"]}],"isDirty":true}

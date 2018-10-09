@@ -12,6 +12,11 @@ describe('note', () => {
       expect(new Note('F3', Duration.quarter).sixteenths()).toEqual(4)
       expect(new Note('F3', '4n.').sixteenths()).toEqual(6)
     })
+
+    it('answers number of dot sixteeths for dotted notes', () => {
+      expect(new Note('F3', '4n.').sixteenthsInTheDot()).toEqual(2)
+      expect(new Note('F3', '8n.').sixteenthsInTheDot()).toEqual(1)
+    })
   })
 
   describe('whole note increment/decrement', () => {

@@ -2,10 +2,9 @@ import Note from './Note'
 import TieWidget from './ui/TieWidget'
 
 export default class Tie extends Note {
-  constructor(noteName, notes, sixteenthsCount) {
-    super(noteName)
-    this.sixteenthsCount = sixteenthsCount
-    this.notes = notes
+  constructor(noteName, duration, isSelected) {
+    super(noteName, duration)
+    this.isSelected = isSelected
   }
 
   // only applies to the Note being manipulated
@@ -15,9 +14,5 @@ export default class Tie extends Note {
 
   drawOn(context) {
     new TieWidget(context, this).draw()
-  }
-
-  sixteenths() {
-    return this.sixteenthsCount
   }
 }

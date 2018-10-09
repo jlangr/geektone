@@ -1,6 +1,7 @@
 import NoteSequence from './NoteSequence'
 import * as Duration from './Duration'
 import Note from './Note'
+import Tie from './Tie'
 
 describe('NoteSequence', () => {
   let sequence
@@ -37,44 +38,6 @@ describe('NoteSequence', () => {
 
         expect(sequence.note(0).isNote).toBeFalsy()
       })
-    })
-  })
-
-  describe('create ties for too-long note', () => {
-    let sequence
-    const halfNote = new Note('E4', '2n')
-    const quarterNote = new Note('E4', '4n')
-
-    beforeEach(() => {
-      sequence = new NoteSequence()
-    })
-
-    it('splits a half', () => {
-      const sixteenthsAvailable = 4
-      const ties = sequence.createTies(halfNote, sixteenthsAvailable)
-
-      expect(ties.map(t => t.sixteenths())).toEqual([4, 4])
-    })
-
-    it('splits to timeremaining plus new note', () => {
-      const sixteenthsAvailable = 2
-      const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
-
-      expect(ties.map(t => t.sixteenths())).toEqual([2, 2])
-    })
-
-    it('creates ties for dotted notes too', () => {
-      const sixteenthsAvailable = 3
-      const ties = sequence.createTies(quarterNote, sixteenthsAvailable)
-
-      expect(ties.map(t => t.sixteenths())).toEqual([3, 1])
-    })
-
-    it('stores start tie in end tie', () => {
-      const sixteenthsAvailable = 4
-      const [startTie, endTie] = sequence.createTies(halfNote, sixteenthsAvailable)
-
-      expect(endTie.startTie).toEqual(startTie)
     })
   })
 
@@ -158,7 +121,21 @@ describe('NoteSequence', () => {
       expect(bars[1].notes).toEqual([e])
     })
 
-    it('demonstrates defect with tie', () => {
+    // TODO
+    xit('puts all tie notes in place', () => {
+      const a = new Note('F4', '2n.')
+      const b = new Note('G4', '2n')
+      sequence.addAll(a, b);
+
+      const bars = sequence.bars() 
+
+      const bar0Notes = bars[0].notes
+      const bar1Notes = bars[1].notes
+      expect(bar0Notes[0]).toEqual(new Note('F4', '2n.'))
+      expect(bar0Notes[1]).toEqual(new Tie('G4', '4n'))
+    })
+
+    it('handles tie split into multiple notes', () => {
       const dottedQuarter = new Note('F4', '4n.')
       const whole = new Note('F4', '1n')
       sequence.addAll(dottedQuarter, whole);
@@ -167,9 +144,55 @@ describe('NoteSequence', () => {
 
       expect(bars.length).toEqual(2)
       const bar0Sixteenths = bars[0].notes.map(note => note.sixteenths())
-      expect(bar0Sixteenths).toEqual([6, 10])
+      expect(bar0Sixteenths).toEqual([6, 8, 2])
       const bar1Sixteenths = bars[1].notes.map(note => note.sixteenths())
       expect(bar1Sixteenths).toEqual([6])
+    })
+
+    describe('create ties for too-long note', () => {
+      let sequence
+      const halfE4 = new Note('E4', '2n')
+      const quarterE4 = new Note('E4', '4n')
+
+      beforeEach(() => {
+        sequence = new NoteSequence()
+      })
+
+      it('splits a half', () => {
+        const sixteenthsAvailable = 4
+
+        const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
+
+        expect(startTies).toEqual([new Tie('E4', '4n', halfE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', '4n', halfE4.isSelected).toJSON()])
+      })
+
+      it('splits to timeremaining plus new note', () => {
+        const sixteenthsAvailable = 2
+
+        const [startTies, endTies] = sequence.createTies(quarterE4, sixteenthsAvailable)
+
+        expect(startTies).toEqual([new Tie('E4', '8n', quarterE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', '8n', quarterE4.isSelected).toJSON()])
+      })
+
+      it('creates ties for dotted notes too', () => {
+        const sixteenthsAvailable = 3
+
+        const [startTies, endTies] = sequence.createTies(quarterE4, sixteenthsAvailable)
+
+        expect(startTies).toEqual([new Tie('E4', '8n.', quarterE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', '16n', quarterE4.isSelected).toJSON()])
+      })
+
+      it('stores start tie in end tie', () => {
+        const sixteenthsAvailable = 4
+
+        const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
+
+        const lastNote = endTies[endTies.length - 1]
+        expect(lastNote.startTie).toEqual(startTies[0])
+      })
     })
   })
   

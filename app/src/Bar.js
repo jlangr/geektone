@@ -38,8 +38,8 @@ export default class Bar {
   }
 
   positionsRequired() {
-    const smallestIncrement = Math.min(...this.notes.map(note => 
-      note.isDotted() ? note.dotSixteenths() : note.sixteenths()))
+    const smallestIncrement = Math.min(...this.notes.map(note =>
+      note.isDotted() ? note.sixteenthsInTheDot() : note.sixteenths()))
     return SixteenthsCapacity / smallestIncrement
   }
 

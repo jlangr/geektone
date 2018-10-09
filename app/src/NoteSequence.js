@@ -211,13 +211,20 @@ export default class NoteSequence {
 
   createTies(note, timeRemaining) {
     const excessTime = note.sixteenths() - timeRemaining
-    const start = new Tie(note.name(), Duration.notesForSixteenths(timeRemaining), timeRemaining)
-    start.isSelected = note.isSelected
-    const end = new Tie(note.name(), Duration.notesForSixteenths(excessTime), excessTime)
-    end.isSelected = note.isSelected
-    end.startTie = start
-    note.setTie(start, end) // TODO test
-    return [start, end]
+
+    const startDurations = Duration.notesForSixteenths(timeRemaining)
+    const startTies = startDurations.map(duration => 
+      new Tie(note.name(), duration, note.isSelected))
+
+    const endDurations = Duration.notesForSixteenths(excessTime)
+    const endTies = endDurations.map(duration => 
+      new Tie(note.name(), duration, note.isSelected))
+
+    endTies[endTies.length - 1].startTie = startTies[0]
+
+    note.setTie(startTies[0], endTies[endTies.length - 1]) // TODO test. THIS IS WRONG
+
+    return [startTies, endTies]
   }
 
   // TODO: optimization if needed: rebar from changed location only
@@ -233,10 +240,11 @@ export default class NoteSequence {
           bar = new Bar(i, note)
         }
         else {
-          const [tieStart, tieEnd] = this.createTies(note, bar.sixteenthsAvailable())
-          bar.push(tieStart)
+          const [tieStartNotes, tieEndNotes] = this.createTies(note, bar.sixteenthsAvailable())
+          tieStartNotes.forEach(note => bar.push(note))
           barSequence.push(bar)
-          bar = new Bar(i, tieEnd)
+          bar = new Bar(i)
+          tieEndNotes.forEach(note => bar.push(note))
         }
       }
       else {

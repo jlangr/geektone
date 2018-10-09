@@ -60,7 +60,8 @@ export default class Note {
     return !this.isNote
   }
 
-  dotSixteenths() {
+  // TODO test?
+  sixteenthsInTheDot() {
     return Duration.time(Duration.noteBase(this.duration)) / 2
   }
 
