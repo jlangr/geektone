@@ -29,30 +29,34 @@ export class App extends Component {
         <div className='text-danger'>{this.props.errorMessage}</div>
         <Grid>
           <Row className='show-grid'>
-            <Col xs={12} md={8}>
+            <Col xs={12} md={8} mdOffset={2}>
               <Form>
-                <label htmlFor='bpm'>BPM</label>
-                <NumericInput 
-                  id='bpm' 
-                  style={{input: { width: 70 }}} 
-                  min={25} max={200} 
-                  value={this.props.song.bpm} 
-                  onChange={this.props.changeBpm.bind(this)} />
-                <Button onClick={() => this.props.playSong(this.props.song, () => {
-                  this.props.stopSong()
-                })} 
-                  { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>Play</Button>
-                <Button onClick={this.props.stopSong}
-                  { ...this.props.synth.isPlaying ? {} : { disabled: true}}>Stop</Button>
-                <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
-                <Button onClick={this.props.loadSong}>Load</Button>
-                <Button onClick={this.props.newTrack}>Add Track</Button>
+                <Row>
+                  <label htmlFor='bpm' style={{ padding: 10 }}>BPM</label>
+                  <NumericInput 
+                    id='bpm' 
+                    style={{input: { width: 70 }}} 
+                    min={25} max={200} 
+                    value={this.props.song.bpm} 
+                    onChange={this.props.changeBpm.bind(this)} />
+                </Row>
+                <Row>
+                  <Button className='btn-song' onClick={() => this.props.playSong(this.props.song, () => {
+                    this.props.stopSong()
+                  })} 
+                    { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>Play</Button>
+                  <Button className='btn-song' onClick={this.props.stopSong}
+                    { ...this.props.synth.isPlaying ? {} : { disabled: true}}>Stop</Button>
+                  <Button className='btn-song' onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
+                  <Button className='btn-song' onClick={this.props.loadSong}>Load</Button>
+                  <Button className='btn-song' onClick={this.props.newTrack}>Add Track</Button>
+                </Row>
               </Form>
+              <HelpPanel />
             </Col>
           </Row>
         </Grid>
 
-          <HelpPanel />
         { this.props.song.tracks.map((_track, i) => 
           <Track key={i} id={i} />) }
       </div>
