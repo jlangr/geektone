@@ -22,16 +22,16 @@ export class App extends Component {
     if (this.props.song.isDirty)
       onBeforeUnload = <Beforeunload onBeforeunload={() => 'You have unsaved changeds. Are you sure you want to navigate away from this page?'} />
     return (
-      <div className="App">
+      <div>
        {onBeforeUnload}
         {this.props.message} <br />
         <div className='text-danger'>{this.props.errorMessage}</div>
-        <Grid>
+        <Grid className='tracks-grid'>
           <Row className='show-grid'>
-            <Col xs={12}>
+            <Col xs={6}>
               <h2><Label>{this.props.song.name}</Label></h2>
               <Form>
-                <Row>
+                <Row className='tracks-row'>
                   <label htmlFor='bpm' style={{ padding: 10 }}>BPM</label>
                   <NumericInput 
                     id='bpm' 
@@ -40,7 +40,7 @@ export class App extends Component {
                     value={this.props.song.bpm} 
                     onChange={this.props.changeBpm.bind(this)} />
                 </Row>
-                <Row>
+                <Row className='tracks-row'>
                   <Button className='btn-song' onClick={() => this.props.playSong(this.props.song, () => {
                     this.props.stopSong()
                   })} 
@@ -52,6 +52,8 @@ export class App extends Component {
                   <Button className='btn-song' onClick={this.props.newTrack}>Add Track</Button>
                 </Row>
               </Form>
+            </Col>
+            <Col xs={6}>
               <HelpPanel />
             </Col>
           </Row>
@@ -59,7 +61,7 @@ export class App extends Component {
         </Grid>
         <Grid className='tracks-grid'>
           { this.props.song.tracks.map((_track, i) => 
-            <Row key={i}>
+            <Row className='tracks-row' key={i}>
               <Col>
                 <Track id={i} />
               </Col>
