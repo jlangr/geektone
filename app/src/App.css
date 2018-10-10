@@ -29,3 +29,12 @@
 .btn-song {
   margin: 3px;
 }
+
+.tracks-grid {
+  margin: 0;
+}
+
+.tracks-row {
+  margin-left: 35px;
+  margin-right: 35px;
+}
