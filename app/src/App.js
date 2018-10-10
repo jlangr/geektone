@@ -24,15 +24,15 @@ export class App extends Component {
     return (
       <div>
        {onBeforeUnload}
-        {this.props.message} <br />
-        <div className='text-danger'>{this.props.errorMessage}</div>
         <Grid className='tracks-grid'>
           <Row className='show-grid'>
             <Col xs={4}>
               <h2><Label>{this.props.song.name}</Label></h2>
+              {this.props.message}<br />
+              <div className='text-danger'>{this.props.errorMessage}</div>
               <Form>
                 <Row className='tracks-row'>
-                  <label htmlFor='bpm' style={{ padding: 10 }}>BPM</label>
+                  <label htmlFor='bpm' className='lbl'>BPM</label>
                   <NumericInput 
                     id='bpm' 
                     style={{input: { width: 70 }}} 
@@ -49,7 +49,6 @@ export class App extends Component {
                     { ...this.props.synth.isPlaying ? {} : { disabled: true}}><Glyphicon glyph='stop' title='Stop playback' /></Button>
                   <Button className='btn-song' onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
                   <Button className='btn-song' onClick={this.props.loadSong}>Load</Button>
-                  <Button className='btn-song' onClick={this.props.newTrack}>Add Track</Button>
                 </Row>
               </Form>
             </Col>
@@ -60,12 +59,15 @@ export class App extends Component {
 
         </Grid>
         <Grid className='tracks-grid'>
+          <Row>
+            <Button className='btn-song' onClick={this.props.newTrack}>Add Track</Button>
+          </Row>
           { this.props.song.tracks.map((_track, i) => 
-            <Row className='tracks-row' key={i}>
-              <Col>
-                <Track id={i} />
-              </Col>
-            </Row>) }
+          <Row className='tracks-row' key={i}>
+            <Col>
+              <Track id={i} />
+            </Col>
+          </Row>) }
         </Grid>
       </div>
     )

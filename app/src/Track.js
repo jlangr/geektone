@@ -24,9 +24,9 @@ export class Track extends Component {
           <option value='trumpet'>Trumpet</option>
           <option value='violin'>Violin</option>
         </select>
-        <Button onClick={() => { this.props.toggleSharpsMode(this.props.id); } }>#</Button>
-        <Button onClick={() => { this.props.toggleFlatsMode(this.props.id); } }>{ '\u266D' }</Button>
-        <Button onClick={() => { this.props.deleteTrack(this.props.id); } }>x</Button>
+        <Button className='btn-song' onClick={() => this.props.toggleSharpsMode(this.props.id)}>#</Button>
+        <Button className='btn-song' onClick={() => this.props.toggleFlatsMode(this.props.id)}>{ '\u266D' }</Button>
+        <Button className='btn-song' onClick={() => this.props.deleteTrack(this.props.id)}>x</Button>
         <label htmlFor='isMuted'>Mute</label>
         <input id='isMuted' type='checkbox'
             checked={this.props.trackData.isMuted}

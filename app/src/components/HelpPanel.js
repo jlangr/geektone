@@ -36,9 +36,9 @@ class HelpPanel extends Component {
         <Table responsive>
         <tbody>
           <tr><td><strong>.</strong></td><td>toggle dot</td></tr>
-          <tr><td><strong>d</strong></td><td>dup</td></tr>
-          <tr><td><strong>x</strong></td><td>del</td></tr>
-          <tr><td><strong>r</strong></td><td>rest</td></tr>
+          <tr><td><strong>d</strong></td><td>duplicate</td></tr>
+          <tr><td><strong>x</strong></td><td>delete</td></tr>
+          <tr><td><strong>r</strong></td><td>toggle rest</td></tr>
           <tr><td><strong>y</strong></td><td>redo</td></tr>
           <tr><td><strong>z</strong></td><td>undo</td></tr>
         </tbody>
