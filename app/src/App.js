@@ -24,12 +24,12 @@ export class App extends Component {
     return (
       <div className="App">
        {onBeforeUnload}
-        <h2><Label>{this.props.song.name}</Label></h2>
         {this.props.message} <br />
         <div className='text-danger'>{this.props.errorMessage}</div>
         <Grid>
           <Row className='show-grid'>
-            <Col xs={12} md={8} mdOffset={2}>
+            <Col xs={12}>
+              <h2><Label>{this.props.song.name}</Label></h2>
               <Form>
                 <Row>
                   <label htmlFor='bpm' style={{ padding: 10 }}>BPM</label>
