@@ -1,15 +1,15 @@
-H set isPlaying to false when track ends
+H bottom notes on treble clef cut (B) 
 H start song at selection point
 H bass clef
 H flats overlap sharps in accidentals area
-H save song by name
-H edit song by name
-H notes longer than 1 bar
+H rename song (UI)
+H load song by name
+M play-along marker
+M notes longer than 1 bar
 M halve / double notes with dots
 M delete / copy / paste multiple notes
 M mouse insert note
 M note insert mode
-M play-along marker
 M repeat section
 L clear staff
 L fix stroke problems etc throughout
@@ -24,8 +24,5 @@ DEFECTS:
 
 UI
 --
-Alignment of buttons, etc.
-Alignment of staffs
-Consistent sizing of stuff
 Show treble / bass indicator
 Make help a hideable popup

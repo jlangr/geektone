@@ -30,6 +30,14 @@
   margin: 3px;
 }
 
+.hidden { 
+  display:none; 
+}
+
+Label {
+  margin-right: 10px;
+}
+
 .tracks-grid {
   margin: 0;
 }
@@ -37,8 +45,4 @@
 .tracks-row {
   margin-left: 5px;
   margin-right: 5px;
-}
-
-Label {
-  margin-right: 10px;
 }
