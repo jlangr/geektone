@@ -27,10 +27,10 @@ export class App extends Component {
         <h2><Label>{this.props.song.name}</Label></h2>
         {this.props.message} <br />
         <div className='text-danger'>{this.props.errorMessage}</div>
-        <Form>
-          <Grid>
-            <Row className='show-grid'>
-              <Col>
+        <Grid>
+          <Row className='show-grid'>
+            <Col xs={12} md={8}>
+              <Form>
                 <label htmlFor='bpm'>BPM</label>
                 <NumericInput 
                   id='bpm' 
@@ -38,8 +38,6 @@ export class App extends Component {
                   min={25} max={200} 
                   value={this.props.song.bpm} 
                   onChange={this.props.changeBpm.bind(this)} />
-              </Col>
-              <Col>
                 <Button onClick={() => this.props.playSong(this.props.song, () => {
                   this.props.stopSong()
                 })} 
@@ -49,12 +47,12 @@ export class App extends Component {
                 <Button onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
                 <Button onClick={this.props.loadSong}>Load</Button>
                 <Button onClick={this.props.newTrack}>Add Track</Button>
-              </Col>
-            </Row>
-          </Grid>
+              </Form>
+            </Col>
+          </Row>
+        </Grid>
 
           <HelpPanel />
-        </Form>
         { this.props.song.tracks.map((_track, i) => 
           <Track key={i} id={i} />) }
       </div>
