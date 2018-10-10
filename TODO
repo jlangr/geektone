@@ -1,3 +1,4 @@
+H TEST WINDOWS
 H bottom notes on treble clef cut (B) 
 H start song at selection point
 H bass clef
@@ -21,8 +22,8 @@ M pause--Transport toggle() function?
 DEFECTS:
 - converting ties to rests
 - dotted rests??
+- various things don't work against empty song
 
 UI
 --
 Show treble / bass indicator
-Make help a hideable popup

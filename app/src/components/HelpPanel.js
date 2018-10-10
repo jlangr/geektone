@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Col, Table } from 'react-bootstrap'
+import { Button, Col, Label, Table } from 'react-bootstrap'
 
 class HelpPanel extends Component {
   constructor() {
@@ -10,12 +10,13 @@ class HelpPanel extends Component {
   }
 
   render() {
+    const buttonGlyph = this.state.show ? '\u25B2' : '\u25BC'
     return (
       <div>
         <Col xs={12}>
           <Button className='btn-song'
             onClick={() => this.setState({show: !this.state.show})}
-          >Keyboard Shortcuts</Button>
+          >Keyboard Shortcuts {buttonGlyph}</Button>
         </Col>
         <div className={this.state.show ? '' : 'hidden' }>
           <Col xs={4}>
@@ -25,8 +26,8 @@ class HelpPanel extends Component {
                 <tr><td><strong>&#8594;</strong></td><td>next note</td></tr>
                 <tr><td><strong>&#8593;</strong></td><td>up</td></tr>
                 <tr><td><strong>&#8595;</strong></td><td>down</td></tr>
-                <tr><td><strong>&#8592;</strong></td><td>prev bar</td></tr>
-                <tr><td><strong>&#8594;</strong></td><td>next bar</td></tr>
+                <tr><td><strong>shift &#8592;</strong></td><td>prev bar</td></tr>
+                <tr><td><strong>shift &#8594;</strong></td><td>next bar</td></tr>
               </tbody>
             </Table>
           </Col>
