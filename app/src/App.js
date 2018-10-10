@@ -56,6 +56,8 @@ export class App extends Component {
             </Col>
           </Row>
 
+        </Grid>
+        <Grid>
           { this.props.song.tracks.map((_track, i) => 
             <Row key={i}>
               <Col>
@@ -63,7 +65,6 @@ export class App extends Component {
               </Col>
             </Row>) }
         </Grid>
-
       </div>
     )
   }

@@ -12,7 +12,7 @@ export class Track extends Component {
 
   render() {
     return (
-      <div style={{float: 'left'}}>
+      <div>
         <select value={this.props.trackData.instrument} onChange={this.instrumentChange.bind(this)}>
           <option value='bass-electric'>Bass (electric)</option>
           <option value='bassoon'>Bassoon</option>
