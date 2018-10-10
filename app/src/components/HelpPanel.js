@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import { Button, Col, Table } from 'react-bootstrap'
 
-class HelpPanel extends Component {
+export default class HelpPanel extends Component {
   constructor() {
     super()
-    this.state = {
-      show: true
-    }
+    this.state = { show: true }
   }
 
   render() {
@@ -16,8 +14,10 @@ class HelpPanel extends Component {
         <Col xs={12}>
           <Button className='btn-song'
             onClick={() => this.setState({show: !this.state.show})}
+            bsStyle='link'
           >Keyboard Shortcuts {buttonGlyph}</Button>
         </Col>
+        
         <div className={this.state.show ? '' : 'hidden' }>
           <Col xs={4}>
             <Table responsive>
@@ -59,5 +59,3 @@ class HelpPanel extends Component {
       </div>)
   }
 }
-
-export default HelpPanel

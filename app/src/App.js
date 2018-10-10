@@ -52,7 +52,7 @@ export class App extends Component {
                 </Row>
               </Form>
             </Col>
-            <Col xs={6} style={{marginTop: 55, borderStyle:'solid' }}>
+            <Col xs={6}>
               <HelpPanel/>
             </Col>
           </Row>
