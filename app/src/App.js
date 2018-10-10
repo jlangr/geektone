@@ -55,10 +55,15 @@ export class App extends Component {
               <HelpPanel />
             </Col>
           </Row>
+
+          { this.props.song.tracks.map((_track, i) => 
+            <Row key={i}>
+              <Col>
+                <Track id={i} />
+              </Col>
+            </Row>) }
         </Grid>
 
-        { this.props.song.tracks.map((_track, i) => 
-          <Track key={i} id={i} />) }
       </div>
     )
   }
