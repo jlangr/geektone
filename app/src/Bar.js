@@ -59,7 +59,13 @@ export default class Bar {
   drawOn(context) {
     const x = Draw.x(this.position)
     context.beginPath()
-    Draw.drawLine(context, x, this.topLineY, x, this.staffHeight)
+    console.log('this.topLineY', this.topLineY)
+    const staffLines = Draw.trebleStaffLines
+    const yTop = Draw.y(staffLines[0])
+    const yBottom = Draw.y(staffLines[staffLines.length - 1])
+    console.log(`ytop ${yTop}`)
+    console.log(`ybottom ${yBottom}`)
+    Draw.drawLine(context, x, yTop, x, yBottom)
     context.stroke()
   }
 }

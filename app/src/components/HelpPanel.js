@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Col, Label, Table } from 'react-bootstrap'
+import { Button, Col, Table } from 'react-bootstrap'
 
 class HelpPanel extends Component {
   constructor() {

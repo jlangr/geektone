@@ -12,11 +12,12 @@ export const sharpArea = sharpWidth + 4
 const sharpPad = 8
 export const sharpsArea = (sharpsInWidth * sharpArea) + sharpPad
 
-export const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ];
-export const trebleStaffNotes = [ 'A6', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4' ];
-export const trebleStaffInterlineIndices = [ 3, 5, 7, 9 ]; // move to Draw
+export const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ]
+export const trebleStaffNotes = [ 'C6', 'B6', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'B3', 'A3' ]
+export const trebleStaffInterlineIndices = [ 5, 7, 9, 11 ]; // move to Draw
 
-export const staffHeight = trebleStaffLines.length * lineHeight
+export const staffHeight = // trebleStaffLines.length * lineHeight
+    trebleStaffNotes.length * lineHeight / 2
 export const staffWidthBetweenUpstrokes = sharpWidth / 4
 
 export const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=defaultLineWeight, color='black') => {

@@ -25,10 +25,15 @@ export class Staff extends Component {
       <div>
         <canvas ref='canvas' id={this.props.id}
           tabIndex={this.props.id}
-          border='0' width={this.staffWidth()} height='144'
+          border='0' width={this.staffWidth()} height={Draw.staffHeight}
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
       </div>
     )  // note: tabIndex needed for key events
+  }
+
+  staffWidth() {
+    const lastNotePosition = this.props.barsAndNotes[this.props.barsAndNotes.length - 1].position
+    return Draw.x(2 + lastNotePosition)
   }
 
   canvas() {
@@ -76,11 +81,6 @@ export class Staff extends Component {
   // TODO move to query on props
   isClickInAccidentals(point) {
     return this.props.ui.staff.accidentalsRect.contains(point)
-  }
-
-  staffWidth() {
-    const lastNotePosition = this.props.barsAndNotes[this.props.barsAndNotes.length - 1].position
-    return Draw.x(2 + lastNotePosition)
   }
 
   draw() {

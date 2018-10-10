@@ -1,4 +1,7 @@
 H TEST WINDOWS
+H redo
+H undo past end--stop & beep
+H can't click on rests
 H bottom notes on treble clef cut (B) 
 H start song at selection point
 H bass clef
@@ -6,6 +9,7 @@ H flats overlap sharps in accidentals area
 H rename song (UI)
 H load song by name
 M play-along marker
+M (ez) draw flag lines down for higher notes
 M notes longer than 1 bar
 M halve / double notes with dots
 M delete / copy / paste multiple notes
