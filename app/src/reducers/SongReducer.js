@@ -7,6 +7,7 @@ export const INITIAL_STATE = {
   message: undefined,
   errorMessage: undefined,
   song: {
+    bpm: 120,
     name: 'default',
     tracks: [],
     isDirty: false
