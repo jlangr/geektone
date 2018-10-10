@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Col, Button, Grid, Row } from 'react-bootstrap'
+import { Form, Col, Button, Grid, Glyphicon, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import NumericInput from 'react-numeric-input'
 import { Label } from 'react-bootstrap'
@@ -44,9 +44,9 @@ export class App extends Component {
                   <Button className='btn-song' onClick={() => this.props.playSong(this.props.song, () => {
                     this.props.stopSong()
                   })} 
-                    { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>Play</Button>
+                    { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}><Glyphicon glyph='play' title='Play' /></Button>
                   <Button className='btn-song' onClick={this.props.stopSong}
-                    { ...this.props.synth.isPlaying ? {} : { disabled: true}}>Stop</Button>
+                    { ...this.props.synth.isPlaying ? {} : { disabled: true}}><Glyphicon glyph='stop' title='Stop playback' /></Button>
                   <Button className='btn-song' onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
                   <Button className='btn-song' onClick={this.props.loadSong}>Load</Button>
                   <Button className='btn-song' onClick={this.props.newTrack}>Add Track</Button>
