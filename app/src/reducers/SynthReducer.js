@@ -20,8 +20,8 @@ export default(state = INITIAL_STATE, action) => {
     }
 
     case PLAY_SONG: {
-      const song = action.payload
-      play(song, state.synths)
+      const { song, songCompletedCallback } = action.payload
+      play(song, state.synths, songCompletedCallback)
       return { ...state, isPlaying: true }
     }
 

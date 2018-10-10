@@ -2,6 +2,7 @@ import Tone from 'tone'
 import * as NoteUtil from './NoteUtil'
 import * as TimeUtil from './TimeUtil'
 import * as Duration from './Duration'
+import { stopSong } from './actions'
 
 let scheduleEventId
 
@@ -26,7 +27,7 @@ const unmutedNoteObjects = tracks =>
     .map(track => [track, NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats)])
 
 // lots of this can be tested...
-export const play = async (song, synths) => {
+export const play = async (song, synths, songCompletedCallback) => {
   const tracks = song.tracks;
   if (Tone.context.state !== 'running')
       Tone.context.resume();
@@ -38,7 +39,7 @@ export const play = async (song, synths) => {
     return TimeUtil.toSixteenths(lastNote.time) + Duration.time(lastNote.duration)
   })
   const stopTime = TimeUtil.transportTime(Math.max(...stopTimes))
-  scheduleEventId = Tone.Transport.scheduleOnce(() => console.log('DONE ! ! ! ', ), stopTime)
+  scheduleEventId = Tone.Transport.scheduleOnce(() => songCompletedCallback(), stopTime)
 
   const parts = noteObjects.map(([track, toneNotes]) => 
       new Tone.Part((time, note) => {

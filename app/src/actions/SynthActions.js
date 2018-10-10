@@ -37,7 +37,8 @@ const createSynth = (instrument, dispatch) => {
 
 export const addSynthAction = (instrument, synth) => ({ type: type.ADD_SYNTH, payload: { instrument, synth }})
 
-export const playSong = song => ({ type: type.PLAY_SONG, payload: song })
+export const playSong = (song, songCompletedCallback) => 
+  ({ type: type.PLAY_SONG, payload: { song, songCompletedCallback }})
 
 export const stopSong = () => ({ type: type.STOP_SONG })
 

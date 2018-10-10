@@ -40,7 +40,9 @@ export class App extends Component {
                   onChange={this.props.changeBpm.bind(this)} />
               </Col>
               <Col>
-                <Button onClick={() => this.props.playSong(this.props.song)} 
+                <Button onClick={() => this.props.playSong(this.props.song, () => {
+                  this.props.stopSong()
+                })} 
                   { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>Play</Button>
                 <Button onClick={this.props.stopSong}
                   { ...this.props.synth.isPlaying ? {} : { disabled: true}}>Stop</Button>
