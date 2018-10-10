@@ -121,8 +121,7 @@ describe('NoteSequence', () => {
       expect(bars[1].notes).toEqual([e])
     })
 
-    // TODO
-    xit('puts all tie notes in place', () => {
+    it('puts all tie notes in place', () => {
       const a = new Note('F4', '2n.')
       const b = new Note('G4', '2n')
       sequence.addAll(a, b);
@@ -131,8 +130,8 @@ describe('NoteSequence', () => {
 
       const bar0Notes = bars[0].notes
       const bar1Notes = bars[1].notes
-      expect(bar0Notes[0]).toEqual(new Note('F4', '2n.'))
-      expect(bar0Notes[1]).toEqual(new Tie('G4', '4n'))
+      expect(bar0Notes[0].toJSON()).toEqual(new Note('F4', '2n.').toJSON())
+      expect(bar0Notes[1].toJSON()).toEqual(new Tie('G4', '4n').toJSON())
     })
 
     it('handles tie split into multiple notes', () => {
