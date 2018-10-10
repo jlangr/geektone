@@ -16,6 +16,7 @@ L fix stroke problems etc throughout
 L flats / sharps in proper order on accidentals area
 L move from track-to-track using ctrl-keys (shift arrow up down)
 L other time signatures
+M pause--Transport toggle() function?
 
 DEFECTS:
 - converting ties to rests

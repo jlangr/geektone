@@ -20,36 +20,33 @@ let scheduleEventId
   }
   */
 
+const unmutedNoteObjects = tracks => 
+  tracks
+    .filter(track => !track.isMuted)
+    .map(track => [track, NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats)])
+
 // lots of this can be tested...
 export const play = async (song, synths) => {
   const tracks = song.tracks;
   if (Tone.context.state !== 'running')
       Tone.context.resume();
 
-  let stopTimes = []
-  const parts = tracks
-    .filter(track => !track.isMuted)
-    .map(track => {
-      const toneNotes = NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats);
+  const noteObjects = unmutedNoteObjects(tracks)
 
-      const lastNote = toneNotes[toneNotes.length - 1]
-      stopTimes.push(TimeUtil.toSixteenths(lastNote.time) + Duration.time(lastNote.duration))
+  const stopTimes = noteObjects.map(([_, toneNotes]) => {
+    const lastNote = toneNotes[toneNotes.length - 1]
+    return TimeUtil.toSixteenths(lastNote.time) + Duration.time(lastNote.duration)
+  })
+  const stopTime = TimeUtil.transportTime(Math.max(...stopTimes))
+  scheduleEventId = Tone.Transport.scheduleOnce(() => console.log('DONE ! ! ! ', ), stopTime)
 
-      return new Tone.Part((time, note) => {
+  const parts = noteObjects.map(([track, toneNotes]) => 
+      new Tone.Part((time, note) => {
 //        drawSelect(note)
         synths[track.instrument].triggerAttackRelease(note.name, note.duration, time);
-      }, toneNotes);
-    });
-
-  const stopTime = TimeUtil.transportTime(Math.max(...stopTimes))
+      }, toneNotes));
 
   parts.forEach(part => part.start());
-
-  scheduleEventId = Tone.Transport.scheduleOnce(() => {
-    console.log('DONE ! ! ! ', )
-  }, stopTime)
-
-  // Pause: transport toggle function?
 
   Tone.Transport.bpm.value = song.bpm;
   const slightDelayToAvoidSchedulingErrors = '+0.1';
