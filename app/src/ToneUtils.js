@@ -2,7 +2,6 @@ import Tone from 'tone'
 import * as NoteUtil from './NoteUtil'
 import * as TimeUtil from './TimeUtil'
 import * as Duration from './Duration'
-import { stopSong } from './actions'
 
 let scheduleEventId
 
@@ -21,7 +20,7 @@ let scheduleEventId
   }
   */
 
-const unmutedNoteObjects = tracks => 
+export const unmutedNoteObjects = tracks => 
   tracks
     .filter(track => !track.isMuted)
     .map(track => [track, NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats)])
