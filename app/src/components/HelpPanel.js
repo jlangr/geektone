@@ -5,19 +5,42 @@ class HelpPanel extends Component {
   render() {
     return (
       <div>
-        <Col xs={2}>
+        <Col xs={12}>
+          <h4>Keyboard Shortcuts</h4>
+        </Col>
+        <Col xs={4}>
         <Table responsive>
         <tbody>
-          <tr><td>&lt;-</td><td> pre</td></tr>
-          <tr><td>-&gt;</td><td> next</td></tr>
+          <tr><td><strong>&#8592;</strong></td><td>prev note</td></tr>
+          <tr><td><strong>&#8594;</strong></td><td>next note</td></tr>
+          <tr><td><strong>&#8593;</strong></td><td>up</td></tr>
+          <tr><td><strong>&#8595;</strong></td><td>down</td></tr>
+          <tr><td><strong>&#8592;</strong></td><td>prev bar</td></tr>
+          <tr><td><strong>&#8594;</strong></td><td>next bar</td></tr>
         </tbody>
         </Table>
-        </Col>
-        <Col xs={2}>
+      </Col>
+      <Col xs={4}>
         <Table responsive>
         <tbody>
-          <tr><td>.</td><td>toggle</td></tr>
-          <tr><td>1</td><td>whole</td></tr>
+          <tr><td><strong>1</strong></td><td>whole</td></tr>
+          <tr><td><strong>2</strong></td><td>half</td></tr>
+          <tr><td><strong>4</strong></td><td>quarter</td></tr>
+          <tr><td><strong>8</strong></td><td>eighth</td></tr>
+          <tr><td><strong>*</strong></td><td>double</td></tr>
+          <tr><td><strong>/</strong></td><td>halve</td></tr>
+        </tbody>
+        </Table>
+      </Col>
+      <Col xs={4}>
+        <Table responsive>
+        <tbody>
+          <tr><td><strong>.</strong></td><td>toggle dot</td></tr>
+          <tr><td><strong>d</strong></td><td>dup</td></tr>
+          <tr><td><strong>x</strong></td><td>del</td></tr>
+          <tr><td><strong>r</strong></td><td>rest</td></tr>
+          <tr><td><strong>y</strong></td><td>redo</td></tr>
+          <tr><td><strong>z</strong></td><td>undo</td></tr>
         </tbody>
         </Table>
         </Col>
@@ -26,23 +49,3 @@ class HelpPanel extends Component {
 }
 
 export default HelpPanel
-
-/*U
-            <strong>^</strong> up<br />
-            <strong>v</strong> down<br />
-            <strong>shift&lt;- </strong> prev bar<br />
-            <strong>shift-&gt; </strong> next bar<br />
-            <strong>^ </strong>up<br />
-            <strong>v</strong> down<br />
-            <strong>d</strong> dup<br />
-            <strong>x</strong> del<br />  
-
-            <strong>2:</strong> half<br />
-            <strong>4:</strong> quarter<br />
-            <strong>8:</strong> eighth<br />
-            <strong>*:</strong> double<br />
-            <strong>/:</strong> halve<br />
-            <strong>r:</strong> rest<br />
-            <strong>y:</strong> redo<br />
-            <strong>z:</strong> undo<br />
-            */

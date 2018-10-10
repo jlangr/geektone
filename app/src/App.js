@@ -28,7 +28,7 @@ export class App extends Component {
         <div className='text-danger'>{this.props.errorMessage}</div>
         <Grid className='tracks-grid'>
           <Row className='show-grid'>
-            <Col xs={6}>
+            <Col xs={4}>
               <h2><Label>{this.props.song.name}</Label></h2>
               <Form>
                 <Row className='tracks-row'>
@@ -53,8 +53,8 @@ export class App extends Component {
                 </Row>
               </Form>
             </Col>
-            <Col xs={6}>
-              <HelpPanel />
+            <Col xs={6} style={{marginTop: 55, borderStyle:'solid' }}>
+              <HelpPanel/>
             </Col>
           </Row>
 
