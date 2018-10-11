@@ -59,6 +59,21 @@ describe('NoteSequence', () => {
 
       expect(sequence.allNoteNames()).toEqual(['E4', 'F4'])
     })
+
+    it('supports redo', () => {
+      sequence.selectFirst()
+      sequence.toggleDotForSelected()
+      sequence.selectFirst()
+      sequence.duplicateNote()
+      sequence.undo()
+      sequence.undo()
+
+      sequence.redo()
+      sequence.redo()
+      
+      expect(sequence.allNotesWithDurations()).toEqual(
+        [['E4', '4n.'], ['E4', '4n.'], ['F4', '4n']])
+    })
   })
 
   describe('bar sequence after rebar', () => {

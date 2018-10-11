@@ -43,6 +43,10 @@ export default class NoteSequence {
     this.commander.executeUndo()
   }
 
+  redo() {
+    this.commander.executeRedo()
+  }
+
   add(note) {
     this.baseAdd(note)
     this.rebar()
@@ -68,6 +72,10 @@ export default class NoteSequence {
 
   allNoteNames() {
     return this.notes.map(n => n.name())
+  }
+
+  allNotesWithDurations() {
+    return this.notes.map(n => [n.name(), n.duration])
   }
 
   note(position) {
