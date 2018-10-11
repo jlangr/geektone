@@ -2,15 +2,13 @@ import React, { Component } from 'react'
 import { Form, Col, Button, Grid, Glyphicon, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import NumericInput from 'react-numeric-input'
-import { Label } from 'react-bootstrap'
 import Beforeunload from 'react-beforeunload'
-
 import './App.css'
-
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
-import { changeBpm, loadSong, loadSynths, newTrack, playSong, saveSong, stopSong } from './actions'
+import { changeBpm, changeSongName, loadSong, loadSynths, newTrack, playSong, saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
+import InlineEdit from 'react-edit-inline2'
 
 export class App extends Component {
   componentDidMount() {
@@ -27,7 +25,13 @@ export class App extends Component {
         <Grid className='tracks-grid'>
           <Row className='show-grid'>
             <Col xs={4}>
-              <h2><Label>{this.props.song.name}</Label></h2>
+              <h2>
+                <InlineEdit
+                  validate={() => true}
+                  text={this.props.song.name}
+                  paramName='newTitle'
+                  change={({ newTitle }) => this.props.changeSongName(newTitle) }/>
+              </h2>
               {this.props.message}<br />
               <div className='text-danger'>{this.props.errorMessage}</div>
               <Form>
@@ -84,7 +88,7 @@ const mapStateToProps = (state, _ownProps) => {
 }
 
 const mapDispatchToProps = { 
-  changeBpm, loadSong, loadSynths, newTrack, saveSong, playSong, stopSong
+  changeBpm, changeSongName, loadSong, loadSynths, newTrack, saveSong, playSong, stopSong
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
