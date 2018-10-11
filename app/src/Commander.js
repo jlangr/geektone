@@ -1,6 +1,7 @@
 export default class Commander {
   constructor(noteSequence) {
     this.commands = []
+    this.redoCommands = []
     this.seq = noteSequence
   }
 
@@ -12,7 +13,18 @@ export default class Commander {
   }
 
   executeUndo() {
+    if (this.commands.length === 0) return
+
     const command = this.commands.pop()
     command.executeUndo()
+    this.redoCommands.push(command)
+  }
+
+  executeRedo() {
+    if (this.redoCommands.length === 0) return
+
+    const command = this.redoCommands.pop()
+    command.execute()
+    this.commands.push(command)
   }
 }

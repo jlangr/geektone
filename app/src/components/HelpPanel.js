@@ -4,7 +4,7 @@ import { Button, Col, Table } from 'react-bootstrap'
 export default class HelpPanel extends Component {
   constructor() {
     super()
-    this.state = { show: true }
+    this.state = { show: false }
   }
 
   render() {
