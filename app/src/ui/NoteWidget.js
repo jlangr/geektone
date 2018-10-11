@@ -45,23 +45,31 @@ export default class NoteWidget {
     this.context.fill()
   }
 
+  stemDirection() {
+    return this.y() < Draw.y('C5') ? 1 : -1
+  }
+
+  stemHeightDelta() {
+    return this.stemDirection() * stemHeight
+  }
+
   drawStem() {
     this.context.moveTo(this.x() + noteWidth, this.y())
-    this.context.lineTo(this.x() + noteWidth, this.y() - stemHeight)
+    this.context.lineTo(this.x() + noteWidth, this.y() + this.stemHeightDelta())
+  }
+
+  drawFlagAt(y) {
+    this.context.moveTo(this.x() + noteWidth, y + this.stemHeightDelta())
+    this.context.lineTo(this.x() + noteWidth + 6,
+      y + this.stemHeightDelta() - (this.stemHeightDelta() / 2))
   }
 
   drawFlag() {
-    this.context.moveTo(this.x() + noteWidth, this.y() - stemHeight)
-    this.context.lineTo(this.x() + noteWidth + 6,
-      this.y() - stemHeight + (stemHeight / 2))
+    this.drawFlagAt(this.y())
   }
 
   drawLowerFlag() {
-    const y = this.y() - stemHeight
-    const yIncrease = 12
-    this.context.moveTo(this.x() + noteWidth, y + yIncrease)
-    this.context.lineTo(this.x() + noteWidth + 6,
-      y + (stemHeight / 2) + yIncrease)
+    this.drawFlagAt(this.y() - ((this.stemHeightDelta() / 2) - (this.stemDirection() * 6)))
   }
 
   drawWhole() {
