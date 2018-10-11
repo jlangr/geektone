@@ -1,5 +1,6 @@
 import * as Draw from '../util/Draw'
 import * as Duration from '../Duration'
+import Rect from '../Rect'
 
 const stemHeight = 36
 
@@ -15,6 +16,14 @@ const highlightColor = 'red'
 const wholeFill = 'white'
 const quarterFill = 'black'
 const solidFill = 'black'
+
+export const restRectangleTop = Draw.y('E5')
+export const restRectangleBottom = Draw.y('E4')
+
+export const restRectangle = x => {
+  const width = (restWidth + 8)
+  return new Rect(x - width / 2, restRectangleTop, width, restRectangleBottom - restRectangleTop)
+}
 
 export default class NoteWidget {
   constructor(context, note) {
@@ -109,11 +118,8 @@ export default class NoteWidget {
     this.context.ellipse(x, y, dotSize, dotSize, rotation, 0, 2 * Math.PI)
   }
 
-  drawRestHighlight(extraRadius=0) {
-    const y = Draw.y('F5')
-    const height = Draw.y('E4') - y
-    const width = (restWidth + 8)
-    this.context.rect(this.x() - width / 2, y, width, height)
+  drawRestHighlight() {
+    restRectangle(this.x()).drawOn(this.context, highlightColor, highlightStroke)
   }
 
   highlightNote() {
@@ -121,7 +127,7 @@ export default class NoteWidget {
     this.context.strokeStyle = highlightColor
     this.context.lineWidth = highlightStroke
     if (this.isRest())
-      this.drawRestHighlight(highlightStroke)
+      this.drawRestHighlight()
     else
       this.drawNoteEllipse(highlightStroke)
     this.context.stroke()

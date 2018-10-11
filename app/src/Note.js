@@ -2,8 +2,7 @@ import Rect from './Rect'
 import * as Draw from './util/Draw'
 import * as Duration from './Duration'
 import { next, prev } from './js/ArrayUtil'
-
-import NoteWidget from './ui/NoteWidget'
+import NoteWidget, { restRectangle } from './ui/NoteWidget'
 
 const noteWidth = 7
 const noteHeight = 5
@@ -149,10 +148,14 @@ export default class Note {
     this.updateTiePitch()
   }
 
-  isHitForElement(element, mousePosition) {
-    const rect = new Rect(
+  noteRect(element) {
+    return new Rect(
       element.x() - noteWidth, element.y() - noteHeight,
       noteWidth * 2, noteHeight * 2)
+  }
+
+  isHitForElement(element, mousePosition) {
+    const rect = this.isRest() ? restRectangle(this.x()) : this.noteRect(element)
     return rect.contains(mousePosition)
   }
 

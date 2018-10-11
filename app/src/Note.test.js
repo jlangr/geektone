@@ -1,6 +1,7 @@
 import Note from './Note'
 import * as Duration from './Duration'
-import Tie from './Tie';
+import Tie from './Tie'
+import { restRectangleTop } from './ui/NoteWidget'
 
 describe('note', () => {
   describe('a note', () => {
@@ -121,7 +122,7 @@ describe('note', () => {
   describe('hit testing', () => {
     it('is false when click does not hit', () => {
       const note = new Note('D4')
-      note.position = 0
+      note.setPosition(0)
 
       const isHit = note.isHit({ x: note.x() + 1000, y: note.y() })
 
@@ -130,7 +131,7 @@ describe('note', () => {
 
     it('is true when click is a hit', () => {
       const note = new Note('D4')
-      note.position = 0
+      note.setPosition(0)
 
       const isHit = note.isHit({ x: note.x(), y: note.y() })
 
@@ -149,6 +150,26 @@ describe('note', () => {
       const isHit = note.isHit({ x: tieEnd.x(), y: note.y() })
 
       expect(isHit).toBeTruthy()
+    })
+
+    it('is true when rest and click in highlight rectangle', () => {
+      const note = new Note('C4')
+      note.setPosition(0)
+      note.restToggle()
+
+      const isHit = note.isHit({ x: note.x(), y: restRectangleTop + 1 })
+
+      expect(isHit).toBeTruthy()
+    })
+
+    it('is false when rest and click outside highlight rectangle', () => {
+      const note = new Note('C4')
+      note.setPosition(0)
+      note.restToggle()
+
+      const isHit = note.isHit({ x: note.x(), y: restRectangleTop - 1 })
+
+      expect(isHit).toBeFalsy()
     })
   })
 
