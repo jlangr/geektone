@@ -24,6 +24,7 @@ Geektone supports the keyboard for many actions.
 Notes longer than one measure not yet supported.
 Sharps / flats in key signature are not ordered appropriately.
 No bass clef
+Doubling / halving of dotted notes not supported (no arbitrary ties)
 
 ## Samples
 

@@ -1,25 +1,24 @@
-H TEST WINDOWS
+H dotted rests: the dot moves up and down!
 H start song at selection point
 H bass clef
 H flats overlap sharps in accidentals area
-H rename song (UI)
 H load song by name
+H volume: is there distortion?
+
+M allow characters numbers and some symbols on rename. (disallow: !, < >, ~, \, /, ?, *, :, |)
 M play-along marker
 M notes longer than 1 bar
-M halve / double notes with dots
+M disallow halve / double notes with dots
 M delete / copy / paste multiple notes
 M mouse insert note
 M note insert mode
 M repeat section
+
 L clear staff
 L flats / sharps in proper order on accidentals area
 L move from track-to-track using ctrl-keys (shift arrow up down)
 L other time signatures
 M pause--Transport toggle() function?
-
-DEFECTS:
-- converting ties to rests
-- dotted rests??
 
 UI
 --
