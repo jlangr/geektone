@@ -8,7 +8,6 @@ H volume: is there distortion?
 M allow characters numbers and some symbols on rename. (disallow: !, < >, ~, \, /, ?, *, :, |)
 M play-along marker
 M notes longer than 1 bar
-M disallow halve / double notes with dots
 M delete / copy / paste multiple notes
 M mouse insert note
 M note insert mode
@@ -23,3 +22,8 @@ M pause--Transport toggle() function?
 UI
 --
 Show treble / bass indicator
+
+
+Regularly:
+=========
+WINDOWS TEST

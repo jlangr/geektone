@@ -21,12 +21,14 @@ export const noteBase = noteDuration => {
 }
 
 export const halveDuration = duration => {
-  if (duration === sixteenth) return duration
+  if (duration === sixteenth || isDotted(duration)) return duration
+
   return noteForSixteenths(time(duration) / 2)
 }
 
 export const doubleDuration = duration => {
-  if (duration === whole) return duration
+  if (duration === whole || isDotted(duration)) return duration
+
   return noteForSixteenths(time(duration) * 2)
 }
 

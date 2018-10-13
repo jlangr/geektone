@@ -293,6 +293,48 @@ describe('NoteSequence', () => {
     })
   })
 
+  describe('double and halve duration', () => {
+    it('doubles duration', () => {
+      const sequence = new NoteSequence()
+      sequence.addAll([new Note('E4', Duration.quarter)])
+      sequence.selectFirst()
+
+      sequence.doubleSelectedDuration()
+
+      expect(sequence.firstNote().duration).toEqual(Duration.half)
+    })
+
+    it('halves duration', () => {
+      const sequence = new NoteSequence()
+      sequence.addAll([new Note('E4', Duration.quarter)])
+      sequence.selectFirst()
+
+      sequence.halveSelectedDuration()
+
+      expect(sequence.firstNote().duration).toEqual(Duration.eighth)
+    })
+
+    it('does not halve dotted notes', () => {
+      const sequence = new NoteSequence()
+      sequence.addAll([new Note('E4', '4n.')])
+      sequence.selectFirst()
+
+      sequence.halveSelectedDuration()
+
+      expect(sequence.firstNote().duration).toEqual('4n.')
+    })
+
+    it('does not double dotted notes', () => {
+      const sequence = new NoteSequence()
+      sequence.addAll([new Note('E4', '4n.')])
+      sequence.selectFirst()
+
+      sequence.doubleSelectedDuration()
+
+      expect(sequence.firstNote().duration).toEqual('4n.')
+    })
+  })
+
   describe('sequence with 3 notes', () => {
     beforeEach(() => {
       sequence = new NoteSequence(['E4', 'F4', 'G4'])
