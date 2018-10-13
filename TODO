@@ -1,4 +1,5 @@
 H dotted rests: the dot moves up and down!
+M dotting a tie rest converts it to a note
 H start song at selection point
 H bass clef
 H flats overlap sharps in accidentals area

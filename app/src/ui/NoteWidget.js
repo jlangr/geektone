@@ -19,9 +19,10 @@ const solidFill = 'black'
 
 export const restRectangleTop = Draw.y('E5')
 export const restRectangleBottom = Draw.y('E4')
+const wholeOrHalfRestY = Draw.y('B4')
 
 export const restRectangle = x => {
-  const width = (restWidth + 8)
+  const width = (restWidth + 16)
   return new Rect(x - width / 2, restRectangleTop, width, restRectangleBottom - restRectangleTop)
 }
 
@@ -108,12 +109,12 @@ export default class NoteWidget {
     this.drawLowerFlag()
   }
 
-  drawDot() {
+  drawDot(y) {
     const dotSize = 2
     const dotPad = 3
     const dotDescension = 5
     const x = this.x() + noteWidth + (2 * dotSize + dotPad)
-    const y = this.y() + dotDescension
+    y = y + dotDescension
     this.context.moveTo(x, y)
     this.context.ellipse(x, y, dotSize, dotSize, rotation, 0, 2 * Math.PI)
   }
@@ -186,7 +187,7 @@ export default class NoteWidget {
     const width = 20
     const height = 8
     let x = this.x()
-    let y = Draw.y('B4')
+    let y = wholeOrHalfRestY
     this.context.rect(
       x - (width / 2), y + (heightOffset * height), 
       width, height);
@@ -232,6 +233,10 @@ export default class NoteWidget {
     else if (Duration.isSixteenthBase(this.duration())) this.drawSixteenth()
   }
 
+  restDotLocation() {
+    return Duration.isHalfBase(this.duration()) ? wholeOrHalfRestY : restRectangleBottom - 12 
+  }
+
   drawElementOn() {
     this.context.beginPath()
     this.context.lineWidth = noteStroke
@@ -243,7 +248,7 @@ export default class NoteWidget {
       this.drawNote()
 
     if (this.isDotted())
-      this.drawDot()
+      this.drawDot(this.isRest() ? this.restDotLocation() : this.y())
 
     this.context.stroke()
   }
