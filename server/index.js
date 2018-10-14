@@ -33,17 +33,27 @@ const ids = files => {
   return matching
 }
 
-app.get('/songs', (request, response) => {
-  const files = fs.readdirSync('data/')
+const songFiles = () => fs.readdirSync('data/')
 
-  response.send(ids(files))
-})
+app.get('/songs', (request, response) => response.send(ids(files())))
+
+const nextAvailableId = () => {
+  const intIds = ids(songFiles()).map(id => parseInt(id, 10))
+  return (Math.max(...intIds) + 1).toString()
+}
 
 app.post('/song', (request,response) => {
-  const json = JSON.stringify(request.body)
-  fs.writeFileSync('song2.json', json)
-  response.writeHead(200, {'Content-Type': 'text/html'})
-  response.end('post received')
+  const song = request.body
+  if (!song.id)
+    song.id = nextAvailableId()
+console.log('song id: ', song.id)
+
+  let songText = JSON.stringify(request.body)
+  fs.writeFileSync('song2.json', songText)
+
+  response.json(song.id)
+//  response.writeHead(200, {'Content-Type': 'application/json'})
+//  response.end(song.id)
 })
 
 app.listen(port, (err) => {

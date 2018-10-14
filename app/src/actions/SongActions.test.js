@@ -37,20 +37,31 @@ describe('async actions', () => {
   })
 
   describe('save song', () => {
-    it('dispatches to mark clean on success', async () => {
-      mock.onPost(actions.request('/song')).reply(200)
+    it('dispatches to create song when no id exists', async () => {
+      song.id = undefined
+      mock.onPost(actions.request('/song')).reply(201, 42)
 
-      await actions.saveSong()(dispatch)
+      await actions.saveSong(song)(dispatch)
+      
+      expect(dispatch).toHaveBeenCalledWith({ type: type.CREATE_SONG, payload: { id: 42, message: 'song saved' } })
+    })
+
+    it('dispatches to mark clean when song is being updated', async () => {
+      song.id = 42
+      mock.onPut(actions.request('/song/42')).reply(200)
+
+      await actions.saveSong(song)(dispatch)
       
       expect(dispatch).toHaveBeenCalledWith({ type: type.MARK_CLEAN, payload: 'song saved' })
     })
 
     it('dispatches to error message', async () => {
+      song.id = undefined
       mock.onPost(actions.request('/song')).reply(500)
 
-      await actions.saveSong()(dispatch)
+      await actions.saveSong(song)(dispatch)
       
-      expect(dispatch).toHaveBeenCalledWith({ type: type.ERROR, payload: 'unable to save your song, sorry: Error: Request failed with status code 500' })
+      expect(dispatch).toHaveBeenCalledWith({ type: type.ERROR, payload: 'unable to create your song, sorry: Error: Request failed with status code 500' })
     })
   })
 })
