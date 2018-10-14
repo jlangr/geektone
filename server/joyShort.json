@@ -1,8 +1,0 @@
-
-{"name":"ode to joy crud","bpm":132,"tracks":[
-{"name":"track 1","instrument":"piano","isMuted":false,
- "notes":[
-  {"name":"F4","duration":"4n."},
-  {"name":"E4","duration":"8n"},
-  {"name":"E4","duration":"2n"}],
-"sharpsMode":false,"sharps":["F4"]}]}

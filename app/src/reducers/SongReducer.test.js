@@ -203,8 +203,9 @@ describe('key signature sharps and flats', () => {
       expect(isInSharpsMode(song, 1)).toBeFalsy()
     })
   })
+
   it('adds note to sharps', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{name: 'a', sharps: [], flats: []}]}}
 
     const newState = SongReducer(state, actions.addSharp(0, 'F4'))
 
@@ -212,7 +213,7 @@ describe('key signature sharps and flats', () => {
   })
 
   it('ignores undefined', () => {
-    const state = { song: { name: 'x', tracks: [{sharps: ['F4'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{sharps: ['F4'], flats: [], name: 'a'}]}}
 
     const newState = SongReducer(state, actions.addSharp(0, undefined))
 
@@ -220,7 +221,7 @@ describe('key signature sharps and flats', () => {
   })
 
   it('removes when already exists', () => {
-    const state = { song: { name: 'x', tracks: [{sharps: ['F4'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{sharps: ['F4'], flats: [], name: 'a'}]}}
 
     const newState = SongReducer(state, actions.addSharp(0, 'F4'))
 
@@ -229,7 +230,7 @@ describe('key signature sharps and flats', () => {
 
   describe('sharps and flats', () => {
     it('adds note to flats', () => {
-      const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
+      const state = { song: { name: 'x', tracks: [{name: 'a', flats: [], sharps: []}]}}
 
       const newState = SongReducer(state, actions.addFlat(0, 'F4'))
 
@@ -256,7 +257,7 @@ describe('key signature sharps and flats', () => {
   })
 
   it('ignores undefined', () => {
-    const state = { song: { name: 'x', tracks: [{flats: ['F4'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{flats: ['F4'], sharps: [], name: 'a'}]}}
 
     const newState = SongReducer(state, actions.addFlat(0, undefined))
 
@@ -264,7 +265,7 @@ describe('key signature sharps and flats', () => {
   })
 
   it('removes when already exists', () => {
-    const state = { song: { name: 'x', tracks: [{flats: ['F4'], name: 'a'}]}}
+    const state = { song: { name: 'x', tracks: [{flats: ['F4'], sharps: [], name: 'a'}]}}
 
     const newState = SongReducer(state, actions.addFlat(0, 'F4'))
 

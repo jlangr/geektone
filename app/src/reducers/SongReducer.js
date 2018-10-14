@@ -90,48 +90,37 @@ const updateState_rebar = (state, trackIndex) => {
   })
 }
 
-const updateState_addFlat = (state, trackIndex, note) => {
+const updateState_addAccidental = (state, note, accidentals, opposingAccidentals) => {
   if (!note) return state
 
-  const updatedTrack = state.song.tracks[trackIndex]
-  if (!updatedTrack.flats) updatedTrack.flats = []
+  if (opposingAccidentals.includes(note))
+    remove(opposingAccidentals, note)
 
-  if (updatedTrack.sharps && updatedTrack.sharps.includes(note))
-    remove(updatedTrack.sharps, note)
-
-  if (updatedTrack.flats.includes(note)) 
-    remove(updatedTrack.flats, note)
+  if (accidentals.includes(note)) 
+    remove(accidentals, note)
   else
-    updatedTrack.flats.push(note)
+    accidentals.push(note)
+}
 
-  updatedTrack.flatsMode = false
-
+const updateTrack = (state, trackIndex, updatedTrack) => {
   const newTracks = 
     [...state.song.tracks.slice(0, trackIndex), updatedTrack, ...state.song.tracks.slice(trackIndex+1) ]
 
   return { ...state, song: {...state.song, tracks: newTracks} }
 }
 
-const updateState_addSharp = (state, trackIndex, note) => {
-  if (!note) return state
-
+const updateState_addFlat = (state, trackIndex, note) => {
   const updatedTrack = state.song.tracks[trackIndex]
-  if (!updatedTrack.sharps) updatedTrack.sharps = []
+  updatedTrack.flatsMode = false
+  updateState_addAccidental(state, note, updatedTrack.flats, updatedTrack.sharps)
+  return updateTrack(state, trackIndex, updatedTrack)
+}
 
-  if (updatedTrack.flats && updatedTrack.flats.includes(note))
-    remove(updatedTrack.flats, note)
-
-  if (updatedTrack.sharps.includes(note)) 
-    remove(updatedTrack.sharps, note)
-  else
-    updatedTrack.sharps.push(note)
-
+const updateState_addSharp = (state, trackIndex, note) => {
+  const updatedTrack = state.song.tracks[trackIndex]
   updatedTrack.sharpsMode = false
-
-  const newTracks = 
-    [...state.song.tracks.slice(0, trackIndex), updatedTrack, ...state.song.tracks.slice(trackIndex+1) ]
-
-  return { ...state, song: {...state.song, tracks: newTracks} }
+  updateState_addAccidental(state, note, updatedTrack.sharps, updatedTrack.flats)
+  return updateTrack(state, trackIndex, updatedTrack)
 }
 
 export default(state = INITIAL_STATE, action) => {
@@ -198,7 +187,13 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.NEW_TRACK:
     {
-      const newTrack = { name: `track${state.song.tracks.length + 1}`, instrument: 'piano', notes: new NoteSequence(['E4']) }
+      const newTrack = { 
+        name: `track${state.song.tracks.length + 1}`, 
+        instrument: 'piano', 
+        notes: new NoteSequence(['E4']),
+        sharps: [],
+        flats: []
+      }
       return { ...state, song: { ...state.song, tracks: [...state.song.tracks, newTrack] } }
     }
 
