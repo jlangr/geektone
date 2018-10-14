@@ -96,6 +96,9 @@ const updateState_addFlat = (state, trackIndex, note) => {
   const updatedTrack = state.song.tracks[trackIndex]
   if (!updatedTrack.flats) updatedTrack.flats = []
 
+  if (updatedTrack.sharps && updatedTrack.sharps.includes(note))
+    remove(updatedTrack.sharps, note)
+
   if (updatedTrack.flats.includes(note)) 
     remove(updatedTrack.flats, note)
   else
@@ -114,6 +117,9 @@ const updateState_addSharp = (state, trackIndex, note) => {
 
   const updatedTrack = state.song.tracks[trackIndex]
   if (!updatedTrack.sharps) updatedTrack.sharps = []
+
+  if (updatedTrack.flats && updatedTrack.flats.includes(note))
+    remove(updatedTrack.flats, note)
 
   if (updatedTrack.sharps.includes(note)) 
     remove(updatedTrack.sharps, note)

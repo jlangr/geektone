@@ -181,10 +181,14 @@ export class Staff extends Component {
         this.drawSharp(note, i)
       })
 
-    if (this.props.trackData.flats)
+    if (this.props.trackData.flats) {
+      const drawOffset = this.props.trackData.sharps 
+        ? this.props.trackData.sharps.length
+        : 0
       this.props.trackData.flats.forEach((note, i) => {
-        this.drawFlat(note, i)
+        this.drawFlat(note, i + drawOffset)
       })
+    }
   }
 }
 

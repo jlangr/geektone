@@ -1,4 +1,3 @@
-H dotted rests: the dot moves up and down!
 M dotting a tie rest converts it to a note
 H start song at selection point
 H bass clef
@@ -13,7 +12,11 @@ M delete / copy / paste multiple notes
 M mouse insert note
 M note insert mode
 M repeat section
+M individual accidental
 
+
+L sharps & flats are not in proper order to determine key
+L allows sharp & flat on same note
 L clear staff
 L flats / sharps in proper order on accidentals area
 L move from track-to-track using ctrl-keys (shift arrow up down)

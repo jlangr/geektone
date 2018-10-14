@@ -20,7 +20,6 @@ describe('a song', () => {
       expect(state.song.isDirty).toBeFalsy()
       expect(state.message).toEqual('message')
     })
-
     // TODO: it('is not dirty after undo to origin', () => { })
   })
 
@@ -110,42 +109,6 @@ describe('a song', () => {
   })
 })
 
-describe('toggle sharps mode', () => {
-  it('turns on with first toggle', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: false}, {name: 'y', sharpsMode: false}]}}
-
-    const newState = SongReducer(state, actions.toggleSharpsMode(1))
-
-    expect(newState.song.tracks[1].sharpsMode).toBeTruthy()
-  })
-
-  it('toggles off when on', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: true}, {name: 'y', sharpsMode: false}]}}
-
-    const newState = SongReducer(state, actions.toggleSharpsMode(0))
-
-    expect(newState.song.tracks[0].sharpsMode).toBeFalsy()
-  })
-})
-
-describe('toggle flats mode', () => {
-  it('turns on with first toggle', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'x', flatsMode: false}, {name: 'y', flatsMode: false}]}}
-
-    const newState = SongReducer(state, actions.toggleFlatsMode(1))
-
-    expect(newState.song.tracks[1].flatsMode).toBeTruthy()
-  })
-
-  it('toggles off when on', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'x', flatsMode: true}, {name: 'y', flatsMode: false}]}}
-
-    const newState = SongReducer(state, actions.toggleFlatsMode(0))
-
-    expect(newState.song.tracks[0].flatsMode).toBeFalsy()
-  })
-})
-
 describe('toggle mute', () => {
   it('turns on with first toggle', () => {
     const state = { song: { name: 'x', tracks: [{name: 'x', isMuted: false}]}}
@@ -164,36 +127,6 @@ describe('toggle mute', () => {
   })
 })
 
-describe('is in flats mode?', () => {
-  it('is true when flag is on for track', () => {
-    const song = { tracks: [ { flatsMode: true } ]}
-
-    expect(isInFlatsMode(song, 0)).toBeTruthy()
-  })
-
-  it('is false when flag is off for track', () => {
-    const song = { tracks: [ { flatsMode: true }, { flatsMode: false } ]}
-
-    expect(isInFlatsMode(song, 1)).toBeFalsy()
-  })
-})
-
-describe('is in sharps mode?', () => {
-  it('is true when flag is on for track', () => {
-    const song = { tracks: [ { sharpsMode: true } ]}
-
-    expect(isInSharpsMode(song, 0)).toBeTruthy()
-  })
-
-  it('is false when flag is off for track', () => {
-    const song = { tracks: [ { sharpsMode: true }, { sharpsMode: false } ]}
-
-    expect(isInSharpsMode(song, 1)).toBeFalsy()
-  })
-})
-
-// TODO track ID should not be index of track
-
 describe('trackData', () => {
   it('represents the track given an id', () => {
     const state = { song: { name: 'x', tracks: [{name: 'x'}, {name: 'y'}]}}
@@ -205,6 +138,71 @@ describe('trackData', () => {
 })
 
 describe('key signature sharps and flats', () => {
+  describe('toggling mode', () => {
+    describe('toggle sharps mode', () => {
+      it('turns on with first toggle', () => {
+        const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: false}, {name: 'y', sharpsMode: false}]}}
+
+        const newState = SongReducer(state, actions.toggleSharpsMode(1))
+
+        expect(newState.song.tracks[1].sharpsMode).toBeTruthy()
+      })
+
+      it('toggles off when on', () => {
+        const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: true}, {name: 'y', sharpsMode: false}]}}
+
+        const newState = SongReducer(state, actions.toggleSharpsMode(0))
+
+        expect(newState.song.tracks[0].sharpsMode).toBeFalsy()
+      })
+    })
+
+    describe('toggle flats mode', () => {
+      it('turns on with first toggle', () => {
+        const state = { song: { name: 'x', tracks: [{name: 'x', flatsMode: false}, {name: 'y', flatsMode: false}]}}
+
+        const newState = SongReducer(state, actions.toggleFlatsMode(1))
+
+        expect(newState.song.tracks[1].flatsMode).toBeTruthy()
+      })
+
+      it('toggles off when on', () => {
+        const state = { song: { name: 'x', tracks: [{name: 'x', flatsMode: true}, {name: 'y', flatsMode: false}]}}
+
+        const newState = SongReducer(state, actions.toggleFlatsMode(0))
+
+        expect(newState.song.tracks[0].flatsMode).toBeFalsy()
+      })
+    })
+  })
+
+  describe('is in flats mode?', () => {
+    it('is true when flag is on for track', () => {
+      const song = { tracks: [ { flatsMode: true } ]}
+
+      expect(isInFlatsMode(song, 0)).toBeTruthy()
+    })
+
+    it('is false when flag is off for track', () => {
+      const song = { tracks: [ { flatsMode: true }, { flatsMode: false } ]}
+
+      expect(isInFlatsMode(song, 1)).toBeFalsy()
+    })
+  })
+
+  describe('is in sharps mode?', () => {
+    it('is true when flag is on for track', () => {
+      const song = { tracks: [ { sharpsMode: true } ]}
+
+      expect(isInSharpsMode(song, 0)).toBeTruthy()
+    })
+
+    it('is false when flag is off for track', () => {
+      const song = { tracks: [ { sharpsMode: true }, { sharpsMode: false } ]}
+
+      expect(isInSharpsMode(song, 1)).toBeFalsy()
+    })
+  })
   it('adds note to sharps', () => {
     const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
 
@@ -229,12 +227,32 @@ describe('key signature sharps and flats', () => {
     expect(newState.song.tracks[0].sharps).toEqual([])
   })
 
-  it('adds note to flats', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
+  describe('sharps and flats', () => {
+    it('adds note to flats', () => {
+      const state = { song: { name: 'x', tracks: [{name: 'a'}]}}
 
-    const newState = SongReducer(state, actions.addFlat(0, 'F4'))
+      const newState = SongReducer(state, actions.addFlat(0, 'F4'))
 
-    expect(newState.song.tracks[0].flats).toEqual(['F4'])
+      expect(newState.song.tracks[0].flats).toEqual(['F4'])
+    })
+
+    it('changes flat to sharp when same note clicked', () => {
+      const state = { song: { name: 'x', tracks: [{flats: ['F4'], sharps: ['G4'], name: 'a'}]}}
+
+      const newState = SongReducer(state, actions.addSharp(0, 'F4'))
+
+      expect(newState.song.tracks[0].sharps).toEqual(['G4', 'F4'])
+      expect(newState.song.tracks[0].flats).toEqual([])
+    })
+
+    it('changes sharp to flat when same note clicked', () => {
+      const state = { song: { name: 'x', tracks: [{flats: ['F4'], sharps: ['G4'], name: 'a'}]}}
+
+      const newState = SongReducer(state, actions.addFlat(0, 'G4'))
+
+      expect(newState.song.tracks[0].sharps).toEqual([])
+      expect(newState.song.tracks[0].flats).toEqual(['F4', 'G4'])
+    })
   })
 
   it('ignores undefined', () => {
