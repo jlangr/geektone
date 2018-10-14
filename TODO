@@ -1,7 +1,6 @@
 M dotting a tie rest converts it to a note
 H start song at selection point
 H bass clef
-H flats overlap sharps in accidentals area
 H load song by name
 H volume: is there distortion?
 
@@ -13,6 +12,8 @@ M mouse insert note
 M note insert mode
 M repeat section
 M individual accidental
+
+M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored
 
 
 L sharps & flats are not in proper order to determine key
