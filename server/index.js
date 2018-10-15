@@ -20,7 +20,13 @@ app.use((req, res, next) => {
 const songNamePrefix = 'song'
 const songLocation = './data'
 const matchOn = /^song(\d+)\.json$/
+
 let allSongs = undefined
+const getAllSongs = () => {
+  if (!allSongs)
+    allSongs = generateSongList(songFiles())
+  return allSongs
+}
 
 const ids = files => {
   const matching = []
@@ -33,15 +39,9 @@ const ids = files => {
 
 const songFilename = id => `${songLocation}/${songNamePrefix}${id}.json`
 
-const readSong = id => {
-  const rawData = fs.readFileSync(songFilename(id))
-  return JSON.parse(rawData)
-}
+const readSong = id => JSON.parse(fs.readFileSync(songFilename(id)))
 
-const writeSong = json => {
-  const songText = JSON.stringify(json)
-  fs.writeFileSync(`song${id}.json`, songText)
-}
+const writeSong = (id, json) => fs.writeFileSync(songFilename(id), JSON.stringify(json))
 
 const title = id => readSong(id).name
 
@@ -68,12 +68,10 @@ app.get('/song/:id', (request, response) => {
   response.send(readSong(request.params.id))
 })
 
-app.get('/songs', (request, response) => {
-  if (!allSongs)
-    allSongs = generateSongList(songFiles())
+const sortedSongList = () => getAllSongs().sort(([_id1, title1], [_id2, title2]) => title1 > title2)
 
-  const sortedByTitle = allSongs.sort(([_id1, title1], [_id2, title2]) => title1 > title2)
-  response.send(sortedByTitle)
+app.get('/songs', (request, response) => {
+  response.send(sortedSongList())
 })
 
 app.put('/song/:id', (request,response) => {
@@ -81,6 +79,22 @@ app.put('/song/:id', (request,response) => {
   const id = request.params.id
   writeSong(id, request.body)
   response.send(200)
+})
+
+const updateSongTitle = (idToUpdate, newTitle) => {
+  const song = getAllSongs().find(([id, title], index) => {
+    return id === idToUpdate})
+  song[1] = newTitle
+}
+
+app.put('/song/:id/rename', (request, response) => {
+  const newTitle = request.body.newTitle
+  const id = request.params.id
+  const song = readSong(id)
+  song.name = newTitle
+  writeSong(id, song)
+  updateSongTitle(id, newTitle)
+  response.status(200).json(sortedSongList())
 })
 
 app.post('/song', (request,response) => {

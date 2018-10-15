@@ -6,7 +6,7 @@ import Beforeunload from 'react-beforeunload'
 import './App.css'
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
-import { changeBpm, changeSongName, loadSong, loadSongList, loadSynths, newTrack, playSong, saveSong, stopSong } from './actions'
+import { changeBpm, loadSong, loadSongList, loadSynths, newTrack, playSong, putSongName, saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
 import Select from 'react-select'
 import InlineEdit from 'react-edit-inline2'
@@ -37,7 +37,9 @@ export class App extends Component {
                   validate={() => true}
                   text={this.props.song.name}
                   paramName='newTitle'
-                  change={({ newTitle }) => this.props.changeSongName(newTitle) }/>
+                  change={({ newTitle }) => {
+                    console.log('song id: ', this.props.song)
+                    this.props.putSongName(this.props.song.id, newTitle) }}/>
               </h2>
               {this.props.message}<br />
               <div className='text-danger'>{this.props.errorMessage}</div>
@@ -112,7 +114,7 @@ const mapStateToProps = (state, _ownProps) => {
 }
 
 const mapDispatchToProps = { 
-  changeBpm, changeSongName, loadSong, loadSongList, loadSynths, newTrack, saveSong, playSong, stopSong
+  changeBpm, putSongName, loadSong, loadSongList, loadSynths, newTrack, saveSong, playSong, stopSong
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

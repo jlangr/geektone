@@ -12,7 +12,11 @@ export const updateTrack = trackIndex => ({ type: type.UPDATE_TRACK, payload: tr
 
 export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm })
 
-export const changeSongName = newName => ({ type: type.CHANGE_SONG_NAME, payload: newName })
+export const changeSongName = (newTitle, songList) => {
+  console.log('changing song name', newTitle, songList)
+
+  return ({ type: type.CHANGE_SONG_NAME, payload: { newTitle, songList }})
+}
 
 export const changeTrackInstrument = (instrument, id) => ({ type: type.CHANGE_TRACK_INSTRUMENT, payload: {instrument: instrument, trackId: id }})
 
@@ -21,16 +25,22 @@ export const createSong = (id, message) => ({ type: type.CREATE_SONG, payload: {
 export const deleteTrack = trackIndex => ({ type: type.DELETE_TRACK, payload: trackIndex })
 
 // TODO test
-export const loadSongList = () =>{
-  return dispatch =>
+export const loadSongList = () =>
+  dispatch =>
     axios.get(request(`/songs`))
       .then(response => dispatch({ type: type.SONG_LIST, payload: response.data }))
-      .catch(error => dispatch(errorMessage(`unable to retrieve song list: ${error.toString}`)))
-}
+      .catch(error => dispatch(errorMessage(`unable to retrieve song list: ${error.toString()}`)))
 
 export const markClean = message => ({ type: type.MARK_CLEAN, payload: message })
 
 export const newTrack = () => ({ type: type.NEW_TRACK })
+
+// TODO add test
+export const putSongName = (id, newName) =>
+  dispatch =>
+    axios.put(request(`/song/${id}/rename`), { newTitle: newName })
+      .then(response => dispatch(changeSongName(newName, response.data)))
+      .catch(error => dispatch(errorMessage(`unable to rename song: ${error.toString()}`)))
 
 export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song })
 

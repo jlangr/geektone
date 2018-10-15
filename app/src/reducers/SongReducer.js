@@ -124,6 +124,8 @@ const updateState_addSharp = (state, trackIndex, note) => {
   return updateTrack(state, trackIndex, updatedTrack)
 }
 
+const convertToSongSelectionList = songs => songs.map(([id, title]) => ({ value: id, label: title }))
+
 export default(state = INITIAL_STATE, action) => {
 //  const incomingStateIsDirty = state.song.isDirty
   state.song.isDirty = true
@@ -150,7 +152,12 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.CHANGE_SONG_NAME:
     {
-      return { ...state, song: { ...state.song, name: action.payload }}
+      console.log('action.payload', action.payload)
+      const { newTitle, songList } = action.payload
+      console.log('change song name: ', newTitle, songList)
+      return { ...state, 
+        songList: convertToSongSelectionList(songList), 
+        song: { ...state.song, name: newTitle }}
     }
 
     case type.CHANGE_TRACK_INSTRUMENT:
@@ -217,9 +224,7 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.SONG_LIST:
     {
-      const songList = action.payload.map(([id, title]) => ({ value: id, label: title }))
-      console.log('song list:', songList)
-      return { ...state, songList }
+      return { ...state, songList: convertToSongSelectionList(action.payload) }
     }
 
     case type.TOGGLE_SHARPS_MODE: 
