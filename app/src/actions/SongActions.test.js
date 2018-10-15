@@ -18,6 +18,24 @@ describe('async actions', () => {
     mock.restore()
   })
 
+  describe('load song list', () => {
+    it('dispatches to SONG_LIST on successful retrieve', async () => {
+      mock.onGet(actions.request('/songs')).reply(200, [['1', 'songname']])
+
+      await actions.loadSongList()(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.songList([['1', 'songname']]))
+    })
+
+    it('dispatches to error message on failed retrieve', async () => {
+      mock.onGet(actions.request('/songs')).reply(500)
+
+      await actions.loadSongList()(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.errorMessage('unable to retrieve song list: Error: Request failed with status code 500'))
+    })
+  })
+
   describe('load song', () => {
     it('dispatches to replace song on successful retrieve', async () => {
       const song = { name: 'x', id: '86' }
@@ -33,7 +51,7 @@ describe('async actions', () => {
 
       await actions.loadSong('86')(dispatch)
       
-      expect(dispatch).toHaveBeenCalledWith({ type: type.ERROR, payload: 'unable to load song; Error: Request failed with status code 500' })
+      expect(dispatch).toHaveBeenCalledWith(actions.errorMessage('unable to load song; Error: Request failed with status code 500'))
     })
   })
 
