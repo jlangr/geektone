@@ -11,7 +11,8 @@ export const INITIAL_STATE = {
     name: 'default',
     tracks: [],
     isDirty: false
-  }
+  },
+  songList: []
 }
 
 // query functions
@@ -163,6 +164,12 @@ export default(state = INITIAL_STATE, action) => {
       return { ...state, song: {...state.song, tracks: tracks }}
     }
 
+    case type.CREATE_SONG:
+    {
+      const { id, message } = action.payload
+      return { ...state, message, song: { ...state.song, id }}
+    }
+
     case type.DELETE_TRACK:
     {
       const trackIndexToDelete = action.payload
@@ -189,6 +196,7 @@ export default(state = INITIAL_STATE, action) => {
     {
       const newTrack = { 
         name: `track${state.song.tracks.length + 1}`, 
+        isMuted: false,
         instrument: 'piano', 
         notes: new NoteSequence(['E4']),
         sharps: [],
@@ -205,6 +213,13 @@ export default(state = INITIAL_STATE, action) => {
         return { ...track, notes: new NoteSequence(notes) }
       })
       return { ...state, song: newSong }
+    }
+
+    case type.SONG_LIST:
+    {
+      const songList = action.payload.map(([id, title]) => ({ value: id, label: title }))
+      console.log('song list:', songList)
+      return { ...state, songList }
     }
 
     case type.TOGGLE_SHARPS_MODE: 

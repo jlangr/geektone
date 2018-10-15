@@ -27,6 +27,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "react-numeric-input": "^2.2.3",
+    "react-select": "^2.1.0",
     "redux-mock-store": "^1.5.1",
     "redux-thunk": "^2.2.0"
   },

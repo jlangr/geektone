@@ -1,18 +1,25 @@
 import React, { Component } from 'react'
-import { Form, Col, Button, Grid, Glyphicon, Row } from 'react-bootstrap'
+import { Col, Button, Grid, Glyphicon, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import NumericInput from 'react-numeric-input'
 import Beforeunload from 'react-beforeunload'
 import './App.css'
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
-import { changeBpm, changeSongName, loadSong, loadSynths, newTrack, playSong, saveSong, stopSong } from './actions'
+import { changeBpm, changeSongName, loadSong, loadSongList, loadSynths, newTrack, playSong, saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
+import Select from 'react-select'
 import InlineEdit from 'react-edit-inline2'
 
 export class App extends Component {
+  constructor() {
+    super()
+    this.state = {}
+  }
+
   componentDidMount() {
     this.props.loadSynths()
+    this.props.loadSongList()
   }
 
   render() {
@@ -24,7 +31,7 @@ export class App extends Component {
        {onBeforeUnload}
         <Grid className='tracks-grid'>
           <Row className='show-grid'>
-            <Col xs={4}>
+            <Col xs={6}>
               <h2>
                 <InlineEdit
                   validate={() => true}
@@ -34,27 +41,43 @@ export class App extends Component {
               </h2>
               {this.props.message}<br />
               <div className='text-danger'>{this.props.errorMessage}</div>
-              <Form>
-                <Row className='tracks-row'>
-                  <label htmlFor='bpm' className='lbl'>BPM</label>
-                  <NumericInput 
-                    id='bpm' 
-                    style={{input: { width: 70 }}} 
-                    min={25} max={200} 
-                    value={this.props.song.bpm} 
-                    onChange={this.props.changeBpm.bind(this)} />
-                </Row>
-                <Row className='tracks-row'>
-                  <Button className='btn-song' onClick={() => this.props.playSong(this.props.song, () => {
-                    this.props.stopSong()
-                  })} 
-                    { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}><Glyphicon glyph='play' title='Play' /></Button>
-                  <Button className='btn-song' onClick={this.props.stopSong}
-                    { ...this.props.synth.isPlaying ? {} : { disabled: true}}><Glyphicon glyph='stop' title='Stop playback' /></Button>
-                  <Button className='btn-song' onClick={() => this.props.saveSong(this.props.song) }>Save</Button>
-                  <Button className='btn-song' onClick={this.props.loadSong}>Load</Button>
-                </Row>
-              </Form>
+
+              <Row className='tracks-row'>
+                <label htmlFor='bpm' className='lbl'>BPM</label>
+                <NumericInput 
+                  id='bpm' 
+                  style={{input: { width: 70 }}} 
+                  min={25} max={200} 
+                  value={this.props.song.bpm} 
+                  onChange={this.props.changeBpm.bind(this)} />
+              </Row>
+
+              <Row className='tracks-row'>
+                <Button className='btn-song' 
+                  onClick={() => this.props.playSong(this.props.song, () => this.props.stopSong())} 
+                  { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>
+                  <Glyphicon glyph='play' title='Play' />
+                </Button>
+                <Button className='btn-song' 
+                  onClick={this.props.stopSong}
+                  { ...this.props.synth.isPlaying ? {} : { disabled: true}}>
+                  <Glyphicon glyph='stop' title='Stop playback' />
+                 </Button>
+                <Button className='btn-song' 
+                  onClick={() => this.props.saveSong(this.props.song)}>
+                  Save
+                </Button>
+                <Button className='btn-song' 
+                  onClick={() => this.props.loadSong(this.state.selectedSongId)}
+                  { ...this.state.selectedSongId ? {} : { disabled: true}}>
+                  Load
+                </Button>
+                <Select
+                  onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
+                  options={this.props.songList}
+                />
+              </Row>
+
             </Col>
             <Col xs={6}>
               <HelpPanel/>
@@ -80,6 +103,7 @@ export class App extends Component {
 
 const mapStateToProps = (state, _ownProps) => {
   return { 
+    songList: state.composition.songList,
     song: state.composition.song,
     message: state.composition.message,
     errorMessage: state.composition.errorMessage,
@@ -88,7 +112,7 @@ const mapStateToProps = (state, _ownProps) => {
 }
 
 const mapDispatchToProps = { 
-  changeBpm, changeSongName, loadSong, loadSynths, newTrack, saveSong, playSong, stopSong
+  changeBpm, changeSongName, loadSong, loadSongList, loadSynths, newTrack, saveSong, playSong, stopSong
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

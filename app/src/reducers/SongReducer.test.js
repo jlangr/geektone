@@ -3,6 +3,14 @@ import * as type from '../actions/types'
 import SongReducer, { isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
 
 describe('a song', () => {
+  describe('create song', () => {
+    it('assigns generated id', () => {
+      const state = SongReducer({ song: { name: 'new' }}, actions.createSong('42', 'hey'))
+
+      expect(state.song.id).toEqual('42')
+    })
+  })
+
   describe('is either dirty or not', () => {
     it('is not dirty by default', () => {
       expect(SongReducer(undefined, 'whatever').song.isDirty).toBeFalsy()
