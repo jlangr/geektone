@@ -124,7 +124,8 @@ const updateState_addSharp = (state, trackIndex, note) => {
   return updateTrack(state, trackIndex, updatedTrack)
 }
 
-const convertToSongSelectionList = songs => songs.map(([id, title]) => ({ value: id, label: title }))
+const convertToSongSelectionList = songs =>
+  songs.map(([id, title]) => ({ value: id, label: title }))
 
 export default(state = INITIAL_STATE, action) => {
 //  const incomingStateIsDirty = state.song.isDirty
@@ -152,9 +153,7 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.CHANGE_SONG_NAME:
     {
-      console.log('action.payload', action.payload)
       const { newTitle, songList } = action.payload
-      console.log('change song name: ', newTitle, songList)
       return { ...state, 
         songList: convertToSongSelectionList(songList), 
         song: { ...state.song, name: newTitle }}

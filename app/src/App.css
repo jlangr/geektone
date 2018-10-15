@@ -41,6 +41,10 @@ Label {
   margin-right: 10px;
 }
 
+.select {
+  display: 'inline-block';
+}
+
 .tracks-grid {
   margin: 0;
 }

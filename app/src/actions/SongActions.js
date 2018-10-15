@@ -13,8 +13,6 @@ export const updateTrack = trackIndex => ({ type: type.UPDATE_TRACK, payload: tr
 export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm })
 
 export const changeSongName = (newTitle, songList) => {
-  console.log('changing song name', newTitle, songList)
-
   return ({ type: type.CHANGE_SONG_NAME, payload: { newTitle, songList }})
 }
 

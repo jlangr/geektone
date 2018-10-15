@@ -17,7 +17,7 @@ describe('a song', () => {
     })
 
     it('is dirty after any update', () => {
-      const state = SongReducer(undefined, actions.changeSongName('y'))
+      const state = SongReducer(undefined, actions.changeSongName('y', []))
 
       expect(state.song.isDirty).toBeTruthy()
     })
@@ -80,10 +80,17 @@ describe('a song', () => {
     })
   })
 
-  it('allows changing the song name', () => {
-    const state = SongReducer(undefined, actions.changeSongName('new name'))
+  describe('changing the song name', () => {
+    const serverSongList = [['42', 'new name']]
+    const state = SongReducer(undefined, actions.changeSongName('new name', serverSongList))
 
-    expect(state.song.name).toEqual('new name')
+    it('updates the name', () => {
+      expect(state.song.name).toEqual('new name')
+    })
+
+    it('transforms the song list to the selection list expected format', () => {
+      expect(state.songList).toEqual([{value: '42', label: 'new name'}])
+    })
   })
 
   it('allows changing the BPM', () => {

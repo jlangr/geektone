@@ -69,15 +69,16 @@ export class App extends Component {
                   onClick={() => this.props.saveSong(this.props.song)}>
                   Save
                 </Button>
+              </Row>
+              <Row className='tracks-row'>
+                <Select
+                  onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
+                  options={this.props.songList} />
                 <Button className='btn-song' 
                   onClick={() => this.props.loadSong(this.state.selectedSongId)}
                   { ...this.state.selectedSongId ? {} : { disabled: true}}>
                   Load
                 </Button>
-                <Select
-                  onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
-                  options={this.props.songList}
-                />
               </Row>
 
             </Col>
