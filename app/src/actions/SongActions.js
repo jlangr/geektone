@@ -12,8 +12,7 @@ export const updateTrack = trackIndex => ({ type: type.UPDATE_TRACK, payload: tr
 
 export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm })
 
-export const changeSongName = (newTitle, songList) => 
-  ({ type: type.CHANGE_SONG_NAME, payload: { newTitle, songList }})
+export const changeSongName = (newTitle, songList) => ({ type: type.CHANGE_SONG_NAME, payload: { newTitle, songList }})
 
 export const changeTrackInstrument = (instrument, id) => ({ type: type.CHANGE_TRACK_INSTRUMENT, payload: {instrument: instrument, trackId: id }})
 
@@ -21,27 +20,15 @@ export const createSong = (id, message) => ({ type: type.CREATE_SONG, payload: {
 
 export const deleteTrack = trackIndex => ({ type: type.DELETE_TRACK, payload: trackIndex })
 
-export const songList = songs => ({ type: type.SONG_LIST, payload: songs })
-
-// TODO test
-export const loadSongList = () =>
-  dispatch =>
-    axios.get(request(`/songs`))
-      .then(response => dispatch(songList(response.data)))
-      .catch(error => dispatch(errorMessage(`unable to retrieve song list: ${error.toString()}`)))
+export const errorMessage = message => ({ type: type.ERROR, payload: message })
 
 export const markClean = message => ({ type: type.MARK_CLEAN, payload: message })
 
 export const newTrack = () => ({ type: type.NEW_TRACK })
 
-// TODO add test
-export const putSongName = (id, newName) =>
-  dispatch =>
-    axios.put(request(`/song/${id}/rename`), { newTitle: newName })
-      .then(response => dispatch(changeSongName(newName, response.data)))
-      .catch(error => dispatch(errorMessage(`unable to rename song: ${error.toString()}`)))
-
 export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song })
+
+export const songList = songs => ({ type: type.SONG_LIST, payload: songs })
 
 export const toggleSharpsMode = trackIndex => ({ type: type.TOGGLE_SHARPS_MODE, payload: trackIndex })
 
@@ -49,13 +36,23 @@ export const toggleFlatsMode = trackIndex => ({ type: type.TOGGLE_FLATS_MODE, pa
 
 export const toggleMute = trackIndex => ({ type: type.TOGGLE_MUTE, payload: trackIndex })
 
-export const errorMessage = message => ({ type: type.ERROR, payload: message })
+export const loadSongList = () =>
+  dispatch =>
+    axios.get(request(`/songs`))
+      .then(response => dispatch(songList(response.data)))
+      .catch(error => dispatch(errorMessage(`unable to retrieve song list: ${error.toString()}`)))
 
 export const postSong = song => 
   dispatch => 
     axios.post(request('/song'), song)
       .then(response => dispatch(createSong(response.data.toString(), 'song created')))
       .catch(error => dispatch(errorMessage(`unable to create your song, sorry: ${error.toString()}`)))
+
+export const putSongName = (id, newName) =>
+  dispatch =>
+    axios.put(request(`/song/${id}/rename`), { newTitle: newName })
+      .then(response => dispatch(changeSongName(newName, response.data)))
+      .catch(error => dispatch(errorMessage(`unable to rename song: ${error.toString()}`)))
 
 export const loadSong = id =>
   dispatch =>

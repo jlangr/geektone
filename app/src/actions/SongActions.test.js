@@ -36,6 +36,24 @@ describe('async actions', () => {
     })
   })
 
+  describe('put song name', () => {
+    it('dispatches to change song name on success', async () => {
+      mock.onPut(actions.request('/song/42/rename')).reply(200, [['42', 'newName']])
+
+      await actions.putSongName('42', 'newName')(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.changeSongName('newName', [['42', 'newName']]))
+    })
+
+    it('dispatches to error message on failed retrieve', async () => {
+      mock.onPut(actions.request('/song/42/rename')).reply(500)
+
+      await actions.putSongName('42', 'newName')(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.errorMessage('unable to rename song: Error: Request failed with status code 500'))
+    })
+  })
+
   describe('load song', () => {
     it('dispatches to replace song on successful retrieve', async () => {
       const song = { name: 'x', id: '86' }
