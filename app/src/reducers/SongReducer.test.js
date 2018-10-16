@@ -1,6 +1,7 @@
 import * as actions from '../actions/SongActions'
 import * as type from '../actions/types'
-import SongReducer, { isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
+import SongReducer, { hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
+import NoteSequence from '../NoteSequence'
 
 describe('a song', () => {
   describe('create song', () => {
@@ -142,16 +143,6 @@ describe('toggle mute', () => {
   })
 })
 
-describe('trackData', () => {
-  it('represents the track given an id', () => {
-    const state = { song: { name: 'x', tracks: [{name: 'x'}, {name: 'y'}]}}
-
-    const track = trackData(state, 1)
-
-    expect(track).toEqual({name: 'y'})
-  })
-})
-
 describe('key signature sharps and flats', () => {
   describe('toggling mode', () => {
     describe('toggle sharps mode', () => {
@@ -285,5 +276,30 @@ describe('key signature sharps and flats', () => {
     const newState = SongReducer(state, actions.addFlat(0, 'F4'))
 
     expect(newState.song.tracks[0].flats).toEqual([])
+  })
+
+})
+
+describe('trackData', () => {
+  it('represents the track given an id', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x'}, {name: 'y'}]}}
+
+    const track = trackData(state, 1)
+
+    expect(track).toEqual({name: 'y'})
+  })
+})
+
+describe('answers whether or not track has notes in treble staff', () => {
+  it('does when any note is C4 or higher', () => {
+    const song = { tracks: [{ id: 0, notes: new NoteSequence(['C4', 'D4', 'E4']) }] }
+    expect(hasTrebleNotes(song, 0)).toBeTruthy()
+  })
+})
+
+describe('answers whether or not track has notes in bass staff', () => {
+  it('does when any note is C4 or lower', () => {
+    const song = { tracks: [{ id: 0, notes: new NoteSequence(['C4', 'D4', 'E4']) }] }
+    expect(hasBassNotes(song, 0)).toBeFalsy()
   })
 })

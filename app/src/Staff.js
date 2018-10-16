@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as keyHandler from './KeyHandler'
 import { addFlat, addSharp, updateTrack } from './actions'
-import { isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
+import { hasBassNotes, hasTrebleNotes, isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
 import { nearestNote } from './reducers/UIReducer'
 import * as UI from './util/UI'
 import * as Draw from './util/Draw'
@@ -20,15 +20,28 @@ export class Staff extends Component {
     this.draw()
   }
 
+  // TODO make height dynamic
   render() {
     return (
       <div>
         <canvas ref='canvas' id={this.props.id}
           tabIndex={this.props.id}
-          border='0' width={this.staffWidth()} height={Draw.staffHeight}
+          border='0' width={this.staffWidth()} 
+          height={this.staffHeight()}
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
       </div>
     )  // note: tabIndex needed for key events
+  }
+
+  // TODO test
+  staffHeight() {
+    let height = 0
+    // what if 0 notes? not possible now
+    if (hasTrebleNotes(this.props.song, this.props.id))
+      height += Draw.staffHeight
+    if (hasBassNotes(this.props.song, this.props.id))
+      height += Draw.staffHeight
+    return height
   }
 
   staffWidth() {
@@ -89,14 +102,21 @@ export class Staff extends Component {
     this.drawStaffLines()
   }
 
-  drawStaffLines() {
+  drawStaff(lines) {
     this.staffContext().beginPath()
-    Draw.trebleStaffLines.forEach(line => {
+    lines.forEach(line => {
       const currentY = Draw.y(line)
       Draw.drawLine(this.staffContext(), 0, currentY, this.staffWidth(), currentY)
     })
     this.staffContext().stroke()
     this.drawAccidentalsArea()
+  }
+
+  drawStaffLines() {
+    if (hasTrebleNotes(this.props.song, this.props.id))
+      this.drawStaff(Draw.trebleStaffLines)
+    if (hasBassNotes(this.props.song, this.props.id))
+      this.drawStaff(Draw.bassStaffLines)
   }
 
   drawSharp(note, sharpIndex) {

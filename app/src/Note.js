@@ -68,6 +68,12 @@ export default class Note {
     return Duration.time(this.duration)
   }
 
+  isHigherOrEqual(that) {
+   return this.octave > that.octave ||
+      (this.octave === that.octave &&
+      this.noteIndex >= that.noteIndex)
+  }
+
   toJSON() {
     return { name: this.name(), duration: this.duration, isNote: this.isNote }
   }

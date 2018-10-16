@@ -37,9 +37,8 @@ export class App extends Component {
                   validate={() => true}
                   text={this.props.song.name}
                   paramName='newTitle'
-                  change={({ newTitle }) => {
-                    console.log('song id: ', this.props.song)
-                    this.props.putSongName(this.props.song.id, newTitle) }}/>
+                  change={({ newTitle }) => 
+                    this.props.putSongName(this.props.song.id, newTitle) }/>
               </h2>
               {this.props.message}<br />
               <div className='text-danger'>{this.props.errorMessage}</div>

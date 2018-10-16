@@ -18,6 +18,24 @@ describe('note', () => {
       expect(new Note('F3', '4n.').sixteenthsInTheDot()).toEqual(2)
       expect(new Note('F3', '8n.').sixteenthsInTheDot()).toEqual(1)
     })
+
+    describe('is higher or equal to', () => {
+      it('returns true when note in same octave and higher', () => {
+        expect(new Note('F3').isHigherOrEqual(new Note('E3'))).toBeTruthy()
+      })
+
+      it('returns false when note in same octave and not higher', () => {
+        expect(new Note('F3').isHigherOrEqual(new Note('G3'))).toBeFalsy()
+      })
+
+      it('returns true when note in higher octave', () => {
+        expect(new Note('F4').isHigherOrEqual(new Note('G3'))).toBeTruthy()
+      })
+
+      it('returns false when note in lower octave', () => {
+        expect(new Note('F3').isHigherOrEqual(new Note('E4'))).toBeFalsy()
+      })
+    })
   })
 
   describe('whole note increment/decrement', () => {

@@ -2,6 +2,7 @@ import * as type from '../actions/types'
 import NoteSequence from '../NoteSequence'
 import { remove } from '../js/ArrayUtil'
 import * as Draw from '../util/Draw'
+import Note from '../Note';
 
 export const INITIAL_STATE = {
   message: undefined,
@@ -15,13 +16,19 @@ export const INITIAL_STATE = {
   songList: []
 }
 
-// query functions
-
 export const isInSharpsMode = (song, id) => song.tracks[id].sharpsMode
 
 export const isInFlatsMode = (song, id) => song.tracks[id].flatsMode
 
 export const trackData = (state, trackId) => state.song.tracks[trackId]
+
+const C4 = new Note('C4')
+
+export const hasTrebleNotes = (song, id) =>
+  song.tracks[id].notes.allNotes().some(note => note.isHigherOrEqual(C4))
+
+export const hasBassNotes = (song, id) =>
+  song.tracks[id].notes.allNotes().some(note => !note.isHigherOrEqual(C4))
 
 // TODO test
 // barsAndNotes are derived from bars(), 

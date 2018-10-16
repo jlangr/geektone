@@ -1,8 +1,13 @@
 M dotting a tie rest converts it to a note
 H start song at selection point
 H bass clef
-H load song by name
+  - draw bass or clef sign
+  - draw bar separators on bass clef
+  - draw rests on both or appropriate clef
+  - draw horizontal line through C note
+  - limit top and bottom notes to known sequence of notes
 H volume: is there distortion?
+H initial song--name = default. State?
 
 M allow characters numbers and some symbols on rename. (disallow: !, < >, ~, \, /, ?, *, :, |)
 M play-along marker
@@ -14,7 +19,6 @@ M repeat section
 M individual accidental
 
 M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored
-
 
 L sharps & flats are not in proper order to determine key
 L allows sharp & flat on same note
