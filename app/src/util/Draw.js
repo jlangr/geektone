@@ -12,6 +12,9 @@ export const sharpArea = sharpWidth + 4
 const sharpPad = 8
 export const sharpsArea = (sharpsInWidth * sharpArea) + sharpPad
 
+const clefSignWidth = 40
+export const accidentalsLeft = clefSignWidth + 1
+
 export const trebleStaffLines = [ 'F5', 'D5', 'B4', 'G4', 'E4' ]
 // TODO CHECK THIS!
 export const bassStaffLines = [ 'A3', 'F3', 'D3', 'B2', 'G2' ]
@@ -41,10 +44,9 @@ export const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=defaultLine
 }
 
 export const verticalIndex = noteName => allStaffNotes.indexOf(noteName)
-  // trebleStaffNotes.indexOf(noteName)
 
 export const y = noteName => verticalIndex(noteName) * lineHeight / 2
 
-export const x = position => sharpsArea + notePad + (position * (noteDistance + notePad))
+export const x = position => accidentalsLeft + sharpsArea + notePad + (position * (noteDistance + notePad))
 
 export const topLineY = () => y(trebleStaffLines[0])

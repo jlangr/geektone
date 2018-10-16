@@ -31,7 +31,7 @@ export const nearestNote = (uiState, point) => {
 export const INITIAL_STATE = {
   staff: {
     noteLineRanges: staffNoteLineRanges(),
-    accidentalsRect:  new Rect(0, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(MiddleC))
+    accidentalsRect:  new Rect(Draw.accidentalsLeft, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(MiddleC))
   }
 };
 

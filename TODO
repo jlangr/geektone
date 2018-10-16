@@ -1,8 +1,9 @@
+H create new song
+M save song as (duplicate)
+
 M dotting a tie rest converts it to a note
 H start song at selection point
 H bass clef
-  - draw bass or clef sign
-  - draw bar separators on bass clef
   - draw rests on both or appropriate clef
   - draw horizontal line through C note
   - limit top and bottom notes to known sequence of notes

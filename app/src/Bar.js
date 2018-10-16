@@ -56,13 +56,19 @@ export default class Bar {
     })
   }
 
-  drawOn(context) {
-    const x = Draw.x(this.position)
+  drawVerticalBar(context, staffLines) {
     context.beginPath()
-    const staffLines = Draw.trebleStaffLines
+
+    const x = Draw.x(this.position)
     const yTop = Draw.y(staffLines[0])
     const yBottom = Draw.y(staffLines[staffLines.length - 1])
     Draw.drawLine(context, x, yTop, x, yBottom)
+
     context.stroke()
+  }
+
+  drawOn(context, hasTrebleNotes, hasBassNotes) {
+    if (hasTrebleNotes) this.drawVerticalBar(context, Draw.trebleStaffLines)
+    if (hasBassNotes) this.drawVerticalBar(context, Draw.bassStaffLines)
   }
 }

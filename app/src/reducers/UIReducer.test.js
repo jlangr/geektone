@@ -6,7 +6,7 @@ describe('accidentals section', () => {
   it('is created with initial state', () => {
     const state = UIReducer.INITIAL_STATE;
 
-    expect(state.staff.accidentalsRect).toEqual(new Rect(0, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(UIReducer.MiddleC)));
+    expect(state.staff.accidentalsRect).toEqual(new Rect(Draw.accidentalsLeft, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(UIReducer.MiddleC)));
   });
 });
 

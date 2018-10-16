@@ -8,6 +8,8 @@ import * as UI from './util/UI'
 import * as Draw from './util/Draw'
 
 const highlightColor = 'red' // move to ui constants source
+const bassClefSymbol = '\uD834\uDD22'
+const trebleClefSymbol = '\uD834\uDD1E'
 
 export class Staff extends Component {
   componentDidMount() {
@@ -20,7 +22,6 @@ export class Staff extends Component {
     this.draw()
   }
 
-  // TODO make height dynamic
   render() {
     return (
       <div>
@@ -35,9 +36,9 @@ export class Staff extends Component {
 
   // TODO test
   staffHeight() {
-    let height = 0
     // what if 0 notes? not possible now
-    if (hasTrebleNotes(this.props.song, this.props.id))
+    let height = 0
+    // if (hasTrebleNotes(this.props.song, this.props.id))
       height += Draw.staffHeight
     if (hasBassNotes(this.props.song, this.props.id))
       height += Draw.staffHeight
@@ -45,7 +46,8 @@ export class Staff extends Component {
   }
 
   staffWidth() {
-    const lastNotePosition = this.props.barsAndNotes[this.props.barsAndNotes.length - 1].position
+    // TODO also add in width of accidentals
+    const lastNotePosition = Draw.accidentalsLeft + this.props.barsAndNotes[this.props.barsAndNotes.length - 1].position
     return Draw.x(2 + lastNotePosition)
   }
 
@@ -98,7 +100,10 @@ export class Staff extends Component {
 
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height)
-    this.props.barsAndNotes.forEach(x => x.drawOn(this.staffContext()))
+    this.props.barsAndNotes.forEach(x => x.drawOn(
+      this.staffContext(),
+      hasTrebleNotes(this.props.song, this.props.id),
+      hasBassNotes(this.props.song, this.props.id)))
     this.drawStaffLines()
   }
 
@@ -112,18 +117,32 @@ export class Staff extends Component {
     this.drawAccidentalsArea()
   }
 
+  drawClefSign(symbol, y, px) {
+    this.staffContext().beginPath()
+    this.staffContext().fillStyle = 'black'
+    this.staffContext().font = `${px}px Arial`
+    this.staffContext().fillText(symbol, 10, y)
+    this.staffContext().stroke()
+  }
+
   drawStaffLines() {
-    if (hasTrebleNotes(this.props.song, this.props.id))
-      this.drawStaff(Draw.trebleStaffLines)
-    if (hasBassNotes(this.props.song, this.props.id))
+    // TODO: this would work if the calculations for a note when there's only a bass staff are adjusted
+    // if (hasTrebleNotes(this.props.song, this.props.id))
+    this.drawStaff(Draw.trebleStaffLines)
+    this.drawClefSign(trebleClefSymbol, Draw.y('F4'), Draw.staffHeight / 2)
+
+    if (hasBassNotes(this.props.song, this.props.id)) {
       this.drawStaff(Draw.bassStaffLines)
+      this.drawClefSign(bassClefSymbol, Draw.y('A2'), Draw.staffHeight / 3)
+    }
   }
 
   drawSharp(note, sharpIndex) {
     this.staffContext().beginPath()
 
     const y = Draw.y(note) + 4
-    const x = (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
+    // yuk. Draw.accidentalsLeft => draw into a rectangle first
+    const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
 
     let top = y - (Draw.sharpHeight / 2)
     let bottom = y + (Draw.sharpHeight / 2)
@@ -157,7 +176,7 @@ export class Staff extends Component {
     const width = 12
 
     const y = Draw.y(note) - (height * 4 / 5)
-    const x = (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
+    const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
     
     this.staffContext().beginPath()
     this.staffContext().lineWidth = 3
