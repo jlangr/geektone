@@ -51,28 +51,22 @@ describe('note', () => {
       expect(note.name()).toEqual('C5')
     })
 
-    it('bumps down a half note', () => {
-      const note = new Note('D4')
-      note.decrement()
-      expect(note.name()).toEqual('C4')
-    })
-
     it('decrements octave when necessary', () => {
       const note = new Note('C4')
       note.decrement()
       expect(note.name()).toEqual('B3')
     })
 
-    it('ignores attempts to go below octave 1', () => {
-      const note = new Note('C1')
+    it('ignores attempts to go below lowest note', () => {
+      const note = new Note('E2')
       note.decrement()
-      expect(note.name()).toEqual('C1')
+      expect(note.name()).toEqual('E2')
     })
 
-    it('ignores attempts to go above octave 8', () => {
-      const note = new Note('C8')
+    it('ignores attempts to go above highest note', () => {
+      const note = new Note('A5')
       note.increment()
-      expect(note.name()).toEqual('C8')
+      expect(note.name()).toEqual('A5')
     })
   })
 

@@ -8,6 +8,7 @@ H initial song--name = default. State?
 
 ===
 
+M should not be able to move rest up or down
 M delete / copy / paste multiple notes
 M play-along marker
 M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored

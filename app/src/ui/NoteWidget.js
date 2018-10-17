@@ -239,7 +239,7 @@ export default class NoteWidget {
     else if (Duration.isQuarterBase(this.duration())) this.drawQuarter()
     else if (Duration.isEighthBase(this.duration())) this.drawEighth()
     else if (Duration.isSixteenthBase(this.duration())) this.drawSixteenth()
-    if (this.note.name() == 'C4' || this.note.name() == 'E2') 
+    if (this.note.name() === 'C4' || this.note.name() === 'E2') 
       this.drawStaffLine()
   }
 

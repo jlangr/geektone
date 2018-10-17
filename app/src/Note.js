@@ -117,10 +117,6 @@ export default class Note {
     return `${ascendingWholeNoteScale[this.noteIndex]}${this.octave}`
   }
 
-  isHighestNote() {
-    return this.name() === 'C8'
-  }
-
   updateTiePitch() {
     if (this.isRepresentedAsTie()) {
       this.startTies.forEach(t => { 
@@ -134,6 +130,10 @@ export default class Note {
     }
   }
 
+  isHighestNote() {
+    return this.name() === Draw.allStaffNotes[0]
+  }
+
   increment() {
     if (this.isHighestNote()) return
 
@@ -143,7 +143,7 @@ export default class Note {
   }
 
   isLowestNote() {
-    return this.octave === 1 && this.noteIndex === 0
+    return this.name() === Draw.allStaffNotes[Draw.allStaffNotes.length - 1]
   }
 
   decrement() {

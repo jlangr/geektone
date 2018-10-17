@@ -28,7 +28,7 @@ describe('nearest note', () => {
   });
 
   it('returns undefined if above staff', () => {
-    const tooHigh = Draw.y('F5') - UIReducer.lineClickTolerance - 1;
+    const tooHigh = Draw.y('A5') - UIReducer.lineClickTolerance - 1;
 
     const nearest = UIReducer.nearestNote(state, { x: 1, y: tooHigh });
 
@@ -36,7 +36,7 @@ describe('nearest note', () => {
   });
 
   it('returns undefined if below staff', () => {
-    const tooLow = Draw.y('E4') + UIReducer.lineClickTolerance + 1;
+    const tooLow = Draw.y('E2') + UIReducer.lineClickTolerance + 1;
 
     const nearest = UIReducer.nearestNote(state, { x: 1, y: tooLow });
 
