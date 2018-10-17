@@ -11,6 +11,7 @@ const highlightColor = 'red' // move to ui constants source
 const bassClefSymbol = '\uD834\uDD22'
 const trebleClefSymbol = '\uD834\uDD1E'
 const sharpSymbol = '\u266F'
+const flatSymbol = '\u266D'
 
 export class Staff extends Component {
   componentDidMount() {
@@ -125,11 +126,11 @@ export class Staff extends Component {
     this.drawAccidentalsArea()
   }
 
-  drawClefSign(symbol, y, px) {
+  drawText(text, x, y, px) {
     this.staffContext().beginPath()
     this.staffContext().fillStyle = 'black'
     this.staffContext().font = `${px}px Arial`
-    this.staffContext().fillText(symbol, 10, y)
+    this.staffContext().fillText(text, x, y)
     this.staffContext().stroke()
   }
 
@@ -138,95 +139,26 @@ export class Staff extends Component {
     //  when there's only a bass staff are adjusted
     // if (hasTrebleNotes(this.props.song, this.props.id)) { ... }
     this.drawStaff(Draw.trebleStaffLines)
-    this.drawClefSign(trebleClefSymbol, Draw.y('F4'), Draw.staffHeight / 2)
+    this.drawText(trebleClefSymbol, 10, Draw.y('F4'), Draw.staffHeight * 7 / 10)
 
     if (hasBassNotes(this.props.song, this.props.id)) {
       this.drawStaff(Draw.bassStaffLines)
-      this.drawClefSign(bassClefSymbol, Draw.y('A2'), Draw.staffHeight / 3)
+      this.drawText(bassClefSymbol, 10, Draw.y('A2'), Draw.staffHeight * 5 / 10)
     }
   }
 
   drawSharp(note, sharpIndex) {
-    console.log('sharp for', note)
     const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
-    const y = Draw.y(note) + 4
-
-    const px = Draw.lineHeight
-    this.staffContext().beginPath()
-    this.staffContext().fillStyle = 'black'
-    this.staffContext().font = `${px}px Arial`
-    this.staffContext().fillText(sharpSymbol, x, y)
-    this.staffContext().stroke()
-
-    /*
-    this.staffContext().beginPath()
-
-    const y = Draw.y(note) + 4
-    // yuk. Draw.accidentalsLeft => draw into a rectangle first
-    const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
-
-    let top = y - (Draw.sharpHeight / 2)
-    let bottom = y + (Draw.sharpHeight / 2)
-    let upstrokeLeft = x - (Draw.staffWidthBetweenUpstrokes / 2)
-    let upstrokeRight = x + (Draw.staffWidthBetweenUpstrokes / 2)
-
-    let verticalOffset = Draw.sharpHeight / 3
-
-    let weight = 2
-    Draw.drawLine(this.staffContext(), upstrokeLeft, top, upstrokeLeft, bottom, weight)
-    Draw.drawLine(this.staffContext(), upstrokeRight, top - verticalOffset, upstrokeRight, bottom - verticalOffset, weight)
-
-    this.staffContext().stroke()
-
-    this.staffContext().beginPath()
-    weight = 4
-    let left = x - (Draw.sharpWidth / 2)
-    let right = x + (Draw.sharpWidth / 2)
-    let upslashYstart = y - (Draw.sharpHeight / 4)
-    let upslashYend = upslashYstart - verticalOffset
-    Draw.drawLine(this.staffContext(), left, upslashYstart, right, upslashYend, weight)
-
-    upslashYstart = y + (Draw.sharpHeight / 4)
-    upslashYend = upslashYstart - verticalOffset
-    Draw.drawLine(this.staffContext(), left, upslashYstart, right, upslashYend, weight)
-    this.staffContext().stroke()
-    */
+    const y = Draw.y(note) + 6
+    const px = Draw.lineHeight + 6
+    this.drawText(sharpSymbol, x, y, px)
   }
 
   drawFlat(note, sharpIndex) {
-    const height = 36
-    const width = 12
-
-    const y = Draw.y(note) - (height * 4 / 5)
+    const y = Draw.y(note) + 6
     const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
-    
-    this.staffContext().beginPath()
-    this.staffContext().lineWidth = 3
-    this.staffContext().strokeStyle = 'black'
-    
-    this.staffContext().moveTo(x, y)
-    this.staffContext().lineTo(x, y + height)
-
-    this.staffContext().stroke()
-
-    this.staffContext().beginPath()
-    const startX = x
-    const startY = y + (height * 2 / 3)
-
-    const cp1x = x + width
-    const cp1y = startY - (height * 3 / 10)
-
-    const endX = x
-    const endY = y + height
-
-    const cp2x = x + (width * 2 / 3)
-    const cp2y = endY - (height * 1 / 10)
-
-    this.staffContext().moveTo(cp2x, cp2y)
-    this.staffContext().lineWidth = 5
-    this.staffContext().moveTo(startX, startY)
-    this.staffContext().bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY)
-    this.staffContext().stroke()
+    const px = Draw.lineHeight + 6
+    this.drawText(flatSymbol, x, y, px)
   }
 
   drawAccidentalsArea() {
