@@ -10,6 +10,7 @@ import * as Draw from './util/Draw'
 const highlightColor = 'red' // move to ui constants source
 const bassClefSymbol = '\uD834\uDD22'
 const trebleClefSymbol = '\uD834\uDD1E'
+const sharpSymbol = '\u266F'
 
 export class Staff extends Component {
   componentDidMount() {
@@ -72,12 +73,17 @@ export class Staff extends Component {
       this.props.updateTrack(this.props.id)
   }
 
+  // TODO nearest note is screwed
+
   // TODO test
   click(e) {
     const clickPoint = UI.mousePosition(this.canvas(), e)
     if (this.props.isInSharpsMode) {
-      if (this.isClickInAccidentals(clickPoint))
+      if (this.isClickInAccidentals(clickPoint)) {
+        console.log(clickPoint)
+        console.log('nearest note: ', this.props.nearestNote(clickPoint))
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
+      }
     } 
     else if (this.props.isInFlatsMode) {
       if (this.isClickInAccidentals(clickPoint))
@@ -95,7 +101,9 @@ export class Staff extends Component {
   // TODO test
   // TODO move to query on props
   isClickInAccidentals(point) {
-    return this.props.ui.staff.accidentalsRect.contains(point)
+    const r = this.props.ui.staff.accidentalsRect.contains(point)
+    console.log('in accidentals area')
+    return r
   }
 
   draw() {
@@ -126,8 +134,9 @@ export class Staff extends Component {
   }
 
   drawStaffLines() {
-    // TODO: this would work if the calculations for a note when there's only a bass staff are adjusted
-    // if (hasTrebleNotes(this.props.song, this.props.id))
+    // TODO: treble staff could be optional if the calcs for noteY
+    //  when there's only a bass staff are adjusted
+    // if (hasTrebleNotes(this.props.song, this.props.id)) { ... }
     this.drawStaff(Draw.trebleStaffLines)
     this.drawClefSign(trebleClefSymbol, Draw.y('F4'), Draw.staffHeight / 2)
 
@@ -138,6 +147,18 @@ export class Staff extends Component {
   }
 
   drawSharp(note, sharpIndex) {
+    console.log('sharp for', note)
+    const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
+    const y = Draw.y(note) + 4
+
+    const px = Draw.lineHeight
+    this.staffContext().beginPath()
+    this.staffContext().fillStyle = 'black'
+    this.staffContext().font = `${px}px Arial`
+    this.staffContext().fillText(sharpSymbol, x, y)
+    this.staffContext().stroke()
+
+    /*
     this.staffContext().beginPath()
 
     const y = Draw.y(note) + 4
@@ -169,6 +190,7 @@ export class Staff extends Component {
     upslashYend = upslashYstart - verticalOffset
     Draw.drawLine(this.staffContext(), left, upslashYstart, right, upslashYend, weight)
     this.staffContext().stroke()
+    */
   }
 
   drawFlat(note, sharpIndex) {

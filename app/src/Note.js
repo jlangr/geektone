@@ -5,7 +5,7 @@ import { next, prev } from './js/ArrayUtil'
 import NoteWidget, { restRectangle } from './ui/NoteWidget'
 
 const noteWidth = 7
-const noteHeight = 5
+export const noteHeight = 5
 
 const ascendingWholeNoteScale =
   ["C", "D", "E", "F", "G", "A", "B"]
