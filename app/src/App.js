@@ -6,10 +6,11 @@ import Beforeunload from 'react-beforeunload'
 import './App.css'
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
-import { changeBpm, loadSong, loadSongList, loadSynths, newTrack, playSong, putSongName, saveSong, stopSong } from './actions'
+import { changeBpm, errorMessage, loadSong, loadSongList, loadSynths, newTrack, playSong, putSongName, saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
 import Select from 'react-select'
 import InlineEdit from 'react-edit-inline2'
+import { isValidCrossOSFilename } from './util/Validations';
 
 export class App extends Component {
   constructor() {
@@ -34,14 +35,18 @@ export class App extends Component {
             <Col xs={6}>
               <h2>
                 <InlineEdit
-                  validate={() => true}
+                  validate={filename => { 
+                    const result = isValidCrossOSFilename(filename)
+                    if (!result) this.props.errorMessage('invalid characters in song name')
+                    return result
+                  }}
                   text={this.props.song.name}
                   paramName='newTitle'
                   change={({ newTitle }) => 
                     this.props.putSongName(this.props.song.id, newTitle) }/>
               </h2>
               {this.props.message}<br />
-              <div className='text-danger'>{this.props.errorMessage}</div>
+              <div className='text-danger'>{this.props.errorMessageText}</div>
 
               <Row className='tracks-row'>
                 <label htmlFor='bpm' className='lbl'>BPM</label>
@@ -108,13 +113,13 @@ const mapStateToProps = (state, _ownProps) => {
     songList: state.composition.songList,
     song: state.composition.song,
     message: state.composition.message,
-    errorMessage: state.composition.errorMessage,
+    errorMessageText: state.composition.errorMessage,
     synth: state.synth,
   }
 }
 
 const mapDispatchToProps = { 
-  changeBpm, putSongName, loadSong, loadSongList, loadSynths, newTrack, saveSong, playSong, stopSong
+  changeBpm, errorMessage, putSongName, loadSong, loadSongList, loadSynths, newTrack, saveSong, playSong, stopSong
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

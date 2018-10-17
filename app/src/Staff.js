@@ -81,8 +81,6 @@ export class Staff extends Component {
     const clickPoint = UI.mousePosition(this.canvas(), e)
     if (this.props.isInSharpsMode) {
       if (this.isClickInAccidentals(clickPoint)) {
-        console.log(clickPoint)
-        console.log('nearest note: ', this.props.nearestNote(clickPoint))
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
       }
     } 
@@ -102,9 +100,7 @@ export class Staff extends Component {
   // TODO test
   // TODO move to query on props
   isClickInAccidentals(point) {
-    const r = this.props.ui.staff.accidentalsRect.contains(point)
-    console.log('in accidentals area')
-    return r
+    return this.props.ui.staff.accidentalsRect.contains(point)
   }
 
   draw() {

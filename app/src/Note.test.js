@@ -68,6 +68,24 @@ describe('note', () => {
       note.increment()
       expect(note.name()).toEqual('A5')
     })
+
+    it('does not increment when rest', () => {
+      const note = new Note('C4')
+      note.restToggle()
+
+      note.increment()
+
+      expect(note.name()).toEqual('C4')
+    })
+
+    it('does not decrement when rest', () => {
+      const note = new Note('C4')
+      note.restToggle()
+
+      note.decrement()
+
+      expect(note.name()).toEqual('C4')
+    })
   })
 
   describe('to JSON', () => {

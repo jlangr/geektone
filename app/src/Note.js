@@ -135,7 +135,7 @@ export default class Note {
   }
 
   increment() {
-    if (this.isHighestNote()) return
+    if (this.isRest() || this.isHighestNote()) return
 
     if (this.noteIndex + 1 === ascendingWholeNoteScale.length) this.octave++
     this.noteIndex = next(ascendingWholeNoteScale, this.noteIndex)
@@ -147,7 +147,7 @@ export default class Note {
   }
 
   decrement() {
-    if (this.isLowestNote()) return
+    if (this.isRest() || this.isLowestNote()) return
 
     if (this.noteIndex === 0) this.octave--
     this.noteIndex = prev(ascendingWholeNoteScale, this.noteIndex)

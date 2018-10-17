@@ -1,14 +1,14 @@
 H create new song
+H initial song--name = default. State?
 H bass clef
   - draw rests on both or appropriate clef
-  - limit top and bottom notes to known sequence of notes
 H start song at selection point
 H volume: is there distortion?
-H initial song--name = default. State?
+
+H staff width way wider!
 
 ===
 
-M should not be able to move rest up or down
 M delete / copy / paste multiple notes
 M play-along marker
 M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored
