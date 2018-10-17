@@ -1,25 +1,25 @@
 H create new song
-M save song as (duplicate)
-
-M dotting a tie rest converts it to a note
-H start song at selection point
 H bass clef
   - draw rests on both or appropriate clef
-  - draw horizontal line through C note
   - limit top and bottom notes to known sequence of notes
+H start song at selection point
 H volume: is there distortion?
 H initial song--name = default. State?
 
-M allow characters numbers and some symbols on rename. (disallow: !, < >, ~, \, /, ?, *, :, |)
-M play-along marker
-M notes longer than 1 bar
+===
+
 M delete / copy / paste multiple notes
+M play-along marker
+M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored
+M dotting a tie rest converts it to a note
+M save song as (duplicate)
+M allow characters numbers and some symbols on rename. (disallow: !, < >, ~, \, /, ?, *, :, |)
+M notes longer than 1 bar
 M mouse insert note
 M note insert mode
 M repeat section
 M individual accidental
-
-M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored
+M pause--Transport toggle() function?
 
 L sharps & flats are not in proper order to determine key
 L allows sharp & flat on same note
@@ -27,7 +27,6 @@ L clear staff
 L flats / sharps in proper order on accidentals area
 L move from track-to-track using ctrl-keys (shift arrow up down)
 L other time signatures
-M pause--Transport toggle() function?
 
 UI
 --

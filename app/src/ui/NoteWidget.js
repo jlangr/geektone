@@ -49,6 +49,14 @@ export default class NoteWidget {
       rotation, 0, 2 * Math.PI)
   }
 
+  drawStaffLine() {
+    this.context.strokeStyle = lineColor
+    this.context.lineWidth = 1
+    const halfWidth = noteWidth + 6
+    this.context.moveTo(this.x() - halfWidth, this.y())
+    this.context.lineTo(this.x() + halfWidth, this.y())
+  }
+
   drawFilledNoteEllipse(color, extraRadius=0) {
     this.drawNoteEllipse(extraRadius)
     this.context.fillStyle = color
@@ -231,6 +239,8 @@ export default class NoteWidget {
     else if (Duration.isQuarterBase(this.duration())) this.drawQuarter()
     else if (Duration.isEighthBase(this.duration())) this.drawEighth()
     else if (Duration.isSixteenthBase(this.duration())) this.drawSixteenth()
+    if (this.note.name() == 'C4' || this.note.name() == 'E2') 
+      this.drawStaffLine()
   }
 
   restDotLocation() {
