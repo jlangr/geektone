@@ -28,6 +28,8 @@ export const newTrack = () => ({ type: type.NEW_TRACK })
 
 export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song })
 
+export const setVolume = (trackIndex, volume) => ({ type: type.SET_VOLUME, payload: { trackIndex, volume }})
+
 export const songList = songs => ({ type: type.SONG_LIST, payload: songs })
 
 export const toggleSharpsMode = trackIndex => ({ type: type.TOGGLE_SHARPS_MODE, payload: trackIndex })
@@ -50,8 +52,8 @@ export const postSong = song =>
 
 export const putSongName = (id, newName) =>
   dispatch =>
-    axios.put(request(`/song/${id}/rename`), { newTitle: newName })
-      .then(response => dispatch(changeSongName(newName, response.data)))
+    axios.put(request(`/song/${id}/rename`), { newTitle: newName.trim() })
+      .then(response => dispatch(changeSongName(newName.trim(), response.data)))
       .catch(error => dispatch(errorMessage(`unable to rename song: ${error.toString()}`)))
 
 export const loadSong = id =>

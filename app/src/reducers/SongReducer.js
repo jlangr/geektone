@@ -16,6 +16,8 @@ export const INITIAL_STATE = {
   songList: []
 }
 
+export const defaultTrackVolume = 7
+
 export const isInSharpsMode = (song, id) => song.tracks[id].sharpsMode
 
 export const isInFlatsMode = (song, id) => song.tracks[id].flatsMode
@@ -68,33 +70,55 @@ export const barsAndNotes = (song, trackData) => {
 
 const updateStateForTrack = (state, trackIndex, changeFn) => {
   const changedTrack = state.song.tracks[trackIndex] 
-  changeFn(changedTrack)
+  if (!changeFn(changedTrack))
+    return state
+
   const newTracks = 
     [...state.song.tracks.slice(0, trackIndex), changedTrack, ...state.song.tracks.slice(trackIndex+1) ]
   return { ...state, song: {...state.song, tracks: newTracks} }
  }
 
+ export const normalizeVolume = rawVolume => {
+    let wholeNumber = Math.round(rawVolume)
+    if (wholeNumber > 10)
+      wholeNumber = Math.floor(wholeNumber / 10)
+    return Math.max(wholeNumber, 1)
+ }
+
+const updateState_setVolume = (state, trackIndex, rawVolume) => {
+  return updateStateForTrack(state, trackIndex, (changedTrack) => {
+    const newVolume = normalizeVolume(rawVolume)
+    if (newVolume === changedTrack.volume) return false
+    changedTrack.volume = newVolume
+    return true
+  })
+}
+
 const updateState_toggleMute = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, (changedTrack) => {
     changedTrack.isMuted = !changedTrack.isMuted
+    return true
   })
 }
 
 const updateState_toggleFlatsMode = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, (changedTrack) => {
     changedTrack.flatsMode = !changedTrack.flatsMode
+    return true
   })
 }
 
 const updateState_toggleSharpsMode = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, (changedTrack) => {
     changedTrack.sharpsMode = !changedTrack.sharpsMode
+    return true
   })
 }
 
 const updateState_rebar = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, _changedTrack => {
     //  no-op
+    return true
   })
 }
 
@@ -113,7 +137,6 @@ const updateState_addAccidental = (state, note, accidentals, opposingAccidentals
 const updateTrack = (state, trackIndex, updatedTrack) => {
   const newTracks = 
     [...state.song.tracks.slice(0, trackIndex), updatedTrack, ...state.song.tracks.slice(trackIndex+1) ]
-
   return { ...state, song: {...state.song, tracks: newTracks} }
 }
 
@@ -135,7 +158,6 @@ const convertToSongSelectionList = songs =>
   songs.map(([id, title]) => ({ value: id, label: title }))
 
 export default(state = INITIAL_STATE, action) => {
-//  const incomingStateIsDirty = state.song.isDirty
   state.song.isDirty = true
   state.message = undefined
   state.errorMessage = undefined
@@ -213,7 +235,8 @@ export default(state = INITIAL_STATE, action) => {
         instrument: 'piano', 
         notes: new NoteSequence(['E4']),
         sharps: [],
-        flats: []
+        flats: [],
+        volume: defaultTrackVolume
       }
       return { ...state, song: { ...state.song, tracks: [...state.song.tracks, newTrack] } }
     }
@@ -223,9 +246,16 @@ export default(state = INITIAL_STATE, action) => {
       const newSong = action.payload
       newSong.tracks = newSong.tracks.map(track => {
         const notes = track.notes.map(note => [note.name, note.duration, note.isNote])
+        if (!track.volume) track.volume = defaultTrackVolume
         return { ...track, notes: new NoteSequence(notes) }
       })
       return { ...state, song: newSong }
+    }
+
+    case type.SET_VOLUME:
+    {
+      const { trackIndex, volume } = action.payload
+      return  updateState_setVolume(state, trackIndex, volume)
     }
 
     case type.SONG_LIST:
@@ -258,8 +288,7 @@ export default(state = INITIAL_STATE, action) => {
     }
 
     default:
-//      return { ...state, song: { ...state.song, isDirty: false } }
       state.song.isDirty = false
-      return state // should not trigger a state change
+      return state
   }
 }

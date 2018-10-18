@@ -17,4 +17,8 @@ describe('filename validation', () => {
     const someHighEndCharacter = '\u266D'
     expect(isValidCrossOSFilename(`abc${someHighEndCharacter}123`)).toBeFalsy()
   })
+
+  it('is not valid when it is empty after stripping', () => {
+    expect(isValidCrossOSFilename('   ')).toBeFalsy()
+  })
 })

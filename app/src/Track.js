@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import Staff from './Staff';
-import { changeTrackInstrument, deleteTrack, toggleMute, toggleFlatsMode, toggleSharpsMode } from './actions';
-import { trackData } from './reducers/SongReducer';
+import React, { Component } from 'react'
+import { Button } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import Staff from './Staff'
+import { changeTrackInstrument, deleteTrack, setVolume, toggleMute, toggleFlatsMode, toggleSharpsMode } from './actions'
+import { normalizeVolume, trackData } from './reducers/SongReducer'
+
+import TouchKnob from 'react-touch-knob'
 
 export class Track extends Component {
   instrumentChange(e) {
-    this.props.changeTrackInstrument(e.target.value, this.props.id);
+    this.props.changeTrackInstrument(e.target.value, this.props.id)
   }
 
   render() {
@@ -31,9 +33,14 @@ export class Track extends Component {
         <input id='isMuted' type='checkbox'
             checked={this.props.trackData.isMuted}
             onChange={() => this.props.toggleMute(this.props.id)} />
+        <TouchKnob class='knob'
+          min='0' max='10' 
+          value={this.props.trackData.volume}
+          onEnd={rawValue => this.props.setVolume(this.props.id, rawValue)}
+          showNumber={false} />
         <Staff key={this.props.id} id={this.props.id} />
       </div>
-    );
+    )
   }
 }
 
@@ -42,7 +49,7 @@ const mapStateToProps = ({composition, ui}, ownProps) => (
     song: composition.song, 
     ui 
   }
-);
+)
 
-const mapDispatchToProps = { changeTrackInstrument, deleteTrack, toggleMute, toggleFlatsMode, toggleSharpsMode };
-export default connect(mapStateToProps, mapDispatchToProps)(Track);
+const mapDispatchToProps = { changeTrackInstrument, deleteTrack, setVolume, toggleMute, toggleFlatsMode, toggleSharpsMode }
+export default connect(mapStateToProps, mapDispatchToProps)(Track)

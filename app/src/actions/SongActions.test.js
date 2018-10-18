@@ -45,6 +45,14 @@ describe('async actions', () => {
       expect(dispatch).toHaveBeenCalledWith(actions.changeSongName('newName', [['42', 'newName']]))
     })
 
+    it('trims song name sent up', async () => {
+      mock.onPut(actions.request('/song/42/rename')).reply(200, [['42', 'newName']])
+
+      await actions.putSongName('42', '   newName   ')(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.changeSongName('newName', [['42', 'newName']]))
+    })
+
     it('dispatches to error message on failed retrieve', async () => {
       mock.onPut(actions.request('/song/42/rename')).reply(500)
 

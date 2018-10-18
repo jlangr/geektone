@@ -1,6 +1,6 @@
 import * as actions from '../actions/SongActions'
 import * as type from '../actions/types'
-import SongReducer, { hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
+import SongReducer, { defaultTrackVolume, hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
 import NoteSequence from '../NoteSequence'
 
 describe('a song', () => {
@@ -9,6 +9,42 @@ describe('a song', () => {
       const state = SongReducer({ song: { name: 'new' }}, actions.createSong('42', 'hey'))
 
       expect(state.song.id).toEqual('42')
+    })
+  })
+
+  describe('set volume', () => {
+    const initialState = { song: { tracks: [{ }] } }
+
+    it('does not update volume if unchanged', () => {
+      initialState.song.tracks[0].volume = 5
+      
+      const state = SongReducer(initialState, actions.setVolume(0, 5))
+
+      expect(state).toBe(initialState)
+    })
+
+    it('updates volume', () => {
+      const state = SongReducer(initialState, actions.setVolume(0, 10))
+
+      expect(state.song.tracks[0].volume).toEqual(10)
+    })
+
+    it('rounds', () => {
+      const state = SongReducer(initialState, actions.setVolume(0, 5.442))
+
+      expect(state.song.tracks[0].volume).toEqual(5)
+    })
+
+    it('minimizes at 1', () => {
+      const state = SongReducer(initialState, actions.setVolume(0, 0.1052))
+
+      expect(state.song.tracks[0].volume).toEqual(1)
+    })
+
+    it('fixes freak (defective) numbers', () => {
+      const state = SongReducer(initialState, actions.setVolume(0, 51))
+
+      expect(state.song.tracks[0].volume).toEqual(5)
     })
   })
 
@@ -79,6 +115,10 @@ describe('a song', () => {
     it('restores rest boolean', () => {
       expect(noteSequence.note(0).isNote).toBeFalsy()
     })
+
+    it('defaults missing values', () => {
+      expect(state.song.tracks[0].volume).toEqual(defaultTrackVolume)
+    })
   })
 
   describe('changing the song name', () => {
@@ -102,12 +142,18 @@ describe('a song', () => {
     expect(newState.song.bpm).toEqual(140)
   })
 
-  it('creates a new track', () => {
+  describe('creating a new track', () => {
     const state = SongReducer(undefined, actions.newTrack())
 
-    expect(state.song.tracks.length).toEqual(1)
-    expect(state.song.tracks[0].name).toEqual('track1')
-    expect(state.song.tracks[0].instrument).toEqual('piano')
+    it('is added to the song', () => {
+      expect(state.song.tracks.length).toEqual(1)
+    })
+
+    it('has default values for name, instrument, and volume', () => {
+      expect(state.song.tracks[0].name).toEqual('track1')
+      expect(state.song.tracks[0].instrument).toEqual('piano')
+      expect(state.song.tracks[0].volume).toEqual(7)
+    })
   })
 
   it('deletes a track', () => {

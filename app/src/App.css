@@ -53,3 +53,13 @@ Label {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+.knob {
+    display: 'inline-block';
+    width: 36px; /* the canvas's width and height will be based only on the width of the element */
+    height: 36px; 
+    font-size: 1.2vw; /* of text output */
+    line-height: 55%; /* width of the knob's "lane" */
+    border-bottom-color: #ccc; /* background color of "lane" */
+    border-top-color: 'blue'; /* color of knob's value indicator */
+}

@@ -32,26 +32,35 @@ const createSynth = (instrument, dispatch) => {
     'release' : 1, 
     'baseUrl' : `./samples/${instrument}/`,
     'onload': _buffers => dispatch(addSynthAction(instrument, synth))}
-  var synth = new Tone.Sampler(mappings, config).toMaster()
+  const sampler = new Tone.Sampler(mappings, config)
+
+  // this is awkward. the onload needs the synth defined
+  var synth = sampler.toMaster()
 }
 
-export const addSynthAction = (instrument, synth) => ({ type: type.ADD_SYNTH, payload: { instrument, synth }})
+export const addSynthAction = (instrument, synth) => { 
+  console.log('synth added', synth, instrument)
+  if (instrument === 'bass-electric') {
+    var vol = new Tone.Volume(-40);
+    synth.chain(vol, Tone.Master);
+  }
+  return { type: type.ADD_SYNTH, payload: { instrument, synth }} 
+}
 
 export const playSong = (song, songCompletedCallback) => 
   ({ type: type.PLAY_SONG, payload: { song, songCompletedCallback }})
 
 export const stopSong = () => ({ type: type.STOP_SONG })
 
-export const loadSynths = () => {
-  return function(dispatch) {
-    createSynth('piano', dispatch);
-    createSynth('violin', dispatch);
-    createSynth('bass-electric', dispatch);
-    createSynth('bassoon', dispatch);
-    createSynth('cello', dispatch);
-    createSynth('electric-guitar', dispatch);
-    createSynth('french-horn', dispatch);
-    createSynth('organ', dispatch);
-    createSynth('trumpet', dispatch);
+export const loadSynths = () => 
+  dispatch => {
+    createSynth('piano', dispatch)
+    createSynth('violin', dispatch)
+    createSynth('bass-electric', dispatch)
+    createSynth('bassoon', dispatch)
+    createSynth('cello', dispatch)
+    createSynth('electric-guitar', dispatch)
+    createSynth('french-horn', dispatch)
+    createSynth('organ', dispatch)
+    createSynth('trumpet', dispatch)
   }
-}
