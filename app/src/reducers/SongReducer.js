@@ -234,7 +234,7 @@ export default(state = INITIAL_STATE, action) => {
         name: `track${state.song.tracks.length + 1}`, 
         isMuted: false,
         instrument: 'piano', 
-        notes: new NoteSequence(['E4']),
+        notes: new NoteSequence([Constants.DefaultStartingNote]),
         sharps: [],
         flats: [],
         volume: defaultTrackVolume

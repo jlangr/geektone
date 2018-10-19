@@ -16,3 +16,11 @@ export const BassStaffClefY = 'A2'
 export const TrebleStaffClefY = 'F4'
 
 export const NotesToStrikeThrough = ['C4', 'E2']
+
+export const HighestUpStemNote = 'C5'
+
+export const EighthRestY = 'E4'
+export const QuarterRestY = 'E4'
+export const SixteenthsRestY = 'G4'
+
+export const DefaultStartingNote = 'E4'

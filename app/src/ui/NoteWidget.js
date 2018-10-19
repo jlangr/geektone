@@ -63,7 +63,7 @@ export default class NoteWidget {
   }
 
   stemDirection() {
-    return this.y() < Draw.y('C5') ? 1 : -1
+    return this.y() < Draw.y(Constants.HighestUpStemNote) ? 1 : -1
   }
 
   stemHeightDelta() {
@@ -143,7 +143,7 @@ export default class NoteWidget {
 
   drawEighthRest() {
     let x = this.x() - noteWidth / 2
-    const restY = Draw.y('E4') - 6
+    const restY = Draw.y(Constants.EighthRestY) - 6
     let y = restY - 20
     
     const radius = 4
@@ -175,7 +175,7 @@ export default class NoteWidget {
   drawSixteenthRest() {
     const radius = 4
     let x = this.x() - noteWidth / 2
-    let y = Draw.y('G4') - 16
+    let y = Draw.y(Constants.SixteenthsRestY) - 16
     
     this.r16ball(x, y, radius)
     this.r16swoop(x, y, radius)
@@ -212,7 +212,7 @@ export default class NoteWidget {
 
   drawQuarterRest() {
     let x = this.x()
-    let y = Draw.y('E4') - 6
+    let y = Draw.y(Constants.QuarterRestY) - 6
     this.context.lineWidth = 4
     this.context.moveTo(x, y)
     this.context.bezierCurveTo(x - 8, y - 4, x - 3, y - 10, x + 5, y - 5)
@@ -239,8 +239,6 @@ export default class NoteWidget {
     else if (Duration.isEighthBase(this.duration())) this.drawEighth()
     else if (Duration.isSixteenthBase(this.duration())) this.drawSixteenth()
     if (Constants.NotesToStrikeThrough.includes(this.note.name()))
-
-    // if (this.note.name() === 'C4' || this.note.name() === 'E2') 
       this.drawStaffLine()
   }
 
