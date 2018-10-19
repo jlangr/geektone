@@ -1,8 +1,11 @@
 import * as type from '../actions/types'
 import NoteSequence from '../NoteSequence'
 import { remove } from '../js/ArrayUtil'
+import Note from '../Note'
 import * as Draw from '../util/Draw'
-import Note from '../Note';
+import * as Constants from '../Constants'
+
+const MiddleCNote = new Note(Constants.MiddleC)
 
 export const INITIAL_STATE = {
   message: undefined,
@@ -24,13 +27,11 @@ export const isInFlatsMode = (song, id) => song.tracks[id].flatsMode
 
 export const trackData = (state, trackId) => state.song.tracks[trackId]
 
-const C4 = new Note('C4')
-
 export const hasTrebleNotes = (song, id) =>
-  song.tracks[id].notes.allNotes().some(note => note.isHigherOrEqual(C4))
+  song.tracks[id].notes.allNotes().some(note => note.isHigherOrEqual(MiddleCNote))
 
 export const hasBassNotes = (song, id) =>
-  song.tracks[id].notes.allNotes().some(note => !note.isHigherOrEqual(C4))
+  song.tracks[id].notes.allNotes().some(note => !note.isHigherOrEqual(MiddleCNote))
 
 // TODO test
 // barsAndNotes are derived from bars(), 

@@ -3,20 +3,19 @@ import * as Draw from './util/Draw'
 import * as Duration from './Duration'
 import { next, prev } from './js/ArrayUtil'
 import NoteWidget, { restRectangle } from './ui/NoteWidget'
+import { AscendingWholeNoteScale, MiddleC } from './Constants'
 
 const noteWidth = 7
 export const noteHeight = 5
 
-const ascendingWholeNoteScale =
-  ["C", "D", "E", "F", "G", "A", "B"]
-
 const RestNoteName = 'R'
+
 export default class Note {
   constructor(name, duration = Duration.quarter) {
     this.octave = parseInt(name.slice(-1), 10)
     let note = Note.note(name)
     this.baseName = note
-    this.noteIndex = ascendingWholeNoteScale.indexOf(note)
+    this.noteIndex = AscendingWholeNoteScale.indexOf(note)
     this.isSelected = false
     this.duration = duration
     this.isNote = (name !== RestNoteName)
@@ -69,9 +68,8 @@ export default class Note {
   }
 
   isHigherOrEqual(that) {
-   return this.octave > that.octave ||
-      (this.octave === that.octave &&
-      this.noteIndex >= that.noteIndex)
+    return this.octave > that.octave ||
+      (this.octave === that.octave && this.noteIndex >= that.noteIndex)
   }
 
   toJSON() {
@@ -114,7 +112,7 @@ export default class Note {
 
   name() {
     if (this.noteIndex === -1) return ""
-    return `${ascendingWholeNoteScale[this.noteIndex]}${this.octave}`
+    return `${AscendingWholeNoteScale[this.noteIndex]}${this.octave}`
   }
 
   updateTiePitch() {
@@ -137,8 +135,8 @@ export default class Note {
   increment() {
     if (this.isRest() || this.isHighestNote()) return
 
-    if (this.noteIndex + 1 === ascendingWholeNoteScale.length) this.octave++
-    this.noteIndex = next(ascendingWholeNoteScale, this.noteIndex)
+    if (this.noteIndex + 1 === AscendingWholeNoteScale.length) this.octave++
+    this.noteIndex = next(AscendingWholeNoteScale, this.noteIndex)
     this.updateTiePitch()
   }
 
@@ -150,7 +148,7 @@ export default class Note {
     if (this.isRest() || this.isLowestNote()) return
 
     if (this.noteIndex === 0) this.octave--
-    this.noteIndex = prev(ascendingWholeNoteScale, this.noteIndex)
+    this.noteIndex = prev(AscendingWholeNoteScale, this.noteIndex)
     this.updateTiePitch()
   }
 

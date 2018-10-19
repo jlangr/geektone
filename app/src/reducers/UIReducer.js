@@ -2,8 +2,7 @@ import Range from '../Range';
 import Rect from '../Rect';
 import * as Draw from '../util/Draw'
 import { noteHeight } from '../Note'
-
-export const MiddleC = 'C4';
+import { MiddleC } from '../Constants'
 
 export const lineClickTolerance = 2;
 

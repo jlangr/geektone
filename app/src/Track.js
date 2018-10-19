@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import Staff from './Staff'
 import { changeTrackInstrument, deleteTrack, setVolume, toggleMute, toggleFlatsMode, toggleSharpsMode } from './actions'
-import { normalizeVolume, trackData } from './reducers/SongReducer'
+import { trackData } from './reducers/SongReducer'
 
 import TouchKnob from 'react-touch-knob'
 
