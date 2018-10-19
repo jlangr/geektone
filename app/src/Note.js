@@ -3,7 +3,7 @@ import * as Draw from './util/Draw'
 import * as Duration from './Duration'
 import { next, prev } from './js/ArrayUtil'
 import NoteWidget, { restRectangle } from './ui/NoteWidget'
-import { AscendingWholeNoteScale, MiddleC } from './Constants'
+import * as Constants from './Constants'
 
 const noteWidth = 7
 export const noteHeight = 5
@@ -15,7 +15,7 @@ export default class Note {
     this.octave = parseInt(name.slice(-1), 10)
     let note = Note.note(name)
     this.baseName = note
-    this.noteIndex = AscendingWholeNoteScale.indexOf(note)
+    this.noteIndex = Constants.AscendingWholeNoteScale.indexOf(note)
     this.isSelected = false
     this.duration = duration
     this.isNote = (name !== RestNoteName)
@@ -112,7 +112,7 @@ export default class Note {
 
   name() {
     if (this.noteIndex === -1) return ""
-    return `${AscendingWholeNoteScale[this.noteIndex]}${this.octave}`
+    return `${Constants.AscendingWholeNoteScale[this.noteIndex]}${this.octave}`
   }
 
   updateTiePitch() {
@@ -129,26 +129,26 @@ export default class Note {
   }
 
   isHighestNote() {
-    return this.name() === Draw.allStaffNotes[0]
+    return this.name() === Constants.allStaffNotes[0]
   }
 
   increment() {
     if (this.isRest() || this.isHighestNote()) return
 
-    if (this.noteIndex + 1 === AscendingWholeNoteScale.length) this.octave++
-    this.noteIndex = next(AscendingWholeNoteScale, this.noteIndex)
+    if (this.noteIndex + 1 === Constants.AscendingWholeNoteScale.length) this.octave++
+    this.noteIndex = next(Constants.AscendingWholeNoteScale, this.noteIndex)
     this.updateTiePitch()
   }
 
   isLowestNote() {
-    return this.name() === Draw.allStaffNotes[Draw.allStaffNotes.length - 1]
+    return this.name() === Constants.allStaffNotes[Constants.allStaffNotes.length - 1]
   }
 
   decrement() {
     if (this.isRest() || this.isLowestNote()) return
 
     if (this.noteIndex === 0) this.octave--
-    this.noteIndex = prev(AscendingWholeNoteScale, this.noteIndex)
+    this.noteIndex = prev(Constants.AscendingWholeNoteScale, this.noteIndex)
     this.updateTiePitch()
   }
 
