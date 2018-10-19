@@ -16,7 +16,6 @@ export const sharpsArea = (sharpsInWidth * sharpArea) + sharpPad
 const clefSignWidth = 40
 export const accidentalsLeft = clefSignWidth + 1
 
-
 const countOfNotesOnStaff = 13
 
 export const staffHeight = (countOfNotesOnStaff + 1) * lineHeight / 2

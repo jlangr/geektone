@@ -1,7 +1,9 @@
 import Note from './Note'
+import * as Constants from './Constants'
 import * as Duration from './Duration'
 import Tie from './Tie'
-import { restRectangleTop } from './ui/NoteWidget'
+import { restRectangleTop } from './Constants'
+import * as Draw from './util/Draw'
 
 describe('note', () => {
   describe('a note', () => {
@@ -187,7 +189,7 @@ describe('note', () => {
       note.setPosition(0)
       note.restToggle()
 
-      const isHit = note.isHit({ x: note.x(), y: restRectangleTop + 1 })
+      const isHit = note.isHit({ x: note.x(), y: Draw.y(Constants.restRectangleTop) + 1 })
 
       expect(isHit).toBeTruthy()
     })
@@ -197,7 +199,7 @@ describe('note', () => {
       note.setPosition(0)
       note.restToggle()
 
-      const isHit = note.isHit({ x: note.x(), y: restRectangleTop - 1 })
+      const isHit = note.isHit({ x: note.x(), y: Draw.y(Constants.restRectangleTop) - 1 })
 
       expect(isHit).toBeFalsy()
     })

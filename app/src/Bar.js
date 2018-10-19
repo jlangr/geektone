@@ -1,4 +1,5 @@
-import * as Draw from './util/Draw';
+import * as Constants from './Constants'
+import * as Draw from './util/Draw'
 
 const SixteenthsCapacity = 16
 
@@ -68,7 +69,7 @@ export default class Bar {
   }
 
   drawOn(context, hasTrebleNotes, hasBassNotes) {
-    if (hasTrebleNotes) this.drawVerticalBar(context, Draw.trebleStaffLines)
-    if (hasBassNotes) this.drawVerticalBar(context, Draw.bassStaffLines)
+    if (hasTrebleNotes) this.drawVerticalBar(context, Constants.trebleStaffLines)
+    if (hasBassNotes) this.drawVerticalBar(context, Constants.bassStaffLines)
   }
 }

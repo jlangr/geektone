@@ -1,6 +1,7 @@
 import * as Draw from '../util/Draw'
 import * as Duration from '../Duration'
 import Rect from '../Rect'
+import * as Constants from '../Constants'
 
 const stemHeight = 36
 
@@ -17,13 +18,11 @@ const wholeFill = 'white'
 const quarterFill = 'black'
 const solidFill = 'black'
 
-export const restRectangleTop = Draw.y('E5')
-export const restRectangleBottom = Draw.y('E4')
-const wholeOrHalfRestY = Draw.y('B4')
-
 export const restRectangle = x => {
   const width = (restWidth + 16)
-  return new Rect(x - width / 2, restRectangleTop, width, restRectangleBottom - restRectangleTop)
+  return new Rect(
+    x - width / 2, Draw.y(Constants.restRectangleTop), 
+    width, Draw.y(Constants.restRectangleBottom) - Draw.y(Constants.restRectangleTop))
 }
 
 export default class NoteWidget {
@@ -195,7 +194,7 @@ export default class NoteWidget {
     const width = 20
     const height = 8
     let x = this.x()
-    let y = wholeOrHalfRestY
+    let y = Draw.y(Constants.wholeOrHalfRestY)
     this.context.rect(
       x - (width / 2), y + (heightOffset * height), 
       width, height);
@@ -244,7 +243,7 @@ export default class NoteWidget {
   }
 
   restDotLocation() {
-    return Duration.isHalfBase(this.duration()) ? wholeOrHalfRestY : restRectangleBottom - 12 
+    return Duration.isHalfBase(this.duration()) ? Draw.y(Constants.wholeOrHalfRestY) : Draw.y(Constants.restRectangleBottom) - 12 
   }
 
   drawElementOn() {

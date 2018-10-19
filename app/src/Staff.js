@@ -5,6 +5,7 @@ import { addFlat, addSharp, updateTrack } from './actions'
 import { hasBassNotes, hasTrebleNotes, isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
 import { nearestNote } from './reducers/UIReducer'
 import * as UI from './util/UI'
+import * as Constants from './Constants'
 import * as Draw from './util/Draw'
 
 const highlightColor = 'red' // move to ui constants source
@@ -134,12 +135,14 @@ export class Staff extends Component {
     // TODO: treble staff could be optional if the calcs for noteY
     //  when there's only a bass staff are adjusted
     // if (hasTrebleNotes(this.props.song, this.props.id)) { ... }
-    this.drawStaff(Draw.trebleStaffLines)
-    this.drawText(trebleClefSymbol, 10, Draw.y('F4'), Draw.staffHeight * 7 / 10)
+    this.drawStaff(Constants.trebleStaffLines)
+    this.drawText(trebleClefSymbol, 
+      10, Draw.y(Constants.TrebleStaffClefY), Draw.staffHeight * 7 / 10)
 
     if (hasBassNotes(this.props.song, this.props.id)) {
-      this.drawStaff(Draw.bassStaffLines)
-      this.drawText(bassClefSymbol, 10, Draw.y('A2'), Draw.staffHeight * 5 / 10)
+      this.drawStaff(Constants.bassStaffLines)
+      this.drawText(bassClefSymbol, 
+        10, Draw.y(Constants.BassStaffClefY), Draw.staffHeight * 5 / 10)
     }
   }
 
