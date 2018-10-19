@@ -12,5 +12,7 @@ export const restRectangleTop = 'E5'
 export const restRectangleBottom = 'E4'
 export const wholeOrHalfRestY = 'B4'
 
-export const BassStaffClefY = 'A3'
+export const BassStaffClefY = 'A2'
 export const TrebleStaffClefY = 'F4'
+
+export const NotesToStrikeThrough = ['C4', 'E2']
