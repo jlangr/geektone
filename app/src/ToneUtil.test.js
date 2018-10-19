@@ -1,5 +1,32 @@
-import { unmutedNoteObjects } from './ToneUtils'
+import { unmutedNoteObjects, updateSynthVolumes } from './ToneUtils'
 import NoteSequence from './NoteSequence'
+
+describe('updateSynthVolumes', () => {
+  const tracks = [
+    { instrument: 'mute', volume: 0 },
+    { instrument: 'med', volume: 5 },
+    { instrument: 'high', volume: 10 }]
+  const synths = {
+    ['mute']: { volume: { value: 1 }},
+    ['med']: { volume: { value: 2 }},
+    ['high']: { volume: { value: 3 }} }
+
+  beforeEach(() => {
+    updateSynthVolumes(tracks, synths)
+  })
+
+  it('sets dbs to -Infinity for mute value', () => {
+    expect(synths['mute'].volume.value).toEqual(-Infinity)
+  })
+
+  it('sets dbs to -6 for mid value', () => {
+    expect(Math.round(synths['med'].volume.value)).toEqual(-6)
+  })
+
+  it('sets dbs to 0 for high value', () => {
+    expect(synths['high'].volume.value).toEqual(0)
+  })
+})
 
 describe('unmutedNoteObjects', () => {
   const notes1 = new NoteSequence(['E4', 'F4'])

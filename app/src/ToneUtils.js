@@ -25,6 +25,15 @@ export const unmutedNoteObjects = tracks =>
     .filter(track => !track.isMuted)
     .map(track => [track, NoteUtil.noteObjects(track.notes.allNotes(), track.sharps, track.flats)])
 
+export const updateSynthVolumes = (tracks, synths) => {
+  tracks.forEach(track => {
+    const synth = synths[track.instrument]
+    const percent = track.volume * 10.0
+    let dbs = 20.0 * Math.log10(percent / 100)
+    synth.volume.value = dbs
+  })
+}
+
 // lots of this can be tested...
 export const play = async (song, synths, songCompletedCallback) => {
   const tracks = song.tracks;
@@ -39,6 +48,8 @@ export const play = async (song, synths, songCompletedCallback) => {
   })
   const stopTime = TimeUtil.transportTime(Math.max(...stopTimes))
   scheduleEventId = Tone.Transport.scheduleOnce(() => songCompletedCallback(), stopTime)
+
+  updateSynthVolumes(tracks, synths)
 
   const parts = noteObjects.map(([track, toneNotes]) => 
       new Tone.Part((time, note) => {

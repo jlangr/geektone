@@ -38,12 +38,7 @@ const createSynth = (instrument, dispatch) => {
   var synth = sampler.toMaster()
 }
 
-export const addSynthAction = (instrument, synth) => { 
-  console.log('synth added', synth, instrument)
-  if (instrument === 'bass-electric') {
-    var vol = new Tone.Volume(-40);
-    synth.chain(vol, Tone.Master);
-  }
+export const addSynthAction = (instrument, synth) => {
   return { type: type.ADD_SYNTH, payload: { instrument, synth }} 
 }
 
