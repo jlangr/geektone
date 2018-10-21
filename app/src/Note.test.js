@@ -60,15 +60,15 @@ describe('note', () => {
     })
 
     it('ignores attempts to go below lowest note', () => {
-      const note = new Note('E2')
+      const note = new Note('E1')
       note.decrement()
-      expect(note.name()).toEqual('E2')
+      expect(note.name()).toEqual('E1')
     })
 
     it('ignores attempts to go above highest note', () => {
-      const note = new Note('A5')
+      const note = new Note('A4')
       note.increment()
-      expect(note.name()).toEqual('A5')
+      expect(note.name()).toEqual('A4')
     })
 
     it('does not increment when rest', () => {

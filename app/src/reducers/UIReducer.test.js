@@ -15,21 +15,21 @@ describe('nearest note', () => {
   const state = UIReducer.INITIAL_STATE
 
   it('selects a staff-line note if dead-on', () => {
-    const nearest = UIReducer.nearestNote(state, { x: 1, y: Draw.y('F5')})
+    const nearest = UIReducer.nearestNote(state, { x: 1, y: Draw.y('F4')})
 
-    expect(nearest).toEqual('F5')
+    expect(nearest).toEqual('F4')
   })
 
   it('selects a staff-line note if within tolerance above', () => {
-    const justAbove = Draw.y('D5') - 1
+    const justAbove = Draw.y('D4') - 1
 
     const note = UIReducer.nearestNote(state, { x: 1, y: justAbove })
 
-    expect(note).toEqual('D5')
+    expect(note).toEqual('D4')
   })
 
   it('returns undefined if above staff', () => {
-    const tooHigh = Draw.y('A5') - UIReducer.lineClickTolerance - 1
+    const tooHigh = Draw.y('A4') - UIReducer.lineClickTolerance - 1
 
     const nearest = UIReducer.nearestNote(state, { x: 1, y: tooHigh })
 
@@ -37,7 +37,7 @@ describe('nearest note', () => {
   })
 
   it('returns undefined if below staff', () => {
-    const tooLow = Draw.y('E2') + UIReducer.lineClickTolerance + 1
+    const tooLow = Draw.y('E1') + UIReducer.lineClickTolerance + 1
 
     const nearest = UIReducer.nearestNote(state, { x: 1, y: tooLow })
 
@@ -45,10 +45,10 @@ describe('nearest note', () => {
   })
   
   it('selects an off-line note in the middle', () => {
-    const tooLow = Draw.y('B4') + UIReducer.lineClickTolerance + 1
+    const tooLow = Draw.y('B3') + UIReducer.lineClickTolerance + 1
 
     const nearest = UIReducer.nearestNote(state, { x: 1, y: tooLow })
 
-    expect(nearest).toEqual('A4')
+    expect(nearest).toEqual('A3')
   })
 })
