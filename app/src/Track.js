@@ -1,11 +1,13 @@
+import 'rc-slider/assets/index.css'
+import 'rc-tooltip/assets/bootstrap.css'
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import Staff from './Staff'
 import { changeTrackInstrument, deleteTrack, setVolume, toggleMute, toggleFlatsMode, toggleSharpsMode } from './actions'
 import { trackData } from './reducers/SongReducer'
-
-import TouchKnob from 'react-touch-knob'
+import Tooltip from 'rc-tooltip'
+import Slider from 'rc-slider'
 
 export class Track extends Component {
   instrumentChange(e) {
@@ -33,11 +35,10 @@ export class Track extends Component {
         <input id='isMuted' type='checkbox'
             checked={this.props.trackData.isMuted}
             onChange={() => this.props.toggleMute(this.props.id)} />
-        <TouchKnob class='knob'
-          min='0' max='10' 
-          value={this.props.trackData.volume}
-          onEnd={rawValue => this.props.setVolume(this.props.id, rawValue)}
-          showNumber={false} />
+        <Slider min={1} max={10} 
+          marks={{1: '1', 5: '5', 10: '10'}}
+          defaultValue={this.props.trackData.volume} 
+          onAfterChange={value => this.props.setVolume(this.props.id, value)} />
         <Staff key={this.props.id} id={this.props.id} />
       </div>
     )
