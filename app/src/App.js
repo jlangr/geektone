@@ -50,7 +50,7 @@ export class App extends Component {
               <div className='text-danger'>{this.props.errorMessageText}</div>
 
               <Row className='tracks-row'>
-                <label htmlFor='bpm' className='lbl'>BPM</label>
+                <label htmlFor='bpm' className='lbl bump-left'>BPM</label>
                 <NumericInput 
                   id='bpm' 
                   style={{input: { width: 70 }}} 
@@ -76,14 +76,18 @@ export class App extends Component {
                 </Button>
               </Row>
               <Row className='tracks-row'>
-                <Select
-                  onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
-                  options={this.props.songList} />
-                <Button className='btn-song' 
-                  onClick={() => this.props.loadSong(this.state.selectedSongId)}
-                  { ...this.state.selectedSongId ? {} : { disabled: true}}>
-                  Load
-                </Button>
+                <Col xs={3} className="track-select-padding">
+                  <Select
+                    onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
+                    options={this.props.songList} />
+                </Col>
+                <Col xs={2} className="track-select-padding">
+                  <Button className='btn-song' 
+                    onClick={() => this.props.loadSong(this.state.selectedSongId)}
+                    { ...this.state.selectedSongId ? {} : { disabled: true}}>
+                    Load
+                  </Button>
+                </Col>
               </Row>
 
             </Col>
@@ -93,13 +97,15 @@ export class App extends Component {
           </Row>
 
         </Grid>
-        <Grid className='tracks-grid'>
+        <Grid className='tracks-grid tracks'>
           <Row>
-            <Button className='btn-song' onClick={this.props.newTrack}>Add Track</Button>
+            <Col xs={12}>
+              <Button className='btn-song' onClick={this.props.newTrack}>Add Track</Button>
+            </Col>
           </Row>
           { this.props.song.tracks.map((_track, i) => 
           <Row className='tracks-row' key={i}>
-            <Col>
+            <Col xs={12}>
               <Track id={i} />
             </Col>
           </Row>) }
