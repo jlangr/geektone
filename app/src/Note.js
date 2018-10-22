@@ -8,17 +8,15 @@ import * as Constants from './Constants'
 const noteWidth = 7
 export const noteHeight = 5
 
-const RestNoteName = 'R'
-
 export default class Note {
-  constructor(name, duration = Duration.quarter) {
+  constructor(name, duration = Duration.quarter, isNote = true) {
     this.octave = parseInt(name.slice(-1), 10)
     let note = Note.note(name)
     this.baseName = note
     this.noteIndex = Constants.AscendingWholeNoteScale.indexOf(note)
     this.isSelected = false
     this.duration = duration
-    this.isNote = (name !== RestNoteName)
+    this.isNote = isNote
     this.clearTie()
   }
 
@@ -27,13 +25,17 @@ export default class Note {
   }
 
   static Rest(duration) {
-    return new Note(RestNoteName, duration)
+    return new Note(Constants.MiddleC, duration, false)
   }
 
   isATie() { return false }
 
   restToggle() {
     this.isNote = !this.isNote
+  }
+
+  isRest() {
+    return !this.isNote
   }
 
   setPosition(position) {
@@ -52,10 +54,6 @@ export default class Note {
   clearTie() {
     this.startTies = undefined
     this.endTies = undefined
-  }
-
-  isRest() {
-    return !this.isNote
   }
 
   // TODO test?

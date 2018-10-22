@@ -48,7 +48,7 @@ export default class NoteSequence {
   }
 
   add(note) {
-    this.baseAdd(note)
+    this.baseAdd(note, note.isNote)
     this.rebar()
   }
   

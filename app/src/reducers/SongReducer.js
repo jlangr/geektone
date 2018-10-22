@@ -28,10 +28,12 @@ export const isInFlatsMode = (song, id) => song.tracks[id].flatsMode
 export const trackData = (state, trackId) => state.song.tracks[trackId]
 
 export const hasTrebleNotes = (song, id) =>
-  song.tracks[id].notes.allNotes().some(note => note.isHigherOrEqual(MiddleCNote))
+  song.tracks[id].notes.allNotes().some(note => 
+    note.isHigherOrEqual(MiddleCNote) && !note.isRest())
 
 export const hasBassNotes = (song, id) =>
-  song.tracks[id].notes.allNotes().some(note => !note.isHigherOrEqual(MiddleCNote))
+  song.tracks[id].notes.allNotes().some(note => 
+    !note.isHigherOrEqual(MiddleCNote) && !note.isRest())
 
 // TODO test
 // barsAndNotes are derived from bars(), 

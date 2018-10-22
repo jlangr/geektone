@@ -346,6 +346,15 @@ describe('NoteSequence', () => {
 
         expect(sequence.allNoteNames()).toEqual(['E4', 'F4', 'G4', 'A4'])
       })
+
+      it('adds rests and keeps them that way', () => {
+        const rest = Note.Rest(Duration.quarter)
+
+        sequence.add(rest)
+
+        const retrieved = sequence.lastNote()
+        expect(retrieved.isRest()).toBeTruthy()
+      })
     })
 
     describe('isNoteSelected', () => {

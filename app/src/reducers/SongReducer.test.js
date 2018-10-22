@@ -2,7 +2,9 @@ import * as actions from '../actions/SongActions'
 import * as type from '../actions/types'
 import SongReducer, { defaultTrackVolume, hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
 import NoteSequence from '../NoteSequence'
+import Note from '../Note'
 import * as Constants from '../Constants'
+import * as Duration from '../Duration'
 
 describe('a song', () => {
   describe('create song', () => {
@@ -342,11 +344,35 @@ describe('answers whether or not track has notes in treble staff', () => {
     const song = { tracks: [{ id: 0, notes: new NoteSequence([Constants.MiddleC, 'D4', 'E4']) }] }
     expect(hasTrebleNotes(song, 0)).toBeTruthy()
   })
+
+  it('does not count rests', () => {
+    const noteSequence = new NoteSequence()
+    noteSequence.add(Note.Rest(Duration.quarter))
+
+    const song = { tracks: [{ id: 0, notes: noteSequence }] }
+
+    expect(hasTrebleNotes(song, 0)).toBeFalsy()
+  })
 })
 
 describe('answers whether or not track has notes in bass staff', () => {
-  it('does not when no note is lower than A below middle', () => {
+  xit('does not when no note is lower than A below middle', () => {
+    const song = { tracks: [{ id: 0, notes: new NoteSequence(['E2']) }] }
+    expect(hasBassNotes(song, 0)).toBeTruthy()
+  })
+
+  xit('does not when no note is lower than A below middle', () => {
     const song = { tracks: [{ id: 0, notes: new NoteSequence([Constants.MiddleC, 'D4', 'E4']) }] }
+    expect(hasBassNotes(song, 0)).toBeFalsy()
+  })
+
+  it('does not count rests', () => {
+    const noteSequence = new NoteSequence()
+    const note = new Note('F1', Duration.quarter, false)
+    noteSequence.add(note)
+
+    const song = { tracks: [{ id: 0, notes: noteSequence }] }
+
     expect(hasBassNotes(song, 0)).toBeFalsy()
   })
 })
