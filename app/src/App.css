@@ -63,3 +63,16 @@ Label {
     border-bottom-color: #ccc; /* background color of "lane" */
     border-top-color: 'blue'; /* color of knob's value indicator */
 }
+
+.track-select-padding {
+  padding-top: 15px;
+  padding-left: 0;
+}
+
+.tracks {
+  margin: 20px 0;
+}
+
+.bump-left {
+  margin-left: 5px;
+}
