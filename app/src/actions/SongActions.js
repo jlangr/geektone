@@ -12,11 +12,13 @@ export const updateTrack = trackIndex => ({ type: type.UPDATE_TRACK, payload: tr
 
 export const changeBpm = newBpm => ({ type: type.CHANGE_BPM, payload: newBpm })
 
+export const changeNewSongName = newName => ({ type: type.CHANGE_NEW_SONG_NAME, payload: { newName }})
+
 export const changeSongName = (newTitle, songList) => ({ type: type.CHANGE_SONG_NAME, payload: { newTitle, songList }})
 
 export const changeTrackInstrument = (instrument, id) => ({ type: type.CHANGE_TRACK_INSTRUMENT, payload: {instrument: instrument, trackId: id }})
 
-export const createSong = (id, message) => ({ type: type.CREATE_SONG, payload: { id, message } })
+export const createSong = (id, songList, message) => ({ type: type.CREATE_SONG, payload: { id, message, songList } })
 
 export const deleteTrack = trackIndex => ({ type: type.DELETE_TRACK, payload: trackIndex })
 
@@ -44,17 +46,22 @@ export const loadSongList = () =>
       .then(response => dispatch(songList(response.data)))
       .catch(error => dispatch(errorMessage(`unable to retrieve song list: ${error.toString()}`)))
 
-export const postSong = song => 
+export const postSong = song =>
   dispatch => 
     axios.post(request('/song'), song)
-      .then(response => dispatch(createSong(response.data.toString(), 'song created')))
+      .then(response => dispatch(createSong(response.data.id, response.data.songList, 'song created')))
       .catch(error => dispatch(errorMessage(`unable to create your song, sorry: ${error.toString()}`)))
 
 export const putSongName = (id, newName) =>
-  dispatch =>
-    axios.put(request(`/song/${id}/rename`), { newTitle: newName.trim() })
+  dispatch => {
+    if (id === undefined) {
+      console.log('chang new song name', newName.trim())
+      return dispatch(changeNewSongName(newName.trim()))
+    }
+    return axios.put(request(`/song/${id}/rename`), { newTitle: newName.trim() })
       .then(response => dispatch(changeSongName(newName.trim(), response.data)))
       .catch(error => dispatch(errorMessage(`unable to rename song: ${error.toString()}`)))
+  }
 
 export const loadSong = id =>
   dispatch =>

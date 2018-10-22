@@ -183,6 +183,12 @@ export default(state = INITIAL_STATE, action) => {
       return { ...state, song: { ...state.song, bpm: action.payload }}
     }
 
+    case type.CHANGE_NEW_SONG_NAME:
+    {
+      const { newName } = action.payload
+      return { ...state, song: { ...state.song, name: newName }}
+    }
+
     case type.CHANGE_SONG_NAME:
     {
       const { newTitle, songList } = action.payload
@@ -204,8 +210,11 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.CREATE_SONG:
     {
-      const { id, message } = action.payload
-      return { ...state, message, song: { ...state.song, id }}
+      const { id, songList, message } = action.payload
+      return { ...state, 
+        message, 
+        songList: convertToSongSelectionList(songList), 
+        song: { ...state.song, id }}
     }
 
     case type.DELETE_TRACK:

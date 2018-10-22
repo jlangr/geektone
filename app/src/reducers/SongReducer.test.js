@@ -8,10 +8,19 @@ import * as Duration from '../Duration'
 
 describe('a song', () => {
   describe('create song', () => {
-    it('assigns generated id', () => {
-      const state = SongReducer({ song: { name: 'new' }}, actions.createSong('42', 'hey'))
+    const state = SongReducer({ song: { name: 'default' }}, 
+        actions.createSong('42', [['42', 'default']], 'some message' ))
 
+    it('assigns generated id', () => {
       expect(state.song.id).toEqual('42')
+    })
+
+    it('saves messase', () => {
+      expect(state.message).toEqual('some message')
+    })
+
+    it('converts and stores song list', () => {
+      expect(state.songList).toEqual([{value: '42', label: 'default'}])
     })
   })
 
@@ -134,6 +143,14 @@ describe('a song', () => {
 
     it('transforms the song list to the selection list expected format', () => {
       expect(state.songList).toEqual([{value: '42', label: 'new name'}])
+    })
+  })
+
+  describe('changing the name of a new song', () => {
+    const state = SongReducer({ song: { name: 'default'} }, actions.changeNewSongName('new name'))
+
+    it('updates the name', () => {
+      expect(state.song.name).toEqual('new name')
     })
   })
 
@@ -356,12 +373,12 @@ describe('answers whether or not track has notes in treble staff', () => {
 })
 
 describe('answers whether or not track has notes in bass staff', () => {
-  xit('does not when no note is lower than A below middle', () => {
+  it('does when at least one note is lower than A below middle', () => {
     const song = { tracks: [{ id: 0, notes: new NoteSequence(['E2']) }] }
     expect(hasBassNotes(song, 0)).toBeTruthy()
   })
 
-  xit('does not when no note is lower than A below middle', () => {
+  it('does not when no note is lower than A below middle', () => {
     const song = { tracks: [{ id: 0, notes: new NoteSequence([Constants.MiddleC, 'D4', 'E4']) }] }
     expect(hasBassNotes(song, 0)).toBeFalsy()
   })

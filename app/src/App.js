@@ -38,7 +38,7 @@ export class App extends Component {
                   validate={filename => { 
                     // TODO move to reducer
                     const result = isValidCrossOSFilename(filename)
-                    if (!result) this.props.errorMessage('invalid characters in song name')
+                    if (!result) this.props.errorMessage('invalid song name')
                     return result
                   }}
                   text={this.props.song.name}

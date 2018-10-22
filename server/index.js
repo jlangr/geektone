@@ -78,7 +78,7 @@ app.put('/song/:id', (request,response) => {
   const song = request.body
   const id = request.params.id
   writeSong(id, request.body)
-  response.send(200)
+  response.status(200)
 })
 
 const updateSongTitle = (idToUpdate, newTitle) => {
@@ -101,7 +101,9 @@ app.post('/song', (request,response) => {
   const song = request.body
   song.id = nextAvailableId()
   writeSong(song.id, song)
-  response.json(song.id)
+console.log('posted song')
+  allSongs = undefined
+  response.status(200).json({ 'id': song.id, 'songList': sortedSongList() })
 })
 
 app.listen(port, (err) => {

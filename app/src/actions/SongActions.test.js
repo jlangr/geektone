@@ -37,6 +37,12 @@ describe('async actions', () => {
   })
 
   describe('put song name', () => {
+    it('calls change new song name if new (not persisted)', async () => {
+      await actions.putSongName(undefined, 'a new name')(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.changeNewSongName('a new name'))
+    })
+
     it('dispatches to change song name on success', async () => {
       mock.onPut(actions.request('/song/42/rename')).reply(200, [['42', 'newName']])
 
@@ -84,11 +90,11 @@ describe('async actions', () => {
   describe('save song', () => {
     it('dispatches to create song when no id exists', async () => {
       song.id = undefined
-      mock.onPost(actions.request('/song')).reply(201, '42')
+      mock.onPost(actions.request('/song')).reply(201, { id: '42', songList: [['42', 'new song']] })
 
       await actions.saveSong(song)(dispatch)
       
-      expect(dispatch).toHaveBeenCalledWith({ type: type.CREATE_SONG, payload: { id: '42', message: 'song created' } })
+      expect(dispatch).toHaveBeenCalledWith({ type: type.CREATE_SONG, payload: { id: '42', songList: [['42', 'new song']], message: 'song created' } })
     })
 
     it('dispatches to mark clean when song is being updated', async () => {
