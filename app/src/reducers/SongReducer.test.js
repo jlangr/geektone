@@ -5,6 +5,7 @@ import NoteSequence from '../NoteSequence'
 import Note from '../Note'
 import * as Constants from '../Constants'
 import * as Duration from '../Duration'
+import { INITIAL_STATE } from './SongReducer'
 
 describe('a song', () => {
   describe('create song', () => {
@@ -76,6 +77,12 @@ describe('a song', () => {
 
       expect(state.song.isDirty).toBeFalsy()
       expect(state.message).toEqual('message')
+    })
+
+    it('is not dirty after load (replace)', () => {
+      const state = SongReducer({ song: { tracks: [] } }, actions.replaceSong({ tracks: [], isDirty: true }))
+
+      expect(state.song.isDirty).toBeFalsy()
     })
     // TODO: it('is not dirty after undo to origin', () => { })
   })
@@ -162,6 +169,27 @@ describe('a song', () => {
     expect(newState.song.bpm).toEqual(140)
   })
 
+  describe('creating a new song', () => {
+    const newState = SongReducer({ song: { name: 'in progress' } }, actions.newSong())
+
+    it('resets song to default', () => {
+      expect(newState.song).toEqual(INITIAL_STATE.song)
+    })
+  })
+
+  describe('removing a song', () => {
+    const songList = [['42', 'default']]
+    const newState = SongReducer({ song: { name: 'in progress' } }, actions.removeSong(songList))
+    
+    it('resets song to default', () => {
+      expect(newState.song).toEqual(INITIAL_STATE.song)
+    })
+
+    it('updates the song list', () => {
+      expect(newState.songList).toEqual([{value: '42', label: 'default'}])
+    })
+  })
+
   describe('creating a new track', () => {
     const state = SongReducer(undefined, actions.newTrack())
 
@@ -179,7 +207,7 @@ describe('a song', () => {
   it('deletes a track', () => {
     const state = SongReducer({ song: { tracks: [{name: 'x', id: 0}]}}, actions.deleteTrack(0))
 
-    expect(state.song.tracks.length).toEqual(0);
+    expect(state.song.tracks.length).toEqual(0)
   })
 
   it('changes track instrument', () => {

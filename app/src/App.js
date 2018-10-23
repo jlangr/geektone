@@ -6,7 +6,7 @@ import Beforeunload from 'react-beforeunload'
 import './App.css'
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
-import { changeBpm, errorMessage, loadSong, loadSongList, loadSynths, newTrack, playSong, putSongName, saveSong, stopSong } from './actions'
+import { changeBpm, deleteSong, errorMessage, loadSong, loadSongList, loadSynths, newSong, newTrack, playSong, putSongName, saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
 import Select from 'react-select'
 import InlineEdit from 'react-edit-inline2'
@@ -60,36 +60,56 @@ export class App extends Component {
               </Row>
 
               <Row className='tracks-row'>
-                <Button className='btn-song' 
-                  onClick={() => this.props.playSong(this.props.song, () => this.props.stopSong())} 
-                  { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>
-                  <Glyphicon glyph='play' title='Play' />
-                </Button>
-                <Button className='btn-song' 
-                  onClick={this.props.stopSong}
-                  { ...this.props.synth.isPlaying ? {} : { disabled: true}}>
-                  <Glyphicon glyph='stop' title='Stop playback' />
-                 </Button>
-                <Button className='btn-song' 
-                  onClick={() => this.props.saveSong(this.props.song)}>
-                  Save
-                </Button>
-              </Row>
-              <Row className='tracks-row'>
-                <Col xs={3} className="track-select-padding">
-                  <Select
-                    onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
-                    options={this.props.songList} />
+                <Col xs={1} className="track-select-padding">
+                  <Button className='btn-song' 
+                    onClick={() => this.props.playSong(this.props.song, () => this.props.stopSong())} 
+                    { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>
+                    <Glyphicon glyph='play' title='Play' />
+                  </Button>
+                </Col>
+                <Col xs={1} className="track-select-padding">
+                  <Button className='btn-song' onClick={this.props.stopSong}
+                    { ...this.props.synth.isPlaying ? {} : { disabled: true}}>
+                    <Glyphicon glyph='stop' title='Stop playback' />
+                  </Button>
                 </Col>
                 <Col xs={2} className="track-select-padding">
-                  <Button className='btn-song' 
-                    onClick={() => this.props.loadSong(this.state.selectedSongId)}
+                  <Button className='btn-song' onClick={() => this.props.saveSong(this.props.song)}>
+                    Save
+                  </Button>
+                </Col>
+                <Col xs={2} className="track-select-padding">
+                  <Button className='btn-song' onClick={() => {
+                    if (this.props.song.isDirty && !window.confirm('You have unsaved changes. Create a new song anyway?'))
+                      return
+                    this.props.newSong(this.props.song)
+                  }}>
+                    New
+                  </Button>
+                </Col>
+                <Col xs={1} className="track-select-padding">
+                  <Button className='btn-song' onClick={() => {
+                    if (this.props.song.isDirty && !window.confirm('You have unsaved changes. Delete the song anyway?'))
+                      return
+                    this.props.deleteSong(this.props.song)
+                  }}>
+                    Delete
+                  </Button>
+                </Col>
+              </Row>
+              <Row className='tracks-row'>
+                <Col xs={2} className="track-select-padding">
+                  <Button className='btn-song' onClick={() => this.props.loadSong(this.state.selectedSongId)}
                     { ...this.state.selectedSongId ? {} : { disabled: true}}>
                     Load
                   </Button>
                 </Col>
+                <Col xs={4} className="track-select-padding">
+                  <Select
+                    onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
+                    options={this.props.songList} />
+                </Col>
               </Row>
-
             </Col>
             <Col xs={6}>
               <HelpPanel/>
@@ -126,7 +146,7 @@ const mapStateToProps = (state, _ownProps) => {
 }
 
 const mapDispatchToProps = { 
-  changeBpm, errorMessage, putSongName, loadSong, loadSongList, loadSynths, newTrack, saveSong, playSong, stopSong
+  changeBpm, deleteSong, errorMessage, putSongName, loadSong, loadSongList, loadSynths, newSong, newTrack, saveSong, playSong, stopSong
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

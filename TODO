@@ -1,7 +1,7 @@
-H create new song
-  - button to create new song
 H start song at selection point
 H delete song
+ -- songs not dirty when saved
+
 
 H staff width way wider!
 

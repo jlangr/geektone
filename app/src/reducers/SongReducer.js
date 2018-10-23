@@ -239,6 +239,12 @@ export default(state = INITIAL_STATE, action) => {
       return { ...state, message: action.payload }
     }
 
+    case type.NEW_SONG:
+    {
+      console.log('setting song state to new')
+      return { ...state, song: INITIAL_STATE.song }
+    }
+
     case type.NEW_TRACK:
     {
       const newTrack = { 
@@ -253,6 +259,11 @@ export default(state = INITIAL_STATE, action) => {
       return { ...state, song: { ...state.song, tracks: [...state.song.tracks, newTrack] } }
     }
 
+    case type.REMOVE_SONG: 
+    {
+      return { ...state, song: INITIAL_STATE.song, songList: convertToSongSelectionList(action.payload) }
+    }
+
     case type.REPLACE_SONG:
     {
       const newSong = action.payload
@@ -261,6 +272,7 @@ export default(state = INITIAL_STATE, action) => {
         if (!track.volume) track.volume = defaultTrackVolume
         return { ...track, notes: new NoteSequence(notes) }
       })
+      newSong.isDirty = false
       return { ...state, song: newSong }
     }
 
@@ -272,6 +284,7 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.SONG_LIST:
     {
+      console.log('updating song list')
       return { ...state, songList: convertToSongSelectionList(action.payload) }
     }
 

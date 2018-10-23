@@ -26,7 +26,11 @@ export const errorMessage = message => ({ type: type.ERROR, payload: message })
 
 export const markClean = message => ({ type: type.MARK_CLEAN, payload: message })
 
+export const newSong = () => ({ type: type.NEW_SONG })
+
 export const newTrack = () => ({ type: type.NEW_TRACK })
+
+export const removeSong = songList => ({ type: type.REMOVE_SONG, payload: songList })
 
 export const replaceSong = song => ({ type: type.REPLACE_SONG, payload: song })
 
@@ -40,9 +44,20 @@ export const toggleFlatsMode = trackIndex => ({ type: type.TOGGLE_FLATS_MODE, pa
 
 export const toggleMute = trackIndex => ({ type: type.TOGGLE_MUTE, payload: trackIndex })
 
+export const deleteSong = song =>
+  dispatch => {
+    if (song.id === undefined) {
+      console.log('new songing because this song not yet saved')
+      return dispatch(newSong())
+    }
+    return axios.delete(request(`/song/${song.id}`))
+      .then(response => dispatch(removeSong(response.data)))
+      .catch(error => dispatch(errorMessage(`unable to delete song: ${error.toString()}`)))
+  }
+
 export const loadSongList = () =>
   dispatch =>
-    axios.get(request(`/songs`))
+    axios.get(request('/songs'))
       .then(response => dispatch(songList(response.data)))
       .catch(error => dispatch(errorMessage(`unable to retrieve song list: ${error.toString()}`)))
 
@@ -54,10 +69,8 @@ export const postSong = song =>
 
 export const putSongName = (id, newName) =>
   dispatch => {
-    if (id === undefined) {
-      console.log('chang new song name', newName.trim())
+    if (id === undefined)
       return dispatch(changeNewSongName(newName.trim()))
-    }
     return axios.put(request(`/song/${id}/rename`), { newTitle: newName.trim() })
       .then(response => dispatch(changeSongName(newName.trim(), response.data)))
       .catch(error => dispatch(errorMessage(`unable to rename song: ${error.toString()}`)))

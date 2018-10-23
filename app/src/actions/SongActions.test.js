@@ -36,6 +36,30 @@ describe('async actions', () => {
     })
   })
 
+  describe('delete song', () => {
+    it('dispatches to new song if no id', async () => {
+      await actions.deleteSong({ name: 'abc' })(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.newSong())
+    })
+
+    it('dispatches to delete song name with song list', async () => {
+      mock.onDelete(actions.request('/song/42')).reply(200, [['42', 'newName']])
+
+      await actions.deleteSong({ name: 'abc', id: '42' })(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.removeSong([['42', 'newName']]))
+    })
+
+    it('dispatches to error message on failed retrieve', async () => {
+      mock.onDelete(actions.request('/song/42')).reply(500)
+
+      await actions.deleteSong({ name: 'abc', id: '42' })(dispatch)
+
+      expect(dispatch).toHaveBeenCalledWith(actions.errorMessage('unable to delete song: Error: Request failed with status code 500'))
+    })
+  })
+
   describe('put song name', () => {
     it('calls change new song name if new (not persisted)', async () => {
       await actions.putSongName(undefined, 'a new name')(dispatch)

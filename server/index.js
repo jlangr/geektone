@@ -43,6 +43,11 @@ const readSong = id => JSON.parse(fs.readFileSync(songFilename(id)))
 
 const writeSong = (id, json) => fs.writeFileSync(songFilename(id), JSON.stringify(json))
 
+const deleteSong = id => {
+console.log('deleteing song ', songFilename(id))
+fs.unlinkSync(songFilename(id))
+}
+
 const title = id => readSong(id).name
 
 const generateSongList = files => {
@@ -74,6 +79,13 @@ app.get('/songs', (request, response) => {
   response.send(sortedSongList())
 })
 
+app.delete('/song/:id', (request, response) => {
+  const id = request.params.id
+  deleteSong(id)
+  allSongs = undefined
+  response.status(200).json(sortedSongList())
+})
+
 app.put('/song/:id', (request,response) => {
   const song = request.body
   const id = request.params.id
@@ -97,11 +109,11 @@ app.put('/song/:id/rename', (request, response) => {
   response.status(200).json(sortedSongList())
 })
 
-app.post('/song', (request,response) => {
+app.post('/song', (request, response) => {
   const song = request.body
   song.id = nextAvailableId()
   writeSong(song.id, song)
-console.log('posted song')
+console.log('wrote song ', song.id)
   allSongs = undefined
   response.status(200).json({ 'id': song.id, 'songList': sortedSongList() })
 })
