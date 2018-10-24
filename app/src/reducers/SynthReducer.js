@@ -5,6 +5,15 @@ export const showPlayButton = synth =>
   Object.keys(synth.synths).length === synth.expectedSynthCount &&
     !synth.isPlaying
 
+// TODO test
+export const startNoteIndices = (song, selectionStartLine) => {
+  if (!selectionStartLine.start)
+    return song.tracks.map(_ => 0)
+  else
+    return song.tracks.map(track =>
+      track.notes.allNotes().findIndex(n => n.x() > selectionStartLine.start.x))
+}
+
 export const INITIAL_STATE = {
   synths: {},
   expectedSynthCount: 9, // TODO this is such shit
@@ -16,12 +25,12 @@ export default(state = INITIAL_STATE, action) => {
     case ADD_SYNTH: {
       const instrument = action.payload.instrument
       const synth = action.payload.synth
-      return {...state, synths: {...state.synths, [instrument]: synth} }
+      return { ...state, synths: {...state.synths, [instrument]: synth} }
     }
 
     case PLAY_SONG: {
-      const { song, songCompletedCallback } = action.payload
-      play(song, state.synths, songCompletedCallback)
+      const { song, songCompletedCallback, selectionStartLine } = action.payload
+      play(song, state.synths, songCompletedCallback, startNoteIndices(song, selectionStartLine))
       return { ...state, isPlaying: true }
     }
 

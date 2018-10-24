@@ -107,7 +107,6 @@ export class Staff extends Component {
     this.drawSelectionStart()
   }
 
-  // TODO propagate to other staffs
   drawSelectionStart() {
     this.props.ui.staff.selectionStartLine.drawOn(this.staffContext())
   }

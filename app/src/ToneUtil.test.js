@@ -38,19 +38,33 @@ describe('unmutedNoteObjects', () => {
 
   let result
 
-  beforeEach(() => {
-    result = unmutedNoteObjects(tracks)
+  describe('with 0 start positions', () => {
+    beforeEach(() => {
+      result = unmutedNoteObjects(tracks, [0, 0])
+    })
+
+    it('removes muted tracks', () => {
+      const names = result.map(([track, _]) => track.name)
+      expect(names).toEqual(['unmuted'])
+    })
+
+    it('converts notes to note objects', () => {
+      const noteObjects = result.map(([_, noteObjects]) => noteObjects)[0]
+      expect(noteObjects).toEqual([
+        {"duration": "4n", "name": "E4", "time": "0:0:0"}, 
+        {"duration": "4n", "name": "F4", "time": "0:1:0"}])
+    })
   })
 
-  it('removes muted tracks', () => {
-    const names = result.map(([track, _]) => track.name)
-    expect(names).toEqual(['unmuted'])
-  })
+  describe('with non-zero start positions', () => {
+    beforeEach(() => {
+      result = unmutedNoteObjects(tracks, [1, 1])
+    })
 
-  it('converts notes to note objects', () => {
-    const noteObjects = result.map(([_, noteObjects]) => noteObjects)[0]
-    expect(noteObjects).toEqual([
-      {"duration": "4n", "name": "E4", "time": "0:0:0"}, 
-      {"duration": "4n", "name": "F4", "time": "0:1:0"}])
+    it('converts notes to note objects', () => {
+      const noteObjects = result.map(([_, noteObjects]) => noteObjects)[0]
+      expect(noteObjects).toEqual([
+        {"duration": "4n", "name": "F4", "time": "0:0:0"}])
+    })
   })
 })

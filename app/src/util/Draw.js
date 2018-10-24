@@ -28,10 +28,16 @@ export const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=defaultLine
   context.lineTo(xEnd, yEnd)
 }
 
+export const xLeftOffset = accidentalsLeft + sharpsArea + notePad
+
+export const xPositionSpan = noteDistance + notePad
+
 export const verticalIndex = noteName => allStaffNotes.indexOf(noteName)
 
 export const y = noteName => verticalIndex(noteName) * lineHeight / 2
 
-export const x = position => accidentalsLeft + sharpsArea + notePad + (position * (noteDistance + notePad))
+export const x = position => xLeftOffset + (position * xPositionSpan)
+
+export const position = x => Math.floor((x - xLeftOffset) / xPositionSpan)
 
 export const topLineY = () => y(trebleStaffLines[0])

@@ -16,8 +16,11 @@ export default class Line {
   }
 }
 
-
 export class NullLine extends Line {
+  constructor() {
+    super({x: 0, y: 0}, {})
+  }
+
   drawOn(context) {
   }
 }

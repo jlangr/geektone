@@ -2,6 +2,8 @@ import * as type from '../actions/types'
 import * as actions from '../actions/SynthActions'
 import SynthReducer, { INITIAL_STATE, showPlayButton } from './SynthReducer'
 import * as toneutils from '../ToneUtils'
+import { NullLine } from '../ui/Line';
+import NoteSequence from '../NoteSequence';
 
 describe('add synth', () => {
   it('updates instrument-to-synth object', () => {
@@ -42,7 +44,7 @@ describe('showPlayButton', () => {
 describe('play song', () => {
   let play = toneutils.play
   const song = {name: 'new song', instrument: 'piano', tracks: [
-    {name: 't1', notes: [{name: 'E4'}, {name: 'F4'}]}
+    {name: 't1', notes: new NoteSequence(['E4', 'F4'])}
   ]}
 
   beforeEach(() => { 
@@ -54,13 +56,13 @@ describe('play song', () => {
   })
 
   it('turns on playing flag', () => {
-    const state = SynthReducer(undefined, actions.playSong(song));
+    const state = SynthReducer(undefined, actions.playSong(song, () => {}, new NullLine()))
 
     expect(state.isPlaying).toBeTruthy()
   })
 
   it('tells toneutils to play the song', () => {
-    SynthReducer(undefined, actions.playSong(song));
+    SynthReducer(undefined, actions.playSong(song, () => {}, new NullLine()))
 
     expect(toneutils.play).toHaveBeenCalled()
   })

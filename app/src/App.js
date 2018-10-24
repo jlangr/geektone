@@ -69,7 +69,11 @@ export class App extends Component {
               <Row className='tracks-row'>
                 <Col xs={1} className="track-select-padding">
                   <Button className='btn-song' 
-                    onClick={() => this.props.playSong(this.props.song, () => this.props.stopSong())} 
+                    onClick={() => this.props.playSong(
+                        this.props.song, 
+                        () => this.props.stopSong(),
+                        this.props.ui.staff.selectionStartLine
+                      )} 
                     { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>
                     <Glyphicon glyph='play' title='Play' />
                   </Button>
@@ -149,6 +153,7 @@ const mapStateToProps = (state, _ownProps) => {
     message: state.composition.message,
     errorMessageText: state.composition.errorMessage,
     synth: state.synth,
+    ui: state.ui
   }
 }
 

@@ -46,10 +46,8 @@ export const toggleMute = trackIndex => ({ type: type.TOGGLE_MUTE, payload: trac
 
 export const deleteSong = song =>
   dispatch => {
-    if (song.id === undefined) {
-      console.log('new songing because this song not yet saved')
+    if (song.id === undefined)
       return dispatch(newSong())
-    }
     return axios.delete(request(`/song/${song.id}`))
       .then(response => dispatch(removeSong(response.data)))
       .catch(error => dispatch(errorMessage(`unable to delete song: ${error.toString()}`)))

@@ -241,7 +241,6 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.NEW_SONG:
     {
-      console.log('setting song state to new')
       return { ...state, song: INITIAL_STATE.song }
     }
 
@@ -284,7 +283,6 @@ export default(state = INITIAL_STATE, action) => {
 
     case type.SONG_LIST:
     {
-      console.log('updating song list')
       return { ...state, songList: convertToSongSelectionList(action.payload) }
     }
 
