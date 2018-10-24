@@ -51,8 +51,7 @@ export default(state = INITIAL_STATE, action) => {
         ...state, 
         staff: { 
           ...state.staff, 
-          selectionStartLine: line,
-          selectionStart: clickPoint }}
+          selectionStartLine: line }}
     }
 
     default:

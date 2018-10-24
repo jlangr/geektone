@@ -68,7 +68,6 @@ describe('selection start', () => {
 
     const state = UIReducer(undefined, actions.setSelectionStart(point, canvasHeight))
 
-    expect(state.staff.selectionStart.clickPoint).toEqual(point.clickPoint)
     expect(state.staff.selectionStartLine).toEqual(
       new Line({ x: 1, y: 0 + SelectGap }, { x: 1, y: 40 - SelectGap }, 'green'))
   })
