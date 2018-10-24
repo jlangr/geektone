@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as keyHandler from './KeyHandler'
-import { addFlat, addSharp, updateTrack } from './actions'
+import { addFlat, addSharp, setSelectionStart, updateTrack } from './actions'
 import { hasBassNotes, hasTrebleNotes, isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
 import { nearestNote } from './reducers/UIReducer'
 import * as UI from './util/UI'
@@ -75,28 +75,20 @@ export class Staff extends Component {
       this.props.updateTrack(this.props.id)
   }
 
-  // TODO nearest note is screwed
-
   // TODO test
   click(e) {
     const clickPoint = UI.mousePosition(this.canvas(), e)
-    if (this.props.isInSharpsMode) {
-      if (this.isClickInAccidentals(clickPoint)) {
+    if (this.isClickInAccidentals(clickPoint)) {
+      if (this.props.isInSharpsMode)
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
-      }
-    } 
-    else if (this.props.isInFlatsMode) {
-      if (this.isClickInAccidentals(clickPoint))
+      else if (this.props.isInFlatsMode)
         this.props.addFlat(this.props.id, this.props.nearestNote(clickPoint))
     }
     else if (this.props.trackData.notes.clickHitNote(clickPoint)) 
         this.props.updateTrack(this.props.id)
+    else
+      this.props.setSelectionStart(clickPoint, this.canvas().height)
   }
-
-  // TODO the click is based on the note sequence... however,
-  // the ties are only part of the bar sequence... so clickHitNote should be
-  // called in interaction w/ the barSequence()
-  // Maybe BarSequence becomes the first-class type
 
   // TODO test
   // TODO move to query on props
@@ -111,6 +103,13 @@ export class Staff extends Component {
       hasTrebleNotes(this.props.song, this.props.id),
       hasBassNotes(this.props.song, this.props.id)))
     this.drawStaffLines()
+
+    this.drawSelectionStart()
+  }
+
+  // TODO propagate to other staffs
+  drawSelectionStart() {
+    this.props.ui.staff.selectionStartLine.drawOn(this.staffContext())
   }
 
   drawStaff(lines) {
@@ -198,6 +197,6 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
     song }
 }
 
-const mapDispatchToProps = { addSharp, addFlat, updateTrack }
+const mapDispatchToProps = { addSharp, addFlat, updateTrack, setSelectionStart }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Staff)

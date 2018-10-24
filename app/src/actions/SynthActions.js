@@ -38,9 +38,8 @@ const createSynth = (instrument, dispatch) => {
   var synth = sampler.toMaster()
 }
 
-export const addSynthAction = (instrument, synth) => {
-  return { type: type.ADD_SYNTH, payload: { instrument, synth }} 
-}
+export const addSynthAction = (instrument, synth) =>
+  ({ type: type.ADD_SYNTH, payload: { instrument, synth }})
 
 export const playSong = (song, songCompletedCallback) => 
   ({ type: type.PLAY_SONG, payload: { song, songCompletedCallback }})

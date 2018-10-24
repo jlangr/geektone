@@ -2,12 +2,15 @@ H start song at selection point
 H staff width way wider!
 M play-along marker
 M adjust volume / mute while running
+M duplicate song names
 ===
 
 M delete / copy / paste multiple notes
 M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored
+M arbitrary ties
 M dotting a tie rest converts it to a note
 M save song as (duplicate)
+M uneven notes
 M notes longer than 1 bar
 M mouse insert note
 M note insert mode

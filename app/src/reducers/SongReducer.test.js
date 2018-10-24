@@ -1,11 +1,10 @@
 import * as actions from '../actions/SongActions'
 import * as type from '../actions/types'
-import SongReducer, { defaultTrackVolume, hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
+import SongReducer, { INITIAL_STATE, defaultTrackVolume, hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
 import NoteSequence from '../NoteSequence'
 import Note from '../Note'
 import * as Constants from '../Constants'
 import * as Duration from '../Duration'
-import { INITIAL_STATE } from './SongReducer'
 
 describe('a song', () => {
   describe('create song', () => {

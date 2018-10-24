@@ -3,8 +3,11 @@ import Rect from '../Rect'
 import * as Draw from '../util/Draw'
 import { noteHeight } from '../Note'
 import * as Constants from '../Constants'
+import * as types from '../actions/types'
+import Line, { NullLine } from '../ui/Line';
 
 export const lineClickTolerance = 2
+export const SelectGap = 10
 
 const isDrawnOnAStaffLine = note =>
   Constants.allStaffNotes.findIndex(n => n === note) % 2 === 0
@@ -30,10 +33,29 @@ export const nearestNote = (uiState, point) => {
 export const INITIAL_STATE = {
   staff: {
     noteLineRanges: staffNoteLineRanges(),
-    accidentalsRect:  new Rect(Draw.accidentalsLeft, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(Constants.MiddleC))
+    accidentalsRect:  new Rect(Draw.accidentalsLeft, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(Constants.MiddleC)),
+    selectionStartLine: new NullLine()
   }
 }
 
-export default(state = INITIAL_STATE, _action) => {
-  return state
+export default(state = INITIAL_STATE, action) => {
+  switch (action.type) {
+    case types.SET_SELECTION_START:
+    {
+      const { clickPoint, canvasHeight } = action.payload
+      const line = new Line(
+        { x: clickPoint.x, y: 0 + SelectGap }, 
+        { x: clickPoint.x, y: canvasHeight - SelectGap },
+        'green')
+      return { 
+        ...state, 
+        staff: { 
+          ...state.staff, 
+          selectionStartLine: line,
+          selectionStart: clickPoint }}
+    }
+
+    default:
+      return state
+  }
 }

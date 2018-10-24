@@ -6,7 +6,14 @@ import Beforeunload from 'react-beforeunload'
 import './App.css'
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
-import { changeBpm, deleteSong, errorMessage, loadSong, loadSongList, loadSynths, newSong, newTrack, playSong, putSongName, saveSong, stopSong } from './actions'
+import { 
+  changeBpm, 
+  deleteSong, 
+  errorMessage, 
+  loadSong, loadSongList, loadSynths, 
+  newSong, newTrack, 
+  playSong, putSongName, 
+  saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
 import Select from 'react-select'
 import InlineEdit from 'react-edit-inline2'

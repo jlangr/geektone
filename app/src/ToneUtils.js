@@ -67,6 +67,6 @@ export const play = async (song, synths, songCompletedCallback) => {
 export const stop = () => {
   if (scheduleEventId)
     Tone.Transport.clear(scheduleEventId)
-  Tone.Transport.stop();
+  console.log('transport when stopped', Tone.Transport.stop());
   Tone.Transport.cancel();
 };
