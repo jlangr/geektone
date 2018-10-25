@@ -1,9 +1,10 @@
-import * as type from '../actions/types'
 import * as actions from '../actions/SynthActions'
-import SynthReducer, { INITIAL_STATE, showPlayButton } from './SynthReducer'
+import SynthReducer, { INITIAL_STATE, showPlayButton, startNoteIndices } from './SynthReducer'
 import * as toneutils from '../ToneUtils'
-import { NullLine } from '../ui/Line';
-import NoteSequence from '../NoteSequence';
+import { NullLine } from '../ui/Line'
+import NoteSequence from '../NoteSequence'
+import Note from '../Note'
+import * as Draw from '../util/Draw'
 
 describe('add synth', () => {
   it('updates instrument-to-synth object', () => {
@@ -11,12 +12,36 @@ describe('add synth', () => {
 
     const state = SynthReducer(
       { synths: { 'x': 'y' }, expectedSynthCount: 2 },
-      actions.addSynthAction('flugelhorn', synth));
+      actions.addSynthAction('flugelhorn', synth))
 
     expect(state).toEqual({
       synths: { 'x': 'y', 'flugelhorn': 'flugelhornSynth' },
       expectedSynthCount: 2
-    });
+    })
+  })
+})
+
+describe('startNoteIndices', () => {
+  it('maps to zeros for all tracks if no selectionStartLine start', () => {
+    const song = { tracks: [{}, {}] }
+    expect(startNoteIndices(song, {start: undefined })).toEqual([0, 0])
+  })
+
+  it('maps to starting index for songs with notes', () => {
+    const note0 = new Note('F2')
+    note0.position = 0
+    const note1 = new Note('G2')
+    note1.position = 1 
+    const note2 = new Note('A2')
+    note2.position = 2
+    const notes = new NoteSequence()
+    notes.addAll(note0, note1, note2)
+    
+    const song = { tracks: [{ notes }] }
+
+    const indices = startNoteIndices(song, { start: { x: Draw.x(1) - 1 }})
+
+    expect(indices).toEqual([1])
   })
 })
 
@@ -80,13 +105,13 @@ describe('stop song', () => {
   })
 
   it('turns on playing flag', () => {
-    const state = SynthReducer(undefined, actions.stopSong());
+    const state = SynthReducer(undefined, actions.stopSong())
 
     expect(state.isPlaying).toBeFalsy()
   })
 
   it('tells toneutils to stop the song', () => {
-    SynthReducer(undefined, actions.stopSong());
+    SynthReducer(undefined, actions.stopSong())
 
     expect(toneutils.stop).toHaveBeenCalled()
   })

@@ -5,13 +5,12 @@ export const showPlayButton = synth =>
   Object.keys(synth.synths).length === synth.expectedSynthCount &&
     !synth.isPlaying
 
-// TODO test
 export const startNoteIndices = (song, selectionStartLine) => {
   if (!selectionStartLine.start)
     return song.tracks.map(_ => 0)
-  else
-    return song.tracks.map(track =>
-      track.notes.allNotes().findIndex(n => n.x() > selectionStartLine.start.x))
+
+  return song.tracks.map(track => 
+    track.notes.allNotes().findIndex(n => n.x() > selectionStartLine.start.x))
 }
 
 export const INITIAL_STATE = {

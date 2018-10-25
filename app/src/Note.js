@@ -170,7 +170,7 @@ export default class Note {
   }
 
   x() { return Draw.x(this.position) }
-  y() { return Draw.y(this.name()); }
+  y() { return Draw.y(this.name()) }
 
   drawOn(context) {
     this.context = context // TODO: UGH. To support draw from playback
