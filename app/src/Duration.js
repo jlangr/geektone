@@ -1,5 +1,3 @@
-import * as TimeUtil from './TimeUtil'
-
 export const sixteenth = '16n'
 export const eighth = '8n'
 export const quarter = '4n'
@@ -8,11 +6,40 @@ export const whole = '1n'
 
 const sixteenths = {[sixteenth]: 1, [eighth]: 2, [quarter]: 4, [half]: 8, [whole]: 16}
 
+export const toSixteenths = duration => {
+  if (isTransportTime(duration)) {
+    const parts = duration.split(':')
+    const [bars, quarters, sixteenths] = parts.map(s => parseInt(s, 10))
+    return (bars * 16) + (quarters * 4) + sixteenths
+  }
+  else {
+    let result = sixteenths[noteBase(duration)]
+    if (isDotted(duration))
+      result += (result / 2)
+    return result
+  }
+}
+
+export const isTransportTime = duration => duration.includes(':')
+
+export const toTransportTime = duration => {
+  const sixteenths = time(duration)
+  return transportTime(sixteenths)
+}
+
+export const transportTime = totalSixteenths => {
+  const measures = Math.floor(totalSixteenths / 16)
+  const measureSixteenths = totalSixteenths % 16
+  const quarters = Math.floor(measureSixteenths / 4)
+  const sixteenths = totalSixteenths % 4
+  return `${measures}:${quarters}:${sixteenths}`
+}
+
 const dottedNotes = [3, 6, 12, 24]
 
 const isNoteBase = (duration, noteBase, s1, s2) => {
   if (isTransportTime(duration)) {
-    const sixteenths = TimeUtil.toSixteenths(duration)
+    const sixteenths = toSixteenths(duration)
     return sixteenths === s1 || sixteenths === s2
   }
   else
@@ -27,7 +54,7 @@ export const isSixteenthBase = duration => isNoteBase(duration, sixteenth, 1)
 
 export const isDotted = duration => {
   if (isTransportTime(duration)) {
-    const sixteenths = TimeUtil.toSixteenths(duration) 
+    const sixteenths = toSixteenths(duration) 
     return dottedNotes.includes(sixteenths)
   }
   return duration.endsWith('.')
@@ -41,10 +68,10 @@ export const noteBase = noteDuration => {
 
 export const halveDuration = duration => {
   if (isTransportTime(duration)) {
-    const sixteenths = TimeUtil.toSixteenths(duration)
+    const sixteenths = toSixteenths(duration)
     if (sixteenths === 1 || sixteenths % 2) return duration
 
-    return TimeUtil.transportTime(sixteenths / 2)
+    return transportTime(sixteenths / 2)
   }
   else {
     if (duration === sixteenth || isDotted(duration)) return duration
@@ -55,8 +82,8 @@ export const halveDuration = duration => {
 
 export const doubleDuration = duration => {
   if (isTransportTime(duration)) {
-    const sixteenths = TimeUtil.toSixteenths(duration)
-    return TimeUtil.transportTime(sixteenths * 2)
+    const sixteenths = toSixteenths(duration)
+    return transportTime(sixteenths * 2)
   }
   else {
     if (duration === whole || isDotted(duration)) return duration
@@ -106,25 +133,4 @@ export const notesForSixteenths = sixteenths => {
     case 16: return [whole]
     default: return [quarter]
   }
-}
-
-export const toSixteenths = duration => {
-  if (isTransportTime(duration)) {
-    const parts = duration.split(':')
-    const [bars, quarters, sixteenths] = parts.map(s => parseInt(s, 10))
-    return (bars * 16) + (quarters * 4) + sixteenths
-  }
-  else {
-    let result = sixteenths[noteBase(duration)]
-    if (isDotted(duration))
-      result += (result / 2)
-    return result
-  }
-}
-
-export const isTransportTime = duration => duration.includes(':')
-
-export const toTransportTime = duration => {
-  const sixteenths = time(duration)
-  return TimeUtil.transportTime(sixteenths)
 }

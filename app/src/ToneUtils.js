@@ -1,6 +1,5 @@
 import Tone from 'tone'
 import * as NoteUtil from './NoteUtil'
-import * as TimeUtil from './TimeUtil'
 import * as Duration from './Duration'
 
 let scheduleEventId
@@ -49,9 +48,9 @@ export const play = async (song, synths, songCompletedCallback, startNoteIndices
 
   const stopTimes = noteObjects.map(([_track, toneNotes]) => {
     const lastNote = toneNotes[toneNotes.length - 1]
-    return TimeUtil.toSixteenths(lastNote.time) + Duration.time(lastNote.duration)
+    return Duration.toSixteenths(lastNote.time) + Duration.time(lastNote.duration)
   })
-  const stopTime = TimeUtil.transportTime(Math.max(...stopTimes))
+  const stopTime = Duration.transportTime(Math.max(...stopTimes))
   scheduleEventId = Tone.Transport.scheduleOnce(() => songCompletedCallback(), stopTime)
 
   updateSynthVolumes(tracks, synths)

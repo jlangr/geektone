@@ -16,15 +16,41 @@ describe('time', () => {
   })
 })
 
-describe('isTransportTime', () => {
-  expect(Duration.isTransportTime('8n')).toBeFalsy()
-  expect(Duration.isTransportTime('0:1:0')).toBeTruthy()
-})
+describe('transport time', () => {
+  it('converts number of 16s into bars:quarters:sixteenths format', () => {
+    expect(Duration.transportTime(1)).toEqual('0:0:1')
+    expect(Duration.transportTime(2)).toEqual('0:0:2')
+    expect(Duration.transportTime(4)).toEqual('0:1:0')
+    expect(Duration.transportTime(5)).toEqual('0:1:1')
+    expect(Duration.transportTime(15)).toEqual('0:3:3')
+    expect(Duration.transportTime(16)).toEqual('1:0:0')
+    expect(Duration.transportTime(17)).toEqual('1:0:1')
+    expect(Duration.transportTime(30)).toEqual('1:3:2')
+    expect(Duration.transportTime(33)).toEqual('2:0:1')
+  })
 
-describe('convert duration to transport time', () => {
-  expect(Duration.toTransportTime('4n')).toEqual('0:1:0')
-  expect(Duration.toTransportTime('2n.')).toEqual('0:3:0')
-  expect(Duration.toTransportTime('8n.')).toEqual('0:0:3')
+  it('converts transport time to 16s', () => {
+    expect(Duration.toSixteenths('0:0:1')).toEqual(1)
+    expect(Duration.toSixteenths('0:0:2')).toEqual(2)
+    expect(Duration.toSixteenths('0:1:0')).toEqual(4)
+    expect(Duration.toSixteenths('0:1:1')).toEqual(5)
+    expect(Duration.toSixteenths('0:3:3')).toEqual(15)
+    expect(Duration.toSixteenths('1:0:0')).toEqual(16)
+    expect(Duration.toSixteenths('1:0:1')).toEqual(17)
+    expect(Duration.toSixteenths('1:3:2')).toEqual(30)
+    expect(Duration.toSixteenths('2:0:1')).toEqual(33)
+  })
+
+  describe('isTransportTime', () => {
+    expect(Duration.isTransportTime('8n')).toBeFalsy()
+    expect(Duration.isTransportTime('0:1:0')).toBeTruthy()
+  })
+
+  describe('convert duration to transport time', () => {
+    expect(Duration.toTransportTime('4n')).toEqual('0:1:0')
+    expect(Duration.toTransportTime('2n.')).toEqual('0:3:0')
+    expect(Duration.toTransportTime('8n.')).toEqual('0:0:3')
+  })
 })
 
 describe('is dotted', () => {
