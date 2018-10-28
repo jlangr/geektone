@@ -6,6 +6,7 @@ export const transportTime = totalSixteenths => {
   return `${measures}:${quarters}:${sixteenths}`
 }
 
+// TODO Delete
 export const toSixteenths = transportTime => {
   const parts = transportTime.split(':')
   const [bars, quarters, sixteenths] = parts.map(s => parseInt(s, 10))
