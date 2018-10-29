@@ -1,14 +1,16 @@
+H cannot click select rests on ties
+H select on rest-tie 2nd note only alters 2nd note
 H staff width way wider!
-M play-along marker
-M adjust volume / mute while running
 ===
 
+M individual accidental
+M repeat section
+M play-along marker
+M adjust volume / mute while running
 M delete / copy / paste multiple notes
 M dotting a tie rest converts it to a note
 M mouse insert note
 M note insert mode
-M individual accidental
-M repeat section
 
 L pause--Transport toggle() function?
 L sharps & flats are not in proper order to determine key

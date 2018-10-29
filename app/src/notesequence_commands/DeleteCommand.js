@@ -13,6 +13,8 @@ export class DeleteCommand extends RebarCommand {
   }
 
   undo() {
+    this.seq.deselect() // remove select before array is altered
     this.seq.notes.splice(this.noteIndex, 0, this.deletedNote)
+    this.seq.select(this.noteIndex)
   }
 }

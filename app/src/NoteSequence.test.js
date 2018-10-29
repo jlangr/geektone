@@ -220,6 +220,16 @@ describe('NoteSequence', () => {
         const lastNote = endTies[endTies.length - 1]
         expect(lastNote.startTie).toEqual(startTies[0])
       })
+
+      it('retains rests in ties', () => {
+        const halfRest = Note.Rest(Duration.half)
+        const sixteenthsAvailable = 4
+
+        const [startTies, endTies] = sequence.createTies(halfRest, sixteenthsAvailable)
+
+        expect(startTies[0].isRest()).toBeTruthy()
+        expect(endTies[0].isRest()).toBeTruthy()
+      })
     })
   })
   
@@ -413,14 +423,6 @@ describe('NoteSequence', () => {
 
         expect(sequence.selectedNote().name()).toEqual('E4')
       })
-
-      it('removes selection on deselectAll', () => {
-        sequence.selectFirst()
-
-        sequence.deselectAll()
-
-        expect(sequence.isNoteSelected()).toBeFalsy()
-      })
     })
 
     describe('click on position', () => {
@@ -437,7 +439,15 @@ describe('NoteSequence', () => {
 
         sequence.click(0)
 
-        const note = sequence.firstNote()
+        expect(sequence.firstNote().isSelected).toBeTruthy()
+        expect(sequence.lastNote().isSelected).toBeFalsy()
+      })
+
+      it('deselects on selection', () => {
+        sequence.selectLast()
+
+        sequence.selectFirst()
+
         expect(sequence.firstNote().isSelected).toBeTruthy()
         expect(sequence.lastNote().isSelected).toBeFalsy()
       })
@@ -564,17 +574,13 @@ describe('NoteSequence', () => {
         expect(first.isSelected).toBeFalsy()
       })
 
-      it('sets selected to null if no current selection is empty', () => {
-        sequence.deselectAll()
-
+      it('sets selected to null if there is no current selection is empty', () => {
         sequence.selectNext()
 
         expect(sequence.selectedNote().name()).toBe('null')
       })
 
       it('prev sets selected to null if no current selection is empty', () => {
-        sequence.deselectAll()
-
         sequence.selectPrev()
 
         expect(sequence.selectedNote().name()).toBe('null')

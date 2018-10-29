@@ -24,6 +24,8 @@ export const staffNoteLineRanges = () => {
   return ranges
 }
 
+export const isNewEvent = (uiState, event) => uiState.lastKeyEventTimeStamp !== event.timeStamp
+
 export const nearestNote = (uiState, point) => {
   const pair = Object.entries(uiState.staff.noteLineRanges)
     .find(([_, range]) => range.contains(point.y))
@@ -43,7 +45,8 @@ export default(state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.KEY_FOCUS_UPDATE:
     {
-      return { ...state, lastComponentWithKeyFocus: action.payload }
+      const { component, event } = action.payload
+      return { ...state, lastComponentWithKeyFocus: component, lastKeyEventTimeStamp: event.timeStamp }
     }
 
     case types.SET_SELECTION_START:

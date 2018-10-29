@@ -39,13 +39,24 @@ describe('delete note', () => {
     expect(sequence.isSelected(lastIndex - 1)).toBeTruthy()
   })
 
-  it('can be undone', () => {
-    sequence.select(0)
-    sequence.deleteSelected()
+  describe('undo', () => {
+    it('restores deleted note', () => {
+      sequence.select(0)
+      sequence.deleteSelected()
 
-    sequence.undo()
+      sequence.undo()
 
-    expect(sequence.allNotes().map(note => [note.name(), note.duration]))
-      .toEqual([['E4', Duration.quarter], ['F4', Duration.eighth], ['G4', Duration.sixteenth]])
+      expect(sequence.allNotes().map(note => [note.name(), note.duration]))
+        .toEqual([['E4', Duration.quarter], ['F4', Duration.eighth], ['G4', Duration.sixteenth]])
+    })
+
+    it('restores deleted note', () => {
+      sequence.select(0)
+      sequence.deleteSelected()
+
+      sequence.undo()
+
+      expect(sequence.selectedNote().name()).toEqual('E4')
+    })
   })
 })

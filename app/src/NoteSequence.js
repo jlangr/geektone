@@ -118,24 +118,22 @@ export default class NoteSequence {
 
   click(sequenceIndex) {
     if (this.isSelected(sequenceIndex))
-      this.deselect(sequenceIndex)
+      this.deselect()
     else {
-      this.deselectAll()
+      this.deselect()
       this.select(sequenceIndex)
     }
   }
 
-  deselect(sequenceIndex) {
-    this.note(sequenceIndex).deselect()
-    this.currentNoteSequenceIndex = -1
-  }
-
-  deselectAll() {
-    this.selectedNote().deselect()
-    this.currentNoteSequenceIndex = -1
+  deselect() {
+    if (this.currentNoteSequenceIndex !== -1) {
+      this.note(this.currentNoteSequenceIndex).deselect()
+      this.currentNoteSequenceIndex = -1
+    }
   }
 
   select(sequenceIndex) {
+    this.deselect()
     this.currentNoteSequenceIndex = sequenceIndex
     this.notes[sequenceIndex].select()
   }
@@ -240,11 +238,11 @@ export default class NoteSequence {
 
     const startDurations = Duration.notesForSixteenths(timeRemaining)
     const startTies = startDurations.map(duration => 
-      new Tie(note.name(), duration, note.isSelected))
+      new Tie(note.name(), duration, note.isSelected, note.isRest()))
 
     const endDurations = Duration.notesForSixteenths(excessTime)
     const endTies = endDurations.map(duration => 
-      new Tie(note.name(), duration, note.isSelected))
+      new Tie(note.name(), duration, note.isSelected, note.isRest()))
 
     endTies[endTies.length - 1].startTie = startTies[0]
 

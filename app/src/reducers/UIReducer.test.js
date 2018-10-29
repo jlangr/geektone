@@ -1,5 +1,5 @@
 import * as Draw from '../util/Draw'
-import UIReducer, { SelectGap, INITIAL_STATE, lineClickTolerance, nearestNote } from './UIReducer'
+import UIReducer, { SelectGap, INITIAL_STATE, isNewEvent, lineClickTolerance, nearestNote } from './UIReducer'
 import Rect from '../Rect'
 import * as Constants from '../Constants'
 import * as actions from '../actions/UIActions'
@@ -82,10 +82,26 @@ describe('key focus update', () => {
 
   it('changes last component with key focus', () => {
     const component = { id: 1 }
+    const event = { timeStamp: 10001 }
 
-    const newState = UIReducer(undefined, actions.keyFocusUpdate(component))
+    const newState = UIReducer(undefined, actions.keyFocusUpdate(component, event))
 
     expect(newState.lastComponentWithKeyFocus.id).toEqual(1)
+    expect(newState.lastKeyEventTimeStamp).toEqual(10001)
   })
-  
+})
+
+describe('is new event', () => {
+  it('is usually new event', () => {
+    const state = INITIAL_STATE
+
+    expect(isNewEvent(state, { timeStamp: 1 })).toBeTruthy()
+  })
+
+  it('is not new event when its timestamp matches last event timestamp', () => {
+    const state = INITIAL_STATE
+    state.lastKeyEventTimeStamp = 1
+
+    expect(isNewEvent(state, { timeStamp: 1 })).toBeFalsy()
+  })
 })
