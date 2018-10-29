@@ -222,7 +222,7 @@ export default(state = INITIAL_STATE, action) => {
       return { ...state, 
         message, 
         songList: convertToSongSelectionList(songList), 
-        song: { ...state.song, id }}
+        song: { ...state.song, id, isDirty: false }}
     }
 
     case type.DELETE_TRACK:
@@ -240,6 +240,11 @@ export default(state = INITIAL_STATE, action) => {
     case type.MARK_CLEAN:
     {
       return { ...state, message: action.payload, song: { ...state.song, isDirty: false } }
+    }
+
+    case type.MARK_DIRTY:
+    {
+      return { ...state, song: { ...state.song, isDirty: true } }
     }
 
     case type.MESSAGE:

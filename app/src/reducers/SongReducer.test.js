@@ -15,12 +15,16 @@ describe('a song', () => {
       expect(state.song.id).toEqual('42')
     })
 
-    it('saves messase', () => {
+    it('saves message', () => {
       expect(state.message).toEqual('some message')
     })
 
     it('converts and stores song list', () => {
       expect(state.songList).toEqual([{value: '42', label: 'default'}])
+    })
+    
+    it('marks song as clean', () => {
+      expect(state.song.isDirty).toBeFalsy()
     })
   })
 
@@ -62,7 +66,8 @@ describe('a song', () => {
 
   describe('is either dirty or not', () => {
     it('is not dirty by default', () => {
-      expect(SongReducer(undefined, 'whatever').song.isDirty).toBeFalsy()
+      const newState = SongReducer(undefined, 'whatever')
+      expect(newState.song.isDirty).toBeFalsy()
     })
 
     it('is dirty after any update', () => {
@@ -84,6 +89,12 @@ describe('a song', () => {
       expect(state.song.isDirty).toBeFalsy()
     })
     // TODO: it('is not dirty after undo to origin', () => { })
+
+    it('explicitly sets dirty flag to true', () => {
+      const newState = SongReducer(undefined, actions.markDirty())
+
+      expect(newState.song.isDirty).toBeTruthy()
+    })
   })
 
   describe('manages UI messages', () => {

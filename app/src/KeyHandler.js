@@ -1,5 +1,8 @@
 import * as Duration from './Duration'
 
+export const isSelectionChangeOnly = e => 
+  e.key === 'ArrowLeft' || e.key === 'ArrowRight'
+
 export const handleKey = (e, noteSequence) => {
   if (!noteSequence.isNoteSelected()) return false
 

@@ -33,7 +33,6 @@ export default class Note {
   restToggle() {
     this.isNote = !this.isNote
     if (this.isRepresentedAsTie()) {
-      console.log('flopping tie rest toggle')
       this.startTies.forEach(t => t.restToggle())
       this.endTies.forEach(t => t.restToggle())
     }

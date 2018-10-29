@@ -26,6 +26,8 @@ export const errorMessage = message => ({ type: type.ERROR, payload: message })
 
 export const markClean = message => ({ type: type.MARK_CLEAN, payload: message })
 
+export const markDirty = () => ({ type: type.MARK_DIRTY })
+
 export const newSong = () => ({ type: type.NEW_SONG })
 
 export const newTrack = () => ({ type: type.NEW_TRACK })
@@ -70,7 +72,8 @@ export const putSongName = (id, newName) =>
     if (id === undefined)
       return dispatch(changeNewSongName(newName.trim()))
     return axios.put(request(`/song/${id}/rename`), { newTitle: newName.trim() })
-      .then(response => dispatch(changeSongName(newName.trim(), response.data)))
+      .then(response => {
+        dispatch(changeSongName(newName.trim(), response.data))})
       .catch(error => dispatch(errorMessage(`unable to rename song: ${error.toString()}`)))
   }
 
@@ -86,4 +89,6 @@ export const putSong = song =>
       .then(_response => dispatch(markClean('song saved')))
       .catch(error => dispatch(errorMessage(`unable to save your song, sorry: ${error.toString()}`)))
 
-export const saveSong = song => song.id ? putSong(song) : postSong(song)
+export const saveSong = song => {
+  return song.id ? putSong(song) : postSong(song)
+}
