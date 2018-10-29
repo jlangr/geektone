@@ -274,13 +274,10 @@ export default class NoteSequence {
         }
       }
       else {
-        if (note.duration === '0:1:3') {
-          const tieNotes = this.createTiesForNote(note)
-          tieNotes.forEach(note => bar.push(note))
-        }
-        else {
+        if (Duration.requiresTie(note.duration))
+          this.createTiesForNote(note).forEach(note => bar.push(note))
+        else
           bar.push(note)
-        }
       }
     })
     if (!bar.isEmpty()) barSequence.push(bar)
