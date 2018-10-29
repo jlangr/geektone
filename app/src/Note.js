@@ -58,11 +58,11 @@ export default class Note {
 
   // TODO test?
   sixteenthsInTheDot() {
-    return Duration.time(Duration.noteBase(this.duration)) / 2
+    return Duration.toSixteenths(Duration.noteBase(this.duration)) / 2
   }
 
   sixteenths() {
-    return Duration.time(this.duration)
+    return Duration.toSixteenths(this.duration)
   }
 
   isHigherOrEqual(that) {
@@ -83,13 +83,13 @@ export default class Note {
   }
 
   toggleDot() {
-    if (Duration.isWholeBase(this.duration) || Duration.isSixteenthBase(this.duration))
+    if (Duration.isSixteenthBase(this.duration))
       return
 
-    if (this.duration.endsWith('.'))
-      this.duration = this.duration.slice(0, -1)
+    if (Duration.isDotted(this.duration))
+      this.duration = Duration.transportTime(Duration.toSixteenths(this.duration) * 2 / 3)
     else
-      this.duration += '.'
+      this.duration = Duration.transportTime(Duration.toSixteenths(this.duration) * 3 / 2)
   }
 
   select() {

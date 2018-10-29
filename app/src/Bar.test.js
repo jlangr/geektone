@@ -95,36 +95,24 @@ describe('a bar', () => {
       })
     })
 
-    /*
-    describe('if it has ties', () => {
-      const dottedHalf = new Note('E5', '2n.')
-      bar.push(dottedHalf)
-      const half = new note('F5', '2n')
-      
-      bar.push(half)
-      
-      // TODO!
-    })
-    */
-
     describe('with dotted notes', () => {
-      it('is 4 if smallest note is dotted half', () => {
+      it('is 8 if smallest note is dotted quarter', () => {
         bar.push(new Note('E5', Duration.whole));  // 16
-        bar.push(new Note('E5', '4n.'));  // 6
+        bar.push(new Note('E5', '0:1:2'));  // 6
 
         expect(bar.positionsRequired()).toEqual(8)
       })
 
       it('is 8 if smallest note is dotted quarter', () => {
         bar.push(new Note('E5', Duration.whole))
-        bar.push(new Note('E5', '4n.'))
+        bar.push(new Note('E5', '0:1:2'))
 
         expect(bar.positionsRequired()).toEqual(8)
       })
 
       it('is 16 if smallest note is dotted eighth', () => {
         bar.push(new Note('E5', Duration.whole))
-        bar.push(new Note('E5', '8n.'))
+        bar.push(new Note('E5', '0:0:3'))
 
         expect(bar.positionsRequired()).toEqual(16)
       })

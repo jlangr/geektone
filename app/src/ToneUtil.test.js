@@ -51,8 +51,8 @@ describe('unmutedNoteObjects', () => {
     it('converts notes to note objects', () => {
       const noteObjects = result.map(([_, noteObjects]) => noteObjects)[0]
       expect(noteObjects).toEqual([
-        {"duration": "4n", "name": "E4", "time": "0:0:0"}, 
-        {"duration": "4n", "name": "F4", "time": "0:1:0"}])
+        {"duration": "0:1:0", "name": "E4", "time": "0:0:0"}, 
+        {"duration": "0:1:0", "name": "F4", "time": "0:1:0"}])
     })
   })
 
@@ -64,7 +64,7 @@ describe('unmutedNoteObjects', () => {
     it('converts notes to note objects', () => {
       const noteObjects = result.map(([_, noteObjects]) => noteObjects)[0]
       expect(noteObjects).toEqual([
-        {"duration": "4n", "name": "F4", "time": "0:0:0"}])
+        {"duration": "0:1:0", "name": "F4", "time": "0:0:0"}])
     })
   })
 })

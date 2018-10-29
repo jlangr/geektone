@@ -2,7 +2,6 @@ import Note from './Note'
 import * as Constants from './Constants'
 import * as Duration from './Duration'
 import Tie from './Tie'
-import { restRectangleTop } from './Constants'
 import * as Draw from './util/Draw'
 
 describe('note', () => {
@@ -13,12 +12,12 @@ describe('note', () => {
 
     it('answers number of sixteenths', () => {
       expect(new Note('F3', Duration.quarter).sixteenths()).toEqual(4)
-      expect(new Note('F3', '4n.').sixteenths()).toEqual(6)
+      expect(new Note('F3', Duration.dottedQuarter).sixteenths()).toEqual(6)
     })
 
-    it('answers number of dot sixteeths for dotted notes', () => {
-      expect(new Note('F3', '4n.').sixteenthsInTheDot()).toEqual(2)
-      expect(new Note('F3', '8n.').sixteenthsInTheDot()).toEqual(1)
+    it('answers number of dot sixteenths for dotted notes', () => {
+      expect(new Note('F3', '0:1:2').sixteenthsInTheDot()).toEqual(2)
+      expect(new Note('F3', Duration.dottedEighth).sixteenthsInTheDot()).toEqual(1)
     })
 
     describe('is higher or equal to', () => {
@@ -92,62 +91,65 @@ describe('note', () => {
 
   describe('to JSON', () => {
     it('converts a basic note', () => {
-      expect(new Note('F3', '8n').toJSON()).toEqual({name: 'F3', duration: '8n', isNote: true})
+      expect(new Note('F3', Duration.eighth).toJSON())
+        .toEqual({name: 'F3', duration: Duration.eighth, isNote: true})
     })
 
     it('includes whether or not it is a rest', () => {
-      const note = new Note('F3', '4#n')
+      const note = new Note('F3', Duration.quarter)
       note.restToggle()
 
       const json = note.toJSON()
 
-      expect(json).toEqual({name: 'F3', duration: '4#n', isNote: false})
+      expect(json).toEqual({name: 'F3', duration: Duration.quarter, isNote: false})
     })
   })
 
   describe('dotted notes', () => {
     describe('property', () => {
       it('is false when not dotted', () => {
-        expect(new Note('F2', '4n').isDotted()).toBeFalsy()
+        expect(new Note('F2', Duration.quarter).isDotted()).toBeFalsy()
       })
 
       it('is true when dotted', () => {
-        expect(new Note('F2', '4n.').isDotted()).toBeTruthy()
+        expect(new Note('F2', '0:1:2').isDotted()).toBeTruthy()
       })
     })
 
     describe('toggle', () => {
       it('toggles dot to non dotted note', () => {
-        const note = new Note('F2', '4n')
+        const note = new Note('F2', Duration.quarter)
 
         note.toggleDot()
 
-        expect(note.duration).toEqual('4n.')
+        expect(note.duration).toEqual(Duration.dottedQuarter)
       })
 
       it('removes dot from dotted note', () => {
-        const note = new Note('F2', '2n.')
+        const note = new Note('F2', '0:3:0')
 
         note.toggleDot()
 
-        expect(note.duration).toEqual('2n')
+        expect(note.duration).toEqual(Duration.half)
       })
 
-      it('does not toggle whole notes', () => {
-        const note = new Note('G4', '1n')
+      it('toggles whole notes', () => {
+        const note = new Note('G4', Duration.whole)
 
         note.toggleDot()
 
-        expect(note.duration).toEqual('1n')
+        expect(note.duration).toEqual('1:2:0')
       })
 
       it('does not toggle 16th notes', () => {
-        const note = new Note('G4', '16n')
+        const note = new Note('G4', Duration.sixteenth)
 
         note.toggleDot()
 
-        expect(note.duration).toEqual('16n')
+        expect(note.duration).toEqual(Duration.sixteenth)
       })
+
+      // TODO it does not toggle ties!
     })
   })
 

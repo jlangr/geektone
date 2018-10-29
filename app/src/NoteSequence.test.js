@@ -45,7 +45,7 @@ describe('NoteSequence', () => {
     let sequence
 
     beforeEach(() => {
-      sequence = new NoteSequence([['E4', '4n'], ['F4', '4n']])
+      sequence = new NoteSequence([['E4', Duration.quarter], ['F4', Duration.quarter]])
     })
 
     it('supports multiple undo', () => {
@@ -72,13 +72,13 @@ describe('NoteSequence', () => {
       sequence.redo()
       
       expect(sequence.allNotesWithDurations()).toEqual(
-        [['E4', '4n.'], ['E4', '4n.'], ['F4', '4n']])
+        [['E4', Duration.dottedQuarter], ['E4', Duration.dottedQuarter], ['F4', Duration.quarter]])
     })
   })
 
   describe('bar sequence after rebar', () => {
-    const e = new Note('E4', '4n')
-    const f4Half = new Note('F4', '2n')
+    const e = new Note('E4', Duration.quarter)
+    const f4Half = new Note('F4', Duration.half)
     let sequence
 
     beforeEach(() => {
@@ -126,7 +126,7 @@ describe('NoteSequence', () => {
     })
 
     it('handles all notes', () => {
-      const fHalf = new Note('F4', '2n')
+      const fHalf = new Note('F4', Duration.half)
       sequence.addAll(e, e, fHalf, e)
 
       const bars = sequence.bars()
@@ -137,21 +137,21 @@ describe('NoteSequence', () => {
     })
 
     it('puts all tie notes in place', () => {
-      const a = new Note('F4', '2n.')
-      const b = new Note('G4', '2n')
+      const a = new Note('F4', Duration.dottedHalf)
+      const b = new Note('G4', Duration.half)
       sequence.addAll(a, b);
 
       const bars = sequence.bars() 
 
       const bar0Notes = bars[0].notes
       const bar1Notes = bars[1].notes
-      expect(bar0Notes[0].toJSON()).toEqual(new Note('F4', '2n.').toJSON())
-      expect(bar0Notes[1].toJSON()).toEqual(new Tie('G4', '4n').toJSON())
+      expect(bar0Notes[0].toJSON()).toEqual(new Note('F4', Duration.dottedHalf).toJSON())
+      expect(bar0Notes[1].toJSON()).toEqual(new Tie('G4', Duration.quarter).toJSON())
     })
 
     it('handles tie split into multiple notes', () => {
-      const dottedQuarter = new Note('F4', '4n.')
-      const whole = new Note('F4', '1n')
+      const dottedQuarter = new Note('F4', Duration.dottedQuarter)
+      const whole = new Note('F4', Duration.whole)
       sequence.addAll(dottedQuarter, whole);
 
       const bars = sequence.bars()
@@ -165,8 +165,8 @@ describe('NoteSequence', () => {
 
     describe('create ties for too-long note', () => {
       let sequence
-      const halfE4 = new Note('E4', '2n')
-      const quarterE4 = new Note('E4', '4n')
+      const halfE4 = new Note('E4', Duration.half)
+      const quarterE4 = new Note('E4', Duration.quarter)
 
       beforeEach(() => {
         sequence = new NoteSequence()
@@ -177,8 +177,8 @@ describe('NoteSequence', () => {
 
         const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
 
-        expect(startTies).toEqual([new Tie('E4', '4n', halfE4.isSelected)])
-        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', '4n', halfE4.isSelected).toJSON()])
+        expect(startTies).toEqual([new Tie('E4', Duration.quarter, halfE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.quarter, halfE4.isSelected).toJSON()])
       })
 
       it('splits to timeremaining plus new note', () => {
@@ -186,17 +186,17 @@ describe('NoteSequence', () => {
 
         const [startTies, endTies] = sequence.createTies(quarterE4, sixteenthsAvailable)
 
-        expect(startTies).toEqual([new Tie('E4', '8n', quarterE4.isSelected)])
-        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', '8n', quarterE4.isSelected).toJSON()])
+        expect(startTies).toEqual([new Tie('E4', Duration.eighth, quarterE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.eighth, quarterE4.isSelected).toJSON()])
       })
 
-      it('creates ties for dotted notes too', () => {
+      it('XXX creates ties for dotted notes too', () => {
         const sixteenthsAvailable = 3
 
         const [startTies, endTies] = sequence.createTies(quarterE4, sixteenthsAvailable)
 
-        expect(startTies).toEqual([new Tie('E4', '8n.', quarterE4.isSelected)])
-        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', '16n', quarterE4.isSelected).toJSON()])
+        expect(startTies).toEqual([new Tie('E4', Duration.dottedEighth, quarterE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.sixteenth, quarterE4.isSelected).toJSON()])
       })
 
       it('stores start tie in end tie', () => {
@@ -211,7 +211,7 @@ describe('NoteSequence', () => {
   })
   
   describe('a rebar', () => {
-    const e = new Note('E4', '4n')
+    const e = new Note('E4', Duration.quarter)
     let sequence
     let rebar
     let existingRebar
@@ -312,26 +312,6 @@ describe('NoteSequence', () => {
       sequence.halveSelectedDuration()
 
       expect(sequence.firstNote().duration).toEqual(Duration.eighth)
-    })
-
-    it('does not halve dotted notes', () => {
-      const sequence = new NoteSequence()
-      sequence.addAll([new Note('E4', '4n.')])
-      sequence.selectFirst()
-
-      sequence.halveSelectedDuration()
-
-      expect(sequence.firstNote().duration).toEqual('4n.')
-    })
-
-    it('does not double dotted notes', () => {
-      const sequence = new NoteSequence()
-      sequence.addAll([new Note('E4', '4n.')])
-      sequence.selectFirst()
-
-      sequence.doubleSelectedDuration()
-
-      expect(sequence.firstNote().duration).toEqual('4n.')
     })
   })
 

@@ -1,34 +1,35 @@
 import { applyAccidentals, noteObjects } from './NoteUtil'
 import Note from './Note'
+import * as Duration from './Duration'
 
-describe('noteObjects', () => {
+describe(Duration.eighth, () => {
   it('creates note objects with time transports', () => {
-    const notes = [ new Note('C4', '8n'), new Note('D4', '4n')]
+    const notes = [ new Note('C4', Duration.eighth), new Note('D4', Duration.quarter)]
     const sharps = ['C4'] 
     expect(noteObjects(notes, sharps)).toEqual([
-      { name: 'C#4', duration: '8n', time: '0:0:0'},
-      { name: 'D4', duration: '4n', time: '0:0:2'}
+      { name: 'C#4', duration: Duration.eighth, time: '0:0:0'},
+      { name: 'D4', duration: Duration.quarter, time: '0:0:2'}
     ])
   })
 
   it('includes flats', () => {
-    const notes = [ new Note('C4', '8n'), new Note('D4', '4n'), new Note('E4')]
+    const notes = [ new Note('C4', Duration.eighth), new Note('D4', Duration.quarter), new Note('E4')]
     const flats = ['D4']
     const sharps = ['E4']
 
     expect(noteObjects(notes, sharps, flats)).toEqual([
-      { name: 'C4', duration: '8n', time: '0:0:0'},
-      { name: 'Db4', duration: '4n', time: '0:0:2'},
-      { name: 'E#4', duration: '4n', time: '0:1:2'},
+      { name: 'C4', duration: Duration.eighth, time: '0:0:0'},
+      { name: 'Db4', duration: Duration.quarter, time: '0:0:2'},
+      { name: 'E#4', duration: Duration.quarter, time: '0:1:2'},
     ])
   })
 
   it('ignores rests', () => {
-    const notes = [ new Note('C4', '8n'), Note.Rest('4n'), new Note('D4', '4n')]
+    const notes = [ new Note('C4', Duration.eighth), Note.Rest(Duration.quarter), new Note('D4', Duration.quarter)]
 
     expect(noteObjects(notes)).toEqual([
-      { name: 'C4', duration: '8n', time: '0:0:0'},
-      { name: 'D4', duration: '4n', time: '0:1:2'}
+      { name: 'C4', duration: Duration.eighth, time: '0:0:0'},
+      { name: 'D4', duration: Duration.quarter, time: '0:1:2'}
     ])
   })
 })

@@ -25,7 +25,7 @@ export const noteObjects = (notes, sharps = [], flats = []) => {
       // TODO changed--see ToneUtil
       result.push({ name: noteName, duration: note.duration, time: startTime /* , context: note.context, x: note.x(), y: note.y() */ })
     }
-    startSixteenths += Duration.time(note.duration)
+    startSixteenths += Duration.toSixteenths(note.duration)
   });
   return result
 }

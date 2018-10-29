@@ -48,7 +48,7 @@ export const play = async (song, synths, songCompletedCallback, startNoteIndices
 
   const stopTimes = noteObjects.map(([_track, toneNotes]) => {
     const lastNote = toneNotes[toneNotes.length - 1]
-    return Duration.toSixteenths(lastNote.time) + Duration.time(lastNote.duration)
+    return Duration.toSixteenths(lastNote.time) + Duration.toSixteenths(lastNote.duration)
   })
   const stopTime = Duration.transportTime(Math.max(...stopTimes))
   scheduleEventId = Tone.Transport.scheduleOnce(() => songCompletedCallback(), stopTime)

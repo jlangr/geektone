@@ -1,10 +1,11 @@
 import NoteSequence from '../NoteSequence'
+import * as Duration from '../Duration'
 
 describe('delete note', () => {
   let sequence
 
   beforeEach(() => {
-    sequence = new NoteSequence([['E4', '4n'], ['F4', '8n'], ['G4', '16n']])
+    sequence = new NoteSequence([['E4', Duration.quarter], ['F4', Duration.eighth], ['G4', Duration.sixteenth]])
   })
 
   it('removes the currently selected note', () => {
@@ -45,6 +46,6 @@ describe('delete note', () => {
     sequence.undo()
 
     expect(sequence.allNotes().map(note => [note.name(), note.duration]))
-      .toEqual([['E4', '4n'], ['F4', '8n'], ['G4', '16n']])
+      .toEqual([['E4', Duration.quarter], ['F4', Duration.eighth], ['G4', Duration.sixteenth]])
   })
 })
