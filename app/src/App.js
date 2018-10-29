@@ -28,6 +28,11 @@ export class App extends Component {
   componentDidMount() {
     this.props.loadSynths()
     this.props.loadSongList()
+    this.addKeyListeners()
+  }
+
+  addKeyListeners() {
+    document.addEventListener('keyup', e => this.props.ui.lastComponentWithKeyFocus.handleKeyPress(e))
   }
 
   render() {

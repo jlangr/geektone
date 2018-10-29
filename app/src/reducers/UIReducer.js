@@ -34,12 +34,18 @@ export const INITIAL_STATE = {
   staff: {
     noteLineRanges: staffNoteLineRanges(),
     accidentalsRect:  new Rect(Draw.accidentalsLeft, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(Constants.MiddleC)),
-    selectionStartLine: new NullLine()
-  }
+    selectionStartLine: new NullLine(),
+  },
+  lastComponentWithKeyFocus: { handleKeyPress: _e => {} }
 }
 
 export default(state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case types.KEY_FOCUS_UPDATE:
+    {
+      return { ...state, lastComponentWithKeyFocus: action.payload }
+    }
+
     case types.SET_SELECTION_START:
     {
       const { clickPoint, canvasHeight } = action.payload

@@ -72,3 +72,20 @@ describe('selection start', () => {
       new Line({ x: 1, y: 0 + SelectGap }, { x: 1, y: 40 - SelectGap }, 'green'))
   })
 })
+
+describe('key focus update', () => {
+  it('defaults last component with key focus to dummy', () => {
+    const newState = UIReducer(undefined, { type: 'whatever' })
+
+    expect(newState.lastComponentWithKeyFocus).toBeDefined()
+  })
+
+  it('changes last component with key focus', () => {
+    const component = { id: 1 }
+
+    const newState = UIReducer(undefined, actions.keyFocusUpdate(component))
+
+    expect(newState.lastComponentWithKeyFocus.id).toEqual(1)
+  })
+  
+})

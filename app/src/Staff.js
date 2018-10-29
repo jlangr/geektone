@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as keyHandler from './KeyHandler'
-import { addFlat, addSharp, setSelectionStart, updateTrack } from './actions'
+import { addFlat, addSharp, keyFocusUpdate, setSelectionStart, updateTrack } from './actions'
 import { hasBassNotes, hasTrebleNotes, isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
 import { nearestNote } from './reducers/UIReducer'
 import * as UI from './util/UI'
@@ -71,6 +71,7 @@ export class Staff extends Component {
   }
 
   handleKeyPress(e) {
+    this.props.keyFocusUpdate(this)
     if (keyHandler.handleKey(e, this.props.trackData.notes))
       this.props.updateTrack(this.props.id)
   }
@@ -196,6 +197,6 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
     song }
 }
 
-const mapDispatchToProps = { addSharp, addFlat, updateTrack, setSelectionStart }
+const mapDispatchToProps = { addSharp, addFlat, keyFocusUpdate, updateTrack, setSelectionStart }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Staff)
