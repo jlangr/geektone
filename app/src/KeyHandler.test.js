@@ -181,4 +181,22 @@ describe('keystrokes', () => {
 
     expect(noteSequence.firstNote().isRest()).toBeTruthy()
   })
+
+  it('increments selected note duration on +', () => {
+    noteSequence.add(new Note('E4', '0:2:0'))
+    noteSequence.selectFirst()
+
+    handleKey({key: '+'}, noteSequence)
+
+    expect(noteSequence.firstNote().duration).toEqual('0:2:1')
+  })
+
+  it('decrements selected note duration on -', () => {
+    noteSequence.add(new Note('E4', '0:0:4'))
+    noteSequence.selectFirst()
+
+    handleKey({key: '-'}, noteSequence)
+
+    expect(noteSequence.firstNote().duration).toEqual('0:0:3')
+  })
 })

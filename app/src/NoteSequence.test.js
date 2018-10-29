@@ -76,6 +76,19 @@ describe('NoteSequence', () => {
     })
   })
 
+  describe('bar sequence after rebar for non-standard note durations', () => {
+    it('creates a tie for non-standard note durations', () => {
+      const sequence = new NoteSequence()
+      sequence.add(new Note('C4', '0:1:3'))
+
+      const bars = sequence.bars()
+
+      const firstBarNotes = bars[0].notes
+      expect(firstBarNotes[0].duration).toEqual('0:1:2')
+      expect(firstBarNotes[1].duration).toEqual('0:0:1')
+    })
+  })
+
   describe('bar sequence after rebar', () => {
     const e = new Note('E4', Duration.quarter)
     const f4Half = new Note('F4', Duration.half)
@@ -190,7 +203,7 @@ describe('NoteSequence', () => {
         expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.eighth, quarterE4.isSelected).toJSON()])
       })
 
-      it('XXX creates ties for dotted notes too', () => {
+      it('creates ties for dotted notes too', () => {
         const sixteenthsAvailable = 3
 
         const [startTies, endTies] = sequence.createTies(quarterE4, sixteenthsAvailable)
@@ -279,6 +292,18 @@ describe('NoteSequence', () => {
         expect(rebar).toHaveBeenCalled()
       })
 
+      it('triggers on call to incrementSelectedDuration', () => {
+        sequence.incrementSelectedDuration()
+
+        expect(rebar).toHaveBeenCalled()
+      })
+
+      it('triggers on call to decrementSelectedDuration', () => {
+        sequence.decrementSelectedDuration()
+
+        expect(rebar).toHaveBeenCalled()
+      })
+
       it('triggers on call to toggleDotForSelected', () => {
         sequence.toggleDotForSelected()
 
@@ -312,6 +337,33 @@ describe('NoteSequence', () => {
       sequence.halveSelectedDuration()
 
       expect(sequence.firstNote().duration).toEqual(Duration.eighth)
+    })
+  })
+
+  describe('decrements and increments duration', () => {
+    let sequence
+
+    beforeEach(() => {
+      sequence = new NoteSequence()
+    })
+
+    it('decrements duration', () => {
+      sequence.addAll([new Note('E4', '0:1:0')])
+      sequence.selectFirst()
+
+      sequence.decrementSelectedDuration()
+
+      expect(sequence.firstNote().duration).toEqual('0:0:3')
+    })
+
+    it('increments duration', () => {
+      const sequence = new NoteSequence()
+      sequence.addAll([new Note('E4', '0:0:3')])
+      sequence.selectFirst()
+
+      sequence.incrementSelectedDuration()
+
+      expect(sequence.firstNote().duration).toEqual('0:1:0')
     })
   })
 

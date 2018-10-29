@@ -27,6 +27,8 @@ export const handleKey = (e, noteSequence) => {
     case '.': noteSequence.toggleDotForSelected(); return true
     case '/': noteSequence.halveSelectedDuration(); return true
     case '*': noteSequence.doubleSelectedDuration(); return true
+    case '-': noteSequence.decrementSelectedDuration(); return true
+    case '+': noteSequence.incrementSelectedDuration(); return true
     case 'r': noteSequence.toggleRestForSelected(); return true
 
     // TODO test

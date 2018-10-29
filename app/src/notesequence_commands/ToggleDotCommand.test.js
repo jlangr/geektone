@@ -34,7 +34,7 @@ describe('toggleDotForSelected', () => {
       expect(sequence.firstNote().duration).toEqual(Duration.eighth)
     })
 
-    it('XXX can be undone', () => {
+    it('can be undone', () => {
       sequence.firstNote().duration = '0:0:3'
       sequence.toggleDotForSelected()
 

@@ -191,6 +191,14 @@ export default class NoteSequence {
     this.setSelectedTo(Duration.doubleDuration(this.selectedNote().duration))
   }
 
+  incrementSelectedDuration() {
+    this.setSelectedTo(Duration.incrementDuration(this.selectedNote().duration))
+  }
+
+  decrementSelectedDuration() {
+    this.setSelectedTo(Duration.decrementDuration(this.selectedNote().duration))
+  }
+
   duplicateNote() {
     this.commander.execute(new DuplicateNoteCommand())
   }
@@ -215,6 +223,16 @@ export default class NoteSequence {
 
   toggleRestForSelected() {
     this.commander.execute(new ToggleRestCommand())
+  }
+
+  createTiesForNote(note) {
+    const time = note.sixteenths()
+    const durations = Duration.notesForSixteenths(time)
+    const ties = durations.map(duration => 
+      new Tie(note.name(), duration, note.isSelected))
+    ties[ties.length - 1].startTie = ties[0]
+    note.setTies(ties)
+    return ties
   }
 
   createTies(note, timeRemaining) {
@@ -256,7 +274,13 @@ export default class NoteSequence {
         }
       }
       else {
-        bar.push(note)
+        if (note.duration === '0:1:3') {
+          const tieNotes = this.createTiesForNote(note)
+          tieNotes.forEach(note => bar.push(note))
+        }
+        else {
+          bar.push(note)
+        }
       }
     })
     if (!bar.isEmpty()) barSequence.push(bar)

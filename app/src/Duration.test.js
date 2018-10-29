@@ -59,6 +59,20 @@ describe('note bases', () => {
   })
 })
 
+describe('increment / decrement duration by 16ths', () => {
+  it('increases 16ths on increment', () => {
+    expect(Duration.incrementDuration('0:0:2')).toEqual('0:0:3')
+  })
+
+  it('decreases 16ths on decrement', () => {
+    expect(Duration.decrementDuration('0:0:2')).toEqual('0:0:1')
+  })
+
+  it('does not decrease 16s when at 1', () => {
+    expect(Duration.decrementDuration('0:0:1')).toEqual('0:0:1')
+  })
+})
+
 it ('halves durations', () => {
   expect(Duration.halveDuration('0:0:2')).toEqual('0:0:1')
 })
@@ -85,4 +99,18 @@ it ('does not double the largest duration for BPM durations', () => {
 
 it ('doubles larger durations', () => {
   expect(Duration.doubleDuration('1:2:3')).toEqual('3:1:2')
+})
+
+describe('requires tie', () => {
+  it('requires tie when over one measure', () => {
+    expect(Duration.requiresTie('1:0:2')).toBeTruthy()
+  })
+
+  it('requires tie when requires two notes to render', () => {
+    expect(Duration.requiresTie('0:4:3')).toBeTruthy()
+  })
+
+  it('requires no tie when requires one note to render', () => {
+    expect(Duration.requiresTie('0:1:2')).toBeFalsy()
+  })
 })

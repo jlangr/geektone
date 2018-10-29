@@ -46,7 +46,7 @@ export default class Note {
     return this.startTies !== undefined
   }
 
-  setTies(startTies, endTies) {
+  setTies(startTies, endTies = []) {
     this.startTies = startTies
     this.endTies = endTies
   }

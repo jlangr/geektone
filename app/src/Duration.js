@@ -57,6 +57,15 @@ export const noteBase = noteDuration => {
   return noteDuration
 }
 
+export const incrementDuration = duration => transportTime(toSixteenths(duration) + 1)
+
+export const decrementDuration = duration => {
+  const sixteenths = toSixteenths(duration)
+  if (sixteenths === 1) return duration
+ 
+  return transportTime(sixteenths - 1)
+}
+
 export const halveDuration = duration => {
   const sixteenths = toSixteenths(duration)
   if (sixteenths === 1 || sixteenths % 2) return duration
@@ -103,4 +112,10 @@ export const notesForSixteenths = sixteenths => {
     case 16: return [whole]
     default: return [quarter]
   }
+}
+
+export const requiresTie = duration => {
+  const sixteenths = toSixteenths(duration)
+  return sixteenths > 16 ||
+    notesForSixteenths(sixteenths).length > 1
 }
