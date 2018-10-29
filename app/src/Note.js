@@ -32,6 +32,11 @@ export default class Note {
 
   restToggle() {
     this.isNote = !this.isNote
+    if (this.isRepresentedAsTie()) {
+      console.log('flopping tie rest toggle')
+      this.startTies.forEach(t => t.restToggle())
+      this.endTies.forEach(t => t.restToggle())
+    }
   }
 
   isRest() {
@@ -157,14 +162,14 @@ export default class Note {
   }
 
   isHitForElement(element, mousePosition) {
-    const rect = this.isRest() ? restRectangle(this.x()) : this.noteRect(element)
+    const rect = element.isRest() ? restRectangle(element.x()) : this.noteRect(element)
     return rect.contains(mousePosition)
   }
 
   isHit(mousePosition) {
     if (this.isRepresentedAsTie())
-      return this.startTies.concat(this.endTies).some(t => 
-        this.isHitForElement(t, mousePosition))
+      return this.startTies.concat(this.endTies)
+        .some(t => this.isHitForElement(t, mousePosition))
       
     return this.isHitForElement(this, mousePosition)
   }

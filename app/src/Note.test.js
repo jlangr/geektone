@@ -257,6 +257,19 @@ describe('note', () => {
       expect(note.isRest()).toBeTruthy()
     })
 
+    it('toggles ties also', () => {
+      const rest = Note.Rest(Duration.half)
+      const isRest = true
+      const tieStart = new Tie(rest.name(), Duration.quarter, false, isRest)
+      const tieEnd = new Tie(rest.name(), Duration.quarter, false, isRest)
+      rest.setTies([tieStart], [tieEnd])
+
+      rest.restToggle()
+
+      expect(tieStart.isRest()).toBeFalsy()
+      expect(tieEnd.isRest()).toBeFalsy()
+    })
+
     it('can be created via factory method', () => {
       const rest = Note.Rest(Duration.half)
 

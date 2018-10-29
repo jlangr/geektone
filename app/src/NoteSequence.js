@@ -110,6 +110,7 @@ export default class NoteSequence {
   clickHitNote(clickPoint) {
     for (let sequenceIndex = 0; sequenceIndex < this.notes.length; sequenceIndex++)
       if (this.notes[sequenceIndex].isHit(clickPoint)) {
+        console.log('HIT of something at index ', sequenceIndex)
         this.click(sequenceIndex)
         return true
       }

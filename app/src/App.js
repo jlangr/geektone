@@ -32,7 +32,11 @@ export class App extends Component {
   }
 
   addKeyListeners() {
-    document.addEventListener('keyup', e => this.props.ui.lastComponentWithKeyFocus.handleKeyPress(e))
+    document.addEventListener('keyup', e => {
+      console.log('event: ', e)
+      if (e.srcElement.type !== 'text')
+        this.props.ui.lastComponentWithKeyFocus.handleKeyPress(e)
+    })
   }
 
   render() {

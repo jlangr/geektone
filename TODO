@@ -1,8 +1,8 @@
-H cannot click select rests on ties
-H select on rest-tie 2nd note only alters 2nd note
+H x after rest toggle does not work?
 H staff width way wider!
 ===
 
+M adding new track doesn't count as dirty?  DIRTY state questionable. (on new song only?)
 M individual accidental
 M repeat section
 M play-along marker
