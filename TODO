@@ -1,34 +1,30 @@
-H start song at selection point
 H staff width way wider!
 M play-along marker
 M adjust volume / mute while running
-M duplicate song names
 ===
 
 M delete / copy / paste multiple notes
 M click on note to highlight; click on keyboard shortcuts. Focus goes away and keyboard input is ignored
-M arbitrary ties
 M dotting a tie rest converts it to a note
 M save song as (duplicate)
-M uneven notes
-M notes longer than 1 bar
 M mouse insert note
 M note insert mode
-M repeat section
 M individual accidental
-M pause--Transport toggle() function?
+M repeat section
 
+L pause--Transport toggle() function?
 L sharps & flats are not in proper order to determine key
 L allows sharp & flat on same note
 L flats / sharps in proper order on accidentals area
 L move from track-to-track using ctrl-keys (shift arrow up down)
 L other time signatures
 
-UI
---
-Show treble / bass indicator
-
 
 Regularly:
 =========
 WINDOWS TEST
+
+REARCHITECT / REDESIGN
+======================
+- invert notesequence and draw sequence?
+  keep things 'rebarred' and derived the toneutils playback from that model

@@ -4,7 +4,7 @@ import * as Draw from '../util/Draw'
 import { noteHeight } from '../Note'
 import * as Constants from '../Constants'
 import * as types from '../actions/types'
-import Line, { NullLine } from '../ui/Line';
+import Line, { NullLine } from '../ui/Line'
 
 export const lineClickTolerance = 2
 export const SelectGap = 10

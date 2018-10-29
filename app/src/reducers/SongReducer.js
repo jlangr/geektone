@@ -4,6 +4,7 @@ import { remove } from '../js/ArrayUtil'
 import Note from '../Note'
 import * as Draw from '../util/Draw'
 import * as Constants from '../Constants'
+import { isValidCrossOSFilename } from '../util/Validations'
 
 const MiddleCNote = new Note(Constants.MiddleC)
 
@@ -24,6 +25,13 @@ export const defaultTrackVolume = 7
 export const isInSharpsMode = (song, id) => song.tracks[id].sharpsMode
 
 export const isInFlatsMode = (song, id) => song.tracks[id].flatsMode
+
+export const isUniqueName = (songList, name, currentName) => 
+  name === currentName || !songList.some(song => song.label === name)
+
+export const isValidSongName = (songList, name, currentName) => 
+  name === currentName ||
+    (isUniqueName(songList, name) && isValidCrossOSFilename(name))
 
 export const trackData = (state, trackId) => state.song.tracks[trackId]
 

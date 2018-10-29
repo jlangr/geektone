@@ -1,6 +1,6 @@
 import * as actions from '../actions/SongActions'
 import * as type from '../actions/types'
-import SongReducer, { INITIAL_STATE, defaultTrackVolume, hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, trackData } from './SongReducer'
+import SongReducer, { INITIAL_STATE, defaultTrackVolume, hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, isUniqueName, trackData } from './SongReducer'
 import NoteSequence from '../NoteSequence'
 import Note from '../Note'
 import * as Constants from '../Constants'
@@ -370,7 +370,6 @@ describe('key signature sharps and flats', () => {
 
     expect(newState.song.tracks[0].flats).toEqual([])
   })
-
 })
 
 describe('trackData', () => {
@@ -418,5 +417,24 @@ describe('answers whether or not track has notes in bass staff', () => {
     const song = { tracks: [{ id: 0, notes: noteSequence }] }
 
     expect(hasBassNotes(song, 0)).toBeFalsy()
+  })
+})
+
+describe('isUniqueName', () => {
+  const songList =  [
+   {value: '1', label: 'alpha'},
+   {value: '2', label: 'beta'}
+  ];
+
+  it('is true when song name is not changed', () => {
+    expect(isUniqueName(songList, 'beta', 'beta')).toBeTruthy()
+  })
+
+  it('is true when no other song has same name', () => {
+    expect(isUniqueName(songList, 'bozo', 'x')).toBeTruthy()
+  })
+
+  it('is false when another song has same name', () => {
+    expect(isUniqueName(songList, 'alpha', 'x')).toBeFalsy()
   })
 })

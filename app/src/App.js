@@ -15,9 +15,9 @@ import {
   playSong, putSongName, 
   saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
+import { isValidSongName } from './reducers/SongReducer'
 import Select from 'react-select'
 import InlineEdit from 'react-edit-inline2'
-import { isValidCrossOSFilename } from './util/Validations';
 
 export class App extends Component {
   constructor() {
@@ -42,16 +42,17 @@ export class App extends Component {
             <Col xs={6}>
               <h2>
                 <InlineEdit
-                  validate={filename => { 
-                    // TODO move to reducer
-                    const result = isValidCrossOSFilename(filename)
-                    if (!result) this.props.errorMessage('invalid song name')
+                  validate={name => { 
+                    // TODO move to reducer; how? need return value!
+                    const result = isValidSongName(this.props.songList, name, this.props.song.name)
+                    this.props.errorMessage(result ? '' : 'invalid song name')
                     return result
                   }}
                   text={this.props.song.name}
                   paramName='newTitle'
-                  change={({ newTitle }) => 
-                    this.props.putSongName(this.props.song.id, newTitle) }/>
+                  change={({ newTitle }) =>  {
+                    this.props.putSongName(this.props.song.id, newTitle) 
+                  }}/>
               </h2>
               {this.props.message}<br />
               <div className='text-danger'>{this.props.errorMessageText}</div>
