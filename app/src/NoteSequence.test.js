@@ -253,7 +253,6 @@ describe('NoteSequence', () => {
     let existingRebar
 
     beforeEach(() => {
-      // TODO better way in Jest?
       existingRebar = NoteSequence.prototype.rebar
     })
 
@@ -277,7 +276,6 @@ describe('NoteSequence', () => {
       })
     })
 
-    // TODO move to command tests and maybe use abstract test
     describe('after construction', () => {
       beforeEach(() => {
         sequence = new NoteSequence(['E4', 'F4', 'G4'])
@@ -289,54 +287,6 @@ describe('NoteSequence', () => {
       it('triggers on call to add', () => {
         sequence.add(e)
         expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to deleteSelected', () => {
-        sequence.deleteSelected()
-
-        expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to duplicateNote', () => {
-        sequence.duplicateNote()
-
-        expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to halveSelectedDuration', () => {
-        sequence.halveSelectedDuration()
-
-        expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to doubleSelectedDuration', () => {
-        sequence.doubleSelectedDuration()
-
-        expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to incrementSelectedDuration', () => {
-        sequence.incrementSelectedDuration()
-
-        expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to decrementSelectedDuration', () => {
-        sequence.decrementSelectedDuration()
-
-        expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to toggleDotForSelected', () => {
-        sequence.toggleDotForSelected()
-
-        expect(rebar).toHaveBeenCalled()
-      })
-
-      it('triggers on call to setSelectedTo', () => {
-        sequence.setSelectedTo(Duration.half)
-
-        expect(rebar).toHaveBeenCalled()       
       })
     })
   })

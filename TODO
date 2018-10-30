@@ -53,3 +53,5 @@ HOW TO?
 In App.js InlineEdit:
   - validate func needs to return false if not valid but should also updated errorMessage...
     also, validation might want to involve an async action. How to resolve?
+
+In NoteSequence.test.js, how to replace rebar() function temporarily with test double (jest.fn())
