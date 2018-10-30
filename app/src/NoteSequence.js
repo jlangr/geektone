@@ -258,7 +258,6 @@ export default class NoteSequence {
       bar.push(note)
   }
 
-  // TODO: optimization if needed: rebar from changed location only
   rebar() {
     const barSequence = []
     let bar = new Bar()

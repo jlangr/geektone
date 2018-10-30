@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as KeyHandler from './KeyHandler'
 import { addFlat, addSharp, keyFocusUpdate, markDirty, setSelectionStart, updateTrack } from './actions'
 import { hasBassNotes, hasTrebleNotes, isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
-import { isClickInAccidentals, isNewEvent, nearestNote } from './reducers/UIReducer'
+import { isClickInAccidentals, isNewEvent, nearestNote, staffHeight } from './reducers/UIReducer'
 import * as UI from './util/UI'
 import * as Constants from './Constants'
 import * as Draw from './util/Draw'
@@ -31,21 +31,10 @@ export class Staff extends Component {
         <canvas ref='canvas' id={this.props.id}
           tabIndex={this.props.id}
           border='0' width={this.staffWidth()} 
-          height={this.staffHeight()}
+          height={this.props.staffHeight()}
           style={{marginLeft: 10, marginRight: 10, marginTop: 20}} />
       </div>
-    )  // note: tabIndex needed for key events
-  }
-
-  // TODO test
-  staffHeight() {
-    // what if 0 notes? not possible now
-    let height = 0
-    // if (hasTrebleNotes(this.props.song, this.props.id))
-      height += Draw.staffHeight
-    if (hasBassNotes(this.props.song, this.props.id))
-      height += Draw.staffHeight
-    return height
+    )  // tabIndex: needed for key events
   }
 
   staffWidth() {
@@ -196,6 +185,7 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
     isNewEvent: event => isNewEvent(ui, event),
     nearestNote: point => nearestNote(ui, point),
     barsAndNotes: barsAndNotes(song, dataForTrack),
+    staffHeight: () => staffHeight(song, trackId),
     ui, 
     song }
 }

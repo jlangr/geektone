@@ -1,9 +1,10 @@
 import * as Draw from '../util/Draw'
-import UIReducer, { SelectGap, INITIAL_STATE, isClickInAccidentals, isNewEvent, lineClickTolerance, nearestNote } from './UIReducer'
+import UIReducer, { SelectGap, INITIAL_STATE, isClickInAccidentals, isNewEvent, lineClickTolerance, nearestNote, staffHeight } from './UIReducer'
 import Rect from '../Rect'
 import * as Constants from '../Constants'
 import * as actions from '../actions/UIActions'
 import Line, { NullLine } from '../ui/Line';
+import NoteSequence from '../NoteSequence';
 
 describe('accidentals section', () => {
   it('is created with initial state', () => {
@@ -24,6 +25,20 @@ describe('is click in accidentals', () => {
     const point = { x: Draw.accidentalsLeft + 1, y: 1}
 
     expect(isClickInAccidentals(INITIAL_STATE, point)).toBeTruthy()
+  })
+})
+
+describe('staff height', () => {
+  it('is single staff height if only treble notes', () => {
+    const song = { tracks: [{ notes: new NoteSequence(['C4']) }]}
+
+    expect(staffHeight(song, 0)).toEqual(Draw.staffHeight)
+  })
+
+  it('is two staff heights if any bass notes', () => {
+    const song = { tracks: [{ notes: new NoteSequence(['C2']) }]}
+
+    expect(staffHeight(song, 0)).toEqual(2 * Draw.staffHeight)
   })
 })
 

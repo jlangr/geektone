@@ -51,7 +51,6 @@ export class App extends Component {
               <h2>
                 <InlineEdit
                   validate={name => { 
-                    // TODO move to reducer; how? need return value!
                     const result = isValidSongName(this.props.songList, name, this.props.song.name)
                     this.props.errorMessage(result ? '' : 'invalid song name')
                     return result

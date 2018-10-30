@@ -5,6 +5,7 @@ import { noteHeight } from '../Note'
 import * as Constants from '../Constants'
 import * as types from '../actions/types'
 import Line, { NullLine } from '../ui/Line'
+import { hasBassNotes } from './SongReducer'
 
 export const lineClickTolerance = 2
 export const SelectGap = 10
@@ -14,6 +15,15 @@ const isDrawnOnAStaffLine = note =>
 
 export const isClickInAccidentals = (uiState, point) =>
   uiState.staff.accidentalsRect.contains(point)
+
+export const staffHeight = (song, trackId) => {
+  let height = 0
+  // if (hasTrebleNotes(this.props.song, this.props.id))
+    height += Draw.staffHeight
+  if (hasBassNotes(song, trackId))
+    height += Draw.staffHeight
+  return height
+}
 
 export const staffNoteLineRanges = () => {
   const ranges = {}
