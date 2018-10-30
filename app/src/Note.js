@@ -60,7 +60,6 @@ export default class Note {
     this.endTies = undefined
   }
 
-  // TODO test?
   sixteenthsInTheDot() {
     return Duration.toSixteenths(Duration.noteBase(this.duration)) / 2
   }
@@ -177,7 +176,7 @@ export default class Note {
   y() { return Draw.y(this.name()) }
 
   drawOn(context) {
-    this.context = context // TODO: UGH. To support draw from playback
+    this.context = context // supports ability to draw from playback
     new NoteWidget(context, this).draw()
   }
 }

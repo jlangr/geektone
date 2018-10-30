@@ -88,7 +88,6 @@ describe('a song', () => {
 
       expect(state.song.isDirty).toBeFalsy()
     })
-    // TODO: it('is not dirty after undo to origin', () => { })
 
     it('explicitly sets dirty flag to true', () => {
       const newState = SongReducer(undefined, actions.markDirty())

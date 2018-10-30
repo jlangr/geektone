@@ -33,8 +33,6 @@ export const handleKey = (e, noteSequence) => {
     case '-': noteSequence.decrementSelectedDuration(); return true
     case '+': noteSequence.incrementSelectedDuration(); return true
     case 'r': noteSequence.toggleRestForSelected(); return true
-
-    // TODO test
     case 'y': noteSequence.redo(); return true
     case 'z': noteSequence.undo(); return true
 

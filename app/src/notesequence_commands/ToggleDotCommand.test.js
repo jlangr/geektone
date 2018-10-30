@@ -8,10 +8,13 @@ describe('toggleDotForSelected', () => {
     sequence = new NoteSequence([['E4', Duration.quarter], ['F4', Duration.eighth], ['G4', Duration.sixteenth]])
   })
 
-  // TODO
-  // it('does nothing when note not selected', () => {
-  //   sequence.toggleDotForSelected()
-  // })
+  it('does nothing when note not selected', () => {
+    sequence = new NoteSequence([['E4']])
+
+    sequence.toggleDotForSelected()
+
+    expect(sequence.toJSON()).toEqual(new NoteSequence([['E4']]).toJSON())
+  })
 
   describe('with first note selected', () => {
     beforeEach(() => {

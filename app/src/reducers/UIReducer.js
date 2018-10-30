@@ -12,6 +12,9 @@ export const SelectGap = 10
 const isDrawnOnAStaffLine = note =>
   Constants.allStaffNotes.findIndex(n => n === note) % 2 === 0
 
+export const isClickInAccidentals = (uiState, point) =>
+  uiState.staff.accidentalsRect.contains(point)
+
 export const staffNoteLineRanges = () => {
   const ranges = {}
   Constants.allStaffNotes.forEach(note => {

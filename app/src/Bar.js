@@ -41,9 +41,7 @@ export default class Bar {
     return SixteenthsCapacity / smallestIncrement
   }
 
-  // pass in positions required!
-  // once that is working, remove as default arg
-  layouts(positionsRequired = this.positionsRequired()) {
+  layouts(positionsRequired) {
     let sixteenthsPerPosition = 16 / positionsRequired
     let currentNotePosition = 0
     return this.notes.map(note => {

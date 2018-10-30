@@ -1,17 +1,17 @@
 import * as Duration from './Duration'
 
+const noteBase = noteName => noteName.substring(0, 1)
+
+const octave = noteName => noteName.substring(1)
+
+const withAccidental = (noteName, accidental) => 
+  `${noteBase(noteName)}${accidental}${octave(noteName)}`
+
 export const applyAccidentals = (noteName, sharps = [], flats = []) => {
-  // TODO create common free function in Note or somewhere
-  // for this stuff
-  const sharpBases = sharps.map(n => n.substring(0, 1))
-  const flatBases = flats.map(n => n.substring(0, 1))
-  const noteBase = noteName.substring(0, 1)
-  const octave = noteName.substring(1)
-  if (sharpBases.includes(noteBase))
-    return `${noteBase}#${octave}`
-  if (flatBases.includes(noteBase))
-  // TODO move this code to Note.js
-    return `${noteBase}b${octave}`
+  if (sharps.map(noteBase).includes(noteBase(noteName)))
+    return withAccidental(noteName, '#')
+  if (flats.map(noteBase).includes(noteBase(noteName)))
+    return withAccidental(noteName, 'b')
   return noteName
 }
 
@@ -22,7 +22,6 @@ export const noteObjects = (notes, sharps = [], flats = []) => {
     if (!note.isRest()) {
       const startTime = Duration.transportTime(startSixteenths)
       const noteName = applyAccidentals(note.name(), sharps, flats)
-      // TODO changed--see ToneUtil
       result.push({ name: noteName, duration: note.duration, time: startTime /* , context: note.context, x: note.x(), y: note.y() */ })
     }
     startSixteenths += Duration.toSixteenths(note.duration)

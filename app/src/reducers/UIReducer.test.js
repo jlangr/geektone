@@ -1,5 +1,5 @@
 import * as Draw from '../util/Draw'
-import UIReducer, { SelectGap, INITIAL_STATE, isNewEvent, lineClickTolerance, nearestNote } from './UIReducer'
+import UIReducer, { SelectGap, INITIAL_STATE, isClickInAccidentals, isNewEvent, lineClickTolerance, nearestNote } from './UIReducer'
 import Rect from '../Rect'
 import * as Constants from '../Constants'
 import * as actions from '../actions/UIActions'
@@ -10,6 +10,20 @@ describe('accidentals section', () => {
     const state = INITIAL_STATE
 
     expect(state.staff.accidentalsRect).toEqual(new Rect(Draw.accidentalsLeft, 0, Draw.sharpArea * Draw.sharpsInWidth, Draw.y(Constants.MiddleC)))
+  })
+})
+
+describe('is click in accidentals', () => {
+  it('is false when outside rectangle', () => {
+    const point = { x: Draw.accidentalsLeft - 1, y: 1}
+
+    expect(isClickInAccidentals(INITIAL_STATE, point)).toBeFalsy()
+  })
+
+  it('is true when inside rectangle', () => {
+    const point = { x: Draw.accidentalsLeft + 1, y: 1}
+
+    expect(isClickInAccidentals(INITIAL_STATE, point)).toBeTruthy()
   })
 })
 

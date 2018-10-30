@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as KeyHandler from './KeyHandler'
 import { addFlat, addSharp, keyFocusUpdate, markDirty, setSelectionStart, updateTrack } from './actions'
 import { hasBassNotes, hasTrebleNotes, isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
-import { isNewEvent, nearestNote } from './reducers/UIReducer'
+import { isClickInAccidentals, isNewEvent, nearestNote } from './reducers/UIReducer'
 import * as UI from './util/UI'
 import * as Constants from './Constants'
 import * as Draw from './util/Draw'
@@ -83,7 +83,7 @@ export class Staff extends Component {
   // TODO test
   click(e) {
     const clickPoint = UI.mousePosition(this.canvas(), e)
-    if (this.isClickInAccidentals(clickPoint)) {
+    if (this.props.isClickInAccidentals(clickPoint)) {
       if (this.props.isInSharpsMode)
         this.props.addSharp(this.props.id, this.props.nearestNote(clickPoint))
       else if (this.props.isInFlatsMode)
@@ -93,12 +93,6 @@ export class Staff extends Component {
         this.props.updateTrack(this.props.id)
     else
       this.props.setSelectionStart(clickPoint, this.canvas().height)
-  }
-
-  // TODO test
-  // TODO move to query on props
-  isClickInAccidentals(point) {
-    return this.props.ui.staff.accidentalsRect.contains(point)
   }
 
   draw() {
@@ -196,6 +190,7 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
   const dataForTrack = trackData(composition, trackId)
   return { 
     trackData: dataForTrack,
+    isClickInAccidentals: point => isClickInAccidentals(ui, point),
     isInSharpsMode: isInSharpsMode(song, trackId),
     isInFlatsMode: isInFlatsMode(song, trackId),
     isNewEvent: event => isNewEvent(ui, event),

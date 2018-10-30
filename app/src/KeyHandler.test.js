@@ -199,4 +199,25 @@ describe('keystrokes', () => {
 
     expect(noteSequence.firstNote().duration).toEqual('0:0:3')
   })
+
+  it('delegates to undo on z', () => {
+    noteSequence.add(new Note('E4', Duration.quarter))
+    noteSequence.selectFirst()
+    noteSequence.doubleSelectedDuration()
+
+    handleKey({key: 'z'}, noteSequence)
+
+    expect(noteSequence.firstNote().duration).toEqual(Duration.quarter)
+  })
+
+  it('delegates to undo on z', () => {
+    noteSequence.add(new Note('E4', Duration.quarter))
+    noteSequence.selectFirst()
+    noteSequence.doubleSelectedDuration()
+    noteSequence.undo()
+
+    handleKey({key: 'y'}, noteSequence)
+
+    expect(noteSequence.firstNote().duration).toEqual(Duration.half)
+  })
 })

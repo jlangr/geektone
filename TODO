@@ -1,5 +1,7 @@
 H staff width way wider!
 
+
+H do multiple accidentals at once
 ===
 
 M adding new track doesn't count as dirty?  DIRTY state questionable. (on new song only?)
@@ -12,6 +14,8 @@ M dotting a tie rest converts it to a note
 M mouse insert note
 M note insert mode
 
+
+L not dirty after undo to origin
 L pause--Transport toggle() function?
 L sharps & flats are not in proper order to determine key
 L allows sharp & flat on same note

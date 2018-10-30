@@ -148,8 +148,6 @@ describe('note', () => {
 
         expect(note.duration).toEqual(Duration.sixteenth)
       })
-
-      // TODO it does not toggle ties!
     })
   })
 
