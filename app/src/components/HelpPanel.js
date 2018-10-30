@@ -40,8 +40,8 @@ export default class HelpPanel extends Component {
                 <tr><td><strong>8</strong></td><td>eighth</td></tr>
                 <tr><td><strong>*</strong></td><td>double</td></tr>
                 <tr><td><strong>/</strong></td><td>halve</td></tr>
-                <tr><td><strong>+</strong></td><td>increment</td></tr>
-                <tr><td><strong>-</strong></td><td>decrement</td></tr>
+                <tr><td><strong>+</strong></td><td>increment 1/16</td></tr>
+                <tr><td><strong>-</strong></td><td>decrement 1/16</td></tr>
               </tbody>
             </Table>
           </Col>

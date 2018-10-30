@@ -65,6 +65,7 @@ export const barsAndNotes = (song, trackData) => {
         crossBars.map(bar => bar.positionsRequired())
       const positionsRequired = Math.max(...allPositionsRequiredForBar, bar.positionsRequired())
       bar.layouts(positionsRequired).forEach(({ note, position }) => {
+        console.log('set position', barPosition + position)
         note.setPosition(barPosition + position)
         stuffToDraw.push(note);
       })

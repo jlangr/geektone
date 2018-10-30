@@ -251,6 +251,13 @@ export default class NoteSequence {
     return [startTies, endTies]
   }
 
+  addNoteToBar(bar, note) {
+    if (Duration.requiresTie(note.duration))
+      this.createTiesForNote(note).forEach(tie => bar.push(tie))
+    else
+      bar.push(note)
+  }
+
   // TODO: optimization if needed: rebar from changed location only
   rebar() {
     const barSequence = []
@@ -261,7 +268,8 @@ export default class NoteSequence {
       if (!bar.canAccommodate(note)) {
         if (bar.isFull()) {
           barSequence.push(bar)
-          bar = new Bar(i, note)
+          bar = new Bar(i)
+          this.addNoteToBar(bar, note)
         }
         else {
           const [tieStartNotes, tieEndNotes] = this.createTies(note, bar.sixteenthsAvailable())
@@ -271,12 +279,8 @@ export default class NoteSequence {
           tieEndNotes.forEach(note => bar.push(note))
         }
       }
-      else {
-        if (Duration.requiresTie(note.duration))
-          this.createTiesForNote(note).forEach(note => bar.push(note))
-        else
-          bar.push(note)
-      }
+      else 
+        this.addNoteToBar(bar, note)
     })
     if (!bar.isEmpty()) barSequence.push(bar)
     this.barSequence = barSequence

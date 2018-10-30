@@ -4,14 +4,12 @@ import * as Draw from './util/Draw'
 const SixteenthsCapacity = 16
 
 export default class Bar {
-  constructor(startIndex = 0, firstNote=undefined) {
+  constructor(startIndex = 0) {
     this.notes = []
     this.sixteenths = 0
     this.startIndex = startIndex
-    if (firstNote) this.push(firstNote)
   }
 
-  // TODO test directly
   length() {
     return this.notes.length
   }
@@ -29,7 +27,6 @@ export default class Bar {
     return this.sixteenths + note.sixteenths() <= SixteenthsCapacity
   }
 
-  // TODO test
   sixteenthsAvailable() {
     return 16 - this.sixteenths
   }

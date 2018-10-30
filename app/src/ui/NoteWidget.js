@@ -233,6 +233,7 @@ export default class NoteWidget {
 
   drawNote() {
       // TODO inject function into note instead?
+    console.log('this.duration()', this.duration())
     if (Duration.isWholeBase(this.duration())) this.drawWhole()
     else if (Duration.isHalfBase(this.duration())) this.drawHalf()
     else if (Duration.isQuarterBase(this.duration())) this.drawQuarter()

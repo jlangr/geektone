@@ -157,7 +157,6 @@ describe('NoteSequence', () => {
       const bars = sequence.bars() 
 
       const bar0Notes = bars[0].notes
-      const bar1Notes = bars[1].notes
       expect(bar0Notes[0].toJSON()).toEqual(new Note('F4', Duration.dottedHalf).toJSON())
       expect(bar0Notes[1].toJSON()).toEqual(new Tie('G4', Duration.quarter).toJSON())
     })
@@ -174,6 +173,20 @@ describe('NoteSequence', () => {
       expect(bar0Sixteenths).toEqual([6, 8, 2])
       const bar1Sixteenths = bars[1].notes.map(note => note.sixteenths())
       expect(bar1Sixteenths).toEqual([6])
+    })
+
+    it('splites into tie for clean new note of next sequence', () => {
+      sequence.addAll(
+        new Note('D3', '0:2:0'),
+        new Note('E3', '0:1:1'), 
+        new Note('F3', '0:0:3'), 
+        new Note('G3', '0:2:2'))
+
+        const bars = sequence.bars()
+
+        console.log(bars[1].notes)
+        expect(bars[1].notes[0]).toEqual(new Tie('G3', Duration.half, false))
+        expect(bars[1].notes[1].toJSON()).toEqual(new Tie('G3', Duration.eighth, false).toJSON())
     })
 
     describe('create ties for too-long note', () => {

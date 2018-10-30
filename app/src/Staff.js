@@ -103,10 +103,13 @@ export class Staff extends Component {
 
   draw() {
     this.staffContext().clearRect(0, 0, this.canvas().width, this.canvas().height)
-    this.props.barsAndNotes.forEach(x => x.drawOn(
-      this.staffContext(),
-      hasTrebleNotes(this.props.song, this.props.id),
-      hasBassNotes(this.props.song, this.props.id)))
+    this.props.barsAndNotes.forEach(x => {
+      if (x.isSelected)
+        console.log(x)
+      x.drawOn(this.staffContext(),
+                hasTrebleNotes(this.props.song, this.props.id),
+                hasBassNotes(this.props.song, this.props.id))
+    })
     this.drawStaffLines()
 
     this.drawSelectionStart()

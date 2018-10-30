@@ -114,6 +114,9 @@ export const notesForSixteenths = sixteenths => {
   }
 }
 
+// 0:2:2
+//   8 + 2 => ten
+
 export const requiresTie = duration => {
   const sixteenths = toSixteenths(duration)
   return sixteenths > 16 ||

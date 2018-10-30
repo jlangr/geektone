@@ -20,6 +20,24 @@ describe('a bar', () => {
     expect(bar.isEmpty()).toBeFalsy()
   })
 
+  it('has length', () => {
+    bar.push(new Note('F4'))
+
+    expect(bar.length()).toEqual(1)
+  })
+
+  describe('sixteenths available', () => {
+    it('is 16 when bar is empty', () => {
+      expect(bar.sixteenthsAvailable()).toEqual(16)
+    })
+
+    it('is reduced after notes added', () => {
+      bar.push(new Note('F4', Duration.eighth))
+
+      expect(bar.sixteenthsAvailable()).toEqual(14)
+    })
+  })
+
   it('is not full when less than 16 sixteenths', () => {
     bar.push(new Note('E4', Duration.half))
 
@@ -127,27 +145,26 @@ describe('a bar', () => {
     it('is 0 for first note', () => {
       bar.push(eighth)
 
-      expect(bar.layouts()).toEqual([{ note: eighth, position: 0 }])
+      expect(bar.layouts(8)).toEqual([{ note: eighth, position: 0 }])
     })
 
     it('bumps next start16th by current note', () => {
       bar.push(quarter)
       bar.push(eighth)
 
-      expect(bar.layouts()).toEqual([
+      expect(bar.layouts(8)).toEqual([
         { note: quarter, position: 0 },
         { note: eighth, position: 2 }
       ])
     })
 
-    // storing the start 16th is possibly redundant, maybe able to delete
     it('bumps next position based on positions required', () => {
       bar.push(quarter)
       bar.push(half)
       bar.push(quarter)
       expect(bar.positionsRequired()).toEqual(4)
 
-      expect(bar.layouts()).toEqual([
+      expect(bar.layouts(4)).toEqual([
         { note: quarter, position: 0 },
         { note: half, position: 1 },
         { note: quarter, position: 3 }
