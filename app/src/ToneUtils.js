@@ -19,7 +19,6 @@ let scheduleEventId
   }
   */
 
-  // TODO test start index
 export const unmutedNoteObjects = (tracks, startNoteIndices) => 
   tracks
     .filter(track => !track.isMuted)

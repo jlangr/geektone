@@ -19,10 +19,10 @@ const sampleNotes = {
   'trumpet': ['A2', 'A4', 'A#3', 'C3', 'C5', 'D4', 'D#3', 'F2', 'F3', 'F4', 'G3']
 }
 
-const noteToFileMapping = (instrument) => {
+export const noteToFileMapping = instrument => {
   const filename = noteName => `${noteName.replace('#', 's')}.mp3`
   var noteToFile = {}
-  sampleNotes[instrument].forEach((noteName, i) => noteToFile[noteName] = filename(noteName)); // could use lodash
+  sampleNotes[instrument].forEach((noteName, i) => noteToFile[noteName] = filename(noteName))
   return noteToFile
 }
 
