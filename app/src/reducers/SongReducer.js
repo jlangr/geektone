@@ -43,12 +43,9 @@ export const hasBassNotes = (song, id) =>
   song.tracks[id].notes.allNotes().some(note => 
     !note.isHigherOrEqual(MiddleCNote) && !note.isRest())
 
-// TODO test
+// TODO test; make part of state?
 // barsAndNotes are derived from bars(), 
 // which are updated by a rebar() operation
-
-// TODO make part of state?
-
 export const barsAndNotes = (song, trackData) => {
   const barsForOtherTracks = song.tracks
     .filter(track => track.name !== trackData.name)
@@ -57,7 +54,7 @@ export const barsAndNotes = (song, trackData) => {
   const stuffToDraw = []
 
   let barPosition = 0
-  // TODO this gets updated!
+
   trackData.notes.bars()
     .forEach((bar, i) => {
       const crossBars = barsForOtherTracks.map(bars => bars[i]).filter(bar => bar !== undefined)
@@ -65,8 +62,7 @@ export const barsAndNotes = (song, trackData) => {
         crossBars.map(bar => bar.positionsRequired())
       const positionsRequired = Math.max(...allPositionsRequiredForBar, bar.positionsRequired())
       bar.layouts(positionsRequired).forEach(({ note, position }) => {
-        console.log('set position', barPosition + position)
-        note.setPosition(barPosition + position)
+        note.setPosition(barPosition + position) // note update!
         stuffToDraw.push(note);
       })
       barPosition += positionsRequired
@@ -77,8 +73,6 @@ export const barsAndNotes = (song, trackData) => {
     })
     return stuffToDraw
 }
-
-// state
 
 const updateStateForTrack = (state, trackIndex, changeFn) => {
   const changedTrack = state.song.tracks[trackIndex] 
@@ -127,12 +121,8 @@ const updateState_toggleSharpsMode = (state, trackIndex) => {
   })
 }
 
-const updateState_rebar = (state, trackIndex) => {
-  return updateStateForTrack(state, trackIndex, _changedTrack => {
-    //  no-op
-    return true
-  })
-}
+const updateState_rebar = (state, trackIndex) =>
+  updateStateForTrack(state, trackIndex, _changedTrack => true /* no-op */)
 
 const updateState_addAccidental = (state, note, accidentals, opposingAccidentals) => {
   if (!note) return state

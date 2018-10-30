@@ -8,7 +8,7 @@ import * as UI from './util/UI'
 import * as Constants from './Constants'
 import * as Draw from './util/Draw'
 
-const highlightColor = 'red' // move to ui constants source
+const highlightColor = 'red'
 const bassClefSymbol = '\uD834\uDD22'
 const trebleClefSymbol = '\uD834\uDD1E'
 const sharpSymbol = '\u266F'
@@ -121,9 +121,6 @@ export class Staff extends Component {
   }
 
   drawStaffLines() {
-    // TODO: treble staff could be optional if the calcs for noteY
-    //  when there's only a bass staff are adjusted
-    // if (hasTrebleNotes(this.props.song, this.props.id)) { ... }
     this.drawStaff(Constants.trebleStaffLines)
     this.drawText(trebleClefSymbol, 
       10, Draw.y(Constants.TrebleStaffClefY), Draw.staffHeight * 7 / 10)

@@ -55,3 +55,7 @@ In App.js InlineEdit:
     also, validation might want to involve an async action. How to resolve?
 
 In NoteSequence.test.js, how to replace rebar() function temporarily with test double (jest.fn())
+
+    // TODO: treble staff could be optional if the calcs for noteY
+    //  when there's only a bass staff are adjusted
+    // if (hasTrebleNotes(this.props.song, this.props.id)) { ... }
