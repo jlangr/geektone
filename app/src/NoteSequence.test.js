@@ -149,6 +149,14 @@ describe('NoteSequence', () => {
       expect(bars[1].notes).toEqual([e])
     })
 
+    it('clears previous tie', () => {
+      e.setTies([new Tie('E4', Duration.quarter)])
+
+      sequence.addAll(e)
+
+      expect(e.isRepresentedAsTie()).toBeFalsy()
+    })
+
     it('puts all tie notes in place', () => {
       const a = new Note('F4', Duration.dottedHalf)
       const b = new Note('G4', Duration.half)

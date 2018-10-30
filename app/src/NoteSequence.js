@@ -263,7 +263,7 @@ export default class NoteSequence {
     let bar = new Bar()
     bar.startIndex = 0
     this.notes.forEach((note, i) => {
-      note.clearTie() // TODO test in context
+      note.clearTie()
       if (!bar.canAccommodate(note)) {
         if (bar.isFull()) {
           barSequence.push(bar)
