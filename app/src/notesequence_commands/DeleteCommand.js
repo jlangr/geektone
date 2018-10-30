@@ -6,7 +6,6 @@ export class DeleteCommand extends RebarCommand {
     this.deletedNote = this.seq.selectedNote()
   }
 
-  // TODO move delete logic to NoteSequence
   do() {
     this.seq.notes.splice(this.seq.currentNoteSequenceIndex, 1)
     this.seq.currentNoteSequenceIndex = Math.min(this.seq.length() - 1, this.seq.currentNoteSequenceIndex)

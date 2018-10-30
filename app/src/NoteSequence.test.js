@@ -184,7 +184,6 @@ describe('NoteSequence', () => {
 
         const bars = sequence.bars()
 
-        console.log(bars[1].notes)
         expect(bars[1].notes[0]).toEqual(new Tie('G3', Duration.half, false))
         expect(bars[1].notes[1].toJSON()).toEqual(new Tie('G3', Duration.eighth, false).toJSON())
     })
@@ -196,6 +195,15 @@ describe('NoteSequence', () => {
 
       beforeEach(() => {
         sequence = new NoteSequence()
+      })
+
+      it('stores ties in note', () => {
+        const sixteenthsAvailable = 4
+
+        const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
+
+        expect(halfE4.startTies[0].duration).toEqual(startTies[0].duration)
+        expect(halfE4.endTies[0].duration).toEqual(endTies[0].duration)
       })
 
       it('splits a half', () => {

@@ -246,7 +246,7 @@ export default class NoteSequence {
 
     endTies[endTies.length - 1].startTie = startTies[0]
 
-    note.setTies(startTies, endTies) // TODO test
+    note.setTies(startTies, endTies)
 
     return [startTies, endTies]
   }
