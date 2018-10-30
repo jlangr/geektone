@@ -1,5 +1,6 @@
 import { ADD_SYNTH, PLAY_SONG, STOP_SONG } from '../actions/types'
 import { play, stop } from '../ToneUtils'
+import { sampleNotes } from '../actions/SynthActions'
 
 export const showPlayButton = synth => 
   Object.keys(synth.synths).length === synth.expectedSynthCount &&
@@ -15,7 +16,7 @@ export const startNoteIndices = (song, selectionStartLine) => {
 
 export const INITIAL_STATE = {
   synths: {},
-  expectedSynthCount: 9, // TODO this is such shit
+  expectedSynthCount: Object.keys(sampleNotes).length,
   isPlaying: false
 }
 

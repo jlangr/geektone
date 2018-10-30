@@ -1,7 +1,7 @@
 import Tone from 'tone'
 import * as type from './types'
 
-const sampleNotes = {
+export const sampleNotes = {
   'violin': ['C#1', 'D#1', 'F1', 'G1', 'A1', 'B1', 'C#2', 'D#2', 'F2', 'G2', 'A2', 'C#3', 'D#3', 'F3', 'G3', 'A3', 'B3', 'C#4', 'D#4', 'G4'],
   'piano': ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A#0', 'A#1', 'A#2', 'A#3', 'A#4', 'A#5', 'A#6', 
     'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 
