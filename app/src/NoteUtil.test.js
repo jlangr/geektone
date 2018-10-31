@@ -48,22 +48,42 @@ describe('noteObjects', () => {
 
 describe('apply accidentals', () => {
   it('does nothing if no accidentals', () => {
-    expect(applyAccidentals('F5', [])).toEqual('F5')
+    expect(applyAccidentals(new Note('F5'), [])).toEqual('F5')
   })
 
   it('adds sharp if needed', () => {
-    expect(applyAccidentals('F5', ['F'])).toEqual('F#5')
+    expect(applyAccidentals(new Note('F5'), ['F'])).toEqual('F#5')
   })
 
   it('adds flat if needed', () => {
-    expect(applyAccidentals('E4', ['F'], ['E'])).toEqual('Eb4')
+    expect(applyAccidentals(new Note('E4'), ['F'], ['E'])).toEqual('Eb4')
   })
 
   it('applies sharp if ambiguous (flat also supplied)', () => {
-    expect(applyAccidentals('E4', ['E'], ['E'])).toEqual('E#4')
+    expect(applyAccidentals(new Note('E4'), ['E'], ['E'])).toEqual('E#4')
   })
 
   it('applies sharp regardless of octave', () => {
-    expect(applyAccidentals('E4', ['E'])).toEqual('E#4')
+    expect(applyAccidentals(new Note('E4'), ['E'])).toEqual('E#4')
+  })
+
+  it('overrides key signature accidental', () => {
+    const note = new Note('C4')
+    note.toggleAccidental('#')
+    const flats = ['C4']
+
+    const noteName = applyAccidentals(note, [], flats)
+
+    expect(noteName).toEqual('C#4')
+  })
+
+  it('overrides key signature with natural', () => {
+    const note = new Note('C4')
+    note.toggleAccidental('n')
+    const sharps = ['C4']
+
+    const noteName = applyAccidentals(note, sharps, [])
+
+    expect(noteName).toEqual('C4')
   })
 })

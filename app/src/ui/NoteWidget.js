@@ -18,6 +18,12 @@ const wholeFill = 'white'
 const quarterFill = 'black'
 const solidFill = 'black'
 
+const Accidentals = {
+  'b': Draw.flatSymbol,
+  '#': Draw.sharpSymbol,
+  'n': Draw.naturalSymbol
+}
+
 export const restRectangle = x => {
   const width = (restWidth + 16)
   return new Rect(
@@ -40,6 +46,12 @@ export default class NoteWidget {
   isSelected() { return this.note.isSelected }
   position() { return this.note.position }
   startTie() { return this.note.startTie }
+
+  drawAccidental() {
+    Draw.drawText(this.context, Accidentals[this.note.accidental], 
+      this.x() - (noteWidth * 4), this.y() + noteHeight, 
+      Draw.lineHeight + 6)
+  }
 
   drawNoteEllipse(extraRadius=0) {
     this.context.ellipse(
@@ -252,8 +264,11 @@ export default class NoteWidget {
 
     if (this.isRest())
       this.drawRest()
-    else
+    else {
       this.drawNote()
+      if (this.note.accidental && this.note.accidental !== '')
+        this.drawAccidental()
+    }
 
     if (this.isDotted())
       this.drawDot(this.isRest() ? this.restDotLocation() : this.y())

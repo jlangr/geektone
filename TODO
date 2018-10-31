@@ -1,5 +1,13 @@
+H individual accidental
+    + help
+    + note-level toggle
+    + keyboard
+    + command with undo / redo
+    - show on staff
+    - save / load
+    + alter playback (NoteUtil)
+    - update saved songs to store accidental
 H staff width way wider!
-
 
 H do multiple accidentals at once
 ===

@@ -9,10 +9,6 @@ import * as Constants from './Constants'
 import * as Draw from './util/Draw'
 
 const highlightColor = 'red'
-const bassClefSymbol = '\uD834\uDD22'
-const trebleClefSymbol = '\uD834\uDD1E'
-const sharpSymbol = '\u266F'
-const flatSymbol = '\u266D'
 
 export class Staff extends Component {
   componentDidMount() {
@@ -109,21 +105,17 @@ export class Staff extends Component {
   }
 
   drawText(text, x, y, px) {
-    this.staffContext().beginPath()
-    this.staffContext().fillStyle = 'black'
-    this.staffContext().font = `${px}px Arial`
-    this.staffContext().fillText(text, x, y)
-    this.staffContext().stroke()
+    Draw.drawText(this.staffContext(), text, x, y, px)
   }
 
   drawStaffLines() {
     this.drawStaff(Constants.trebleStaffLines)
-    this.drawText(trebleClefSymbol, 
+    this.drawText(Draw.trebleClefSymbol, 
       10, Draw.y(Constants.TrebleStaffClefY), Draw.staffHeight * 7 / 10)
 
     if (hasBassNotes(this.props.song, this.props.id)) {
       this.drawStaff(Constants.bassStaffLines)
-      this.drawText(bassClefSymbol, 
+      this.drawText(Draw.bassClefSymbol, 
         10, Draw.y(Constants.BassStaffClefY), Draw.staffHeight * 5 / 10)
     }
   }
@@ -132,14 +124,14 @@ export class Staff extends Component {
     const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
     const y = Draw.y(note) + 6
     const px = Draw.lineHeight + 6
-    this.drawText(sharpSymbol, x, y, px)
+    this.drawText(Draw.sharpSymbol, x, y, px)
   }
 
   drawFlat(note, sharpIndex) {
     const y = Draw.y(note) + 6
     const x = Draw.accidentalsLeft + (sharpIndex % Draw.sharpsInWidth) * Draw.sharpArea + Draw.sharpWidth
     const px = Draw.lineHeight + 6
-    this.drawText(flatSymbol, x, y, px)
+    this.drawText(Draw.flatSymbol, x, y, px)
   }
 
   drawAccidentalsArea() {

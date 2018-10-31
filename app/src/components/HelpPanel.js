@@ -52,6 +52,9 @@ export default class HelpPanel extends Component {
                 <tr><td><strong>d</strong></td><td>duplicate</td></tr>
                 <tr><td><strong>x</strong></td><td>delete</td></tr>
                 <tr><td><strong>r</strong></td><td>toggle rest</td></tr>
+                <tr><td><strong>#</strong></td><td>sharp</td></tr>
+                <tr><td><strong>b</strong></td><td>flat</td></tr>
+                <tr><td><strong>n</strong></td><td>natural</td></tr>
                 <tr><td><strong>y</strong></td><td>redo</td></tr>
                 <tr><td><strong>z</strong></td><td>undo</td></tr>
               </tbody>
