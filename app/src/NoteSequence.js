@@ -11,12 +11,14 @@ import { DuplicateNoteCommand,
   DecrementCommand,
   ToggleRestCommand } from './notesequence_commands'
 import Commander from './Commander'
+import { ToggleAccidentalCommand } from './notesequence_commands/ToggleAccidentalCommand';
 
 const nullNote = {
   name: () => 'null',
   select: () => {},
   deselect: () => {},
   toggleDot: () => {},
+  toggleAccidental: _ => {},
   isSelected: false
 }
 
@@ -203,6 +205,10 @@ export default class NoteSequence {
 
   toggleDotForSelected() {
     this.commander.execute(new ToggleDotCommand())
+  }
+
+  toggleAccidentalForSelected(accidental) {
+    this.commander.execute(new ToggleAccidentalCommand(accidental))
   }
 
   incrementSelected() {

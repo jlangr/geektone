@@ -1,8 +1,8 @@
 import * as Duration from './Duration'
 
-const noteBase = noteName => noteName.substring(0, 1)
+export const noteBase = noteName => noteName.substring(0, 1)
 
-const octave = noteName => noteName.substring(1)
+export const octave = noteName => noteName.substring(noteName.length - 1)
 
 const withAccidental = (noteName, accidental) => 
   `${noteBase(noteName)}${accidental}${octave(noteName)}`

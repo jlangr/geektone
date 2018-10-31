@@ -32,6 +32,9 @@ export const handleKey = (e, noteSequence) => {
     case '*': noteSequence.doubleSelectedDuration(); return true
     case '-': noteSequence.decrementSelectedDuration(); return true
     case '+': noteSequence.incrementSelectedDuration(); return true
+    case '#': noteSequence.toggleAccidentalForSelected('#'); return true
+    case 'b': noteSequence.toggleAccidentalForSelected('b'); return true
+    case 'n': noteSequence.toggleAccidentalForSelected('n'); return true
     case 'r': noteSequence.toggleRestForSelected(); return true
     case 'y': noteSequence.redo(); return true
     case 'z': noteSequence.undo(); return true

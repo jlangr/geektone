@@ -182,6 +182,33 @@ describe('keystrokes', () => {
     expect(noteSequence.firstNote().isRest()).toBeTruthy()
   })
 
+  it('toggles accidental on #', () => {
+    noteSequence.add(new Note('E4'))
+    noteSequence.selectFirst()
+
+    handleKey({key: '#'}, noteSequence)
+
+    expect(noteSequence.firstNote().accidental).toEqual('#')
+  })
+
+  it('toggles accidental on b', () => {
+    noteSequence.add(new Note('E4'))
+    noteSequence.selectFirst()
+
+    handleKey({key: 'b'}, noteSequence)
+
+    expect(noteSequence.firstNote().accidental).toEqual('b')
+  })
+
+  it('toggles accidental on n', () => {
+    noteSequence.add(new Note('E4'))
+    noteSequence.selectFirst()
+
+    handleKey({key: 'n'}, noteSequence)
+
+    expect(noteSequence.firstNote().accidental).toEqual('n')
+  })
+
   it('increments selected note duration on +', () => {
     noteSequence.add(new Note('E4', '0:2:0'))
     noteSequence.selectFirst()

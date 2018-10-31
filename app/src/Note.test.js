@@ -116,7 +116,35 @@ describe('note', () => {
       })
     })
 
-    describe('toggle', () => {
+    describe('toggle accidental', () => {
+      it('applies accidental', () => {
+        const note = new Note('G4')
+
+        note.toggleAccidental('#')
+
+        expect(note.accidental).toEqual('#')
+      })
+
+      it('resets accidental', () => {
+        const note = new Note('G4')
+        note.toggleAccidental('#')
+
+        note.toggleAccidental('#')
+
+        expect(note.accidental).toEqual('')
+      })
+
+      it('changes accidental when different', () => {
+        const note = new Note('G4')
+        note.toggleAccidental('#')
+
+        note.toggleAccidental('b')
+
+        expect(note.accidental).toEqual('b')
+      })
+    })
+
+    describe('toggle dot', () => {
       it('toggles dot to non dotted note', () => {
         const note = new Note('F2', Duration.quarter)
 

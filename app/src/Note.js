@@ -18,6 +18,7 @@ export default class Note {
     this.duration = duration
     this.isNote = isNote
     this.clearTie()
+    this.accidental = ''
   }
 
   static note(name) {
@@ -93,6 +94,10 @@ export default class Note {
       this.duration = Duration.transportTime(Duration.toSixteenths(this.duration) * 2 / 3)
     else
       this.duration = Duration.transportTime(Duration.toSixteenths(this.duration) * 3 / 2)
+  }
+
+  toggleAccidental(accidental) {
+    this.accidental = (this.accidental === accidental) ? '' : accidental 
   }
 
   select() {

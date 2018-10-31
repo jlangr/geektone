@@ -1,8 +1,20 @@
-import { applyAccidentals, noteObjects } from './NoteUtil'
+import { applyAccidentals, noteBase, noteObjects, octave } from './NoteUtil'
 import Note from './Note'
 import * as Duration from './Duration'
 
-describe(Duration.eighth, () => {
+describe('noteBase', () => {
+  it('is first part of note', () => expect(noteBase('E4')).toEqual('E'))
+
+  it('works with sharps', () => expect(noteBase('E#4')).toEqual('E'))
+})
+
+describe('octave', () => {
+  it('is last part of note', () => expect(octave('E4')).toEqual('4'))
+
+  it('works with sharps', () => expect(octave('E#3')).toEqual('3'))
+})
+
+describe('noteObjects', () => {
   it('creates note objects with time transports', () => {
     const notes = [ new Note('C4', Duration.eighth), new Note('D4', Duration.quarter)]
     const sharps = ['C4'] 
