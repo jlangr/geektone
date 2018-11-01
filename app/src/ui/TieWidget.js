@@ -16,13 +16,8 @@ export default class TieWidget extends NoteWidget {
   }
 
   shouldDrawAccidental() {
-    console.log('should draw accidental in TieWidget; tie index:', this.note.tieIndex)
-    console.log(`this.note.name(): ${this.note.name()}`)
-    const result = super.shouldDrawAccidental() && 
+    return super.shouldDrawAccidental() && 
       this.note.tieIndex === 0
-
-    console.log('... result: ', result)
-    return result
   }
 
   drawNote() {

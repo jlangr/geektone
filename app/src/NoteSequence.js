@@ -240,13 +240,29 @@ export default class NoteSequence {
     return ties
   }
 
-  createTies(note, timeRemaining) {
-    const startTies = this.createTiesToFit(note, timeRemaining)
-    const excessTime = note.sixteenths() - timeRemaining
-    const endTies = this.createTiesToFit(note, excessTime, startTies.length)
-    endTies[endTies.length - 1].startTie = startTies[0]
-    note.setTies(startTies, endTies)
-    return [startTies, endTies]
+  createTies(note, timeRemainingInFirstBar) {
+    const noteTies = []
+
+    const startTies = this.createTiesToFit(note, timeRemainingInFirstBar)
+    noteTies.push(startTies)
+
+    let noteTime = note.sixteenths() - timeRemainingInFirstBar
+    let length = startTies.length
+
+    do {
+      const tieTime = Math.min(noteTime, 16)
+      const ties = this.createTiesToFit(note, tieTime, length)
+      length += ties.length
+      noteTies.push(ties)
+      noteTime -= tieTime
+    } while (noteTime > 0)
+
+    const lastTies = noteTies[noteTies.length - 1]
+    lastTies[lastTies.length - 1].startTie = startTies[0]
+
+    note.setTies(noteTies)
+
+    return noteTies
   }
 
   addNoteToBar(bar, note) {
@@ -262,22 +278,24 @@ export default class NoteSequence {
     bar.startIndex = 0
     this.notes.forEach((note, i) => {
       note.clearTie()
-      if (!bar.canAccommodate(note)) {
-        if (bar.isFull()) {
-          barSequence.push(bar)
-          bar = new Bar(i)
-          this.addNoteToBar(bar, note)
-        }
-        else {
-          const [tieStartNotes, tieEndNotes] = this.createTies(note, bar.sixteenthsAvailable())
-          tieStartNotes.forEach(note => bar.push(note))
-          barSequence.push(bar)
-          bar = new Bar(i)
-          tieEndNotes.forEach(note => bar.push(note))
-        }
+
+      if (bar.isFull()) {
+        barSequence.push(bar)
+        bar = new Bar(i)
       }
-      else 
+
+      if (bar.canAccommodate(note))
         this.addNoteToBar(bar, note)
+      else {
+        const noteTies = this.createTies(note, bar.sixteenthsAvailable())
+        noteTies.forEach(tiesForBar => {
+          if (bar.isFull()) {
+            barSequence.push(bar)
+            bar = new Bar(i)
+          }
+          tiesForBar.forEach(note => bar.push(note))
+        })
+      }
     })
     if (!bar.isEmpty()) barSequence.push(bar)
     this.barSequence = barSequence

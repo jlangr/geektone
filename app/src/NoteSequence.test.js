@@ -156,7 +156,7 @@ describe('NoteSequence', () => {
     })
 
     it('clears previous tie', () => {
-      e.setTies([new Tie('E4', Duration.quarter)])
+      e.setTies([[new Tie('E4', Duration.quarter)]])
 
       sequence.addAll(e)
 
@@ -231,22 +231,31 @@ describe('NoteSequence', () => {
         sequence = new NoteSequence()
       })
 
+      it('supports multiple bars, not just two', () => {
+        const doubleWhole = new Note('B4', '2:0:0')
+        const sixteenthsAvailable = 4
+
+        const ties = sequence.createTies(doubleWhole, sixteenthsAvailable)
+
+        const durations = ties.map(tieNotes => tieNotes.map(tieNote => tieNote.duration)) 
+        expect(durations).toEqual([['0:1:0'], ['1:0:0'], ['0:3:0']])
+      })
+
       it('stores tie index', () => {
         const sixteenthsAvailable = 4
 
-        const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
+        const [[startTie], [endTie]] = sequence.createTies(halfE4, sixteenthsAvailable)
 
-        expect(startTies[0].tieIndex).toEqual(0)
-        expect(endTies[0].tieIndex).toEqual(1)
+        expect(startTie.tieIndex).toEqual(0)
+        expect(endTie.tieIndex).toEqual(1)
       })
 
       it('stores ties in note', () => {
         const sixteenthsAvailable = 4
 
-        const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
+        const ties = sequence.createTies(halfE4, sixteenthsAvailable)
 
-        expect(halfE4.startTies[0].duration).toEqual(startTies[0].duration)
-        expect(halfE4.endTies[0].duration).toEqual(endTies[0].duration)
+        expect(halfE4.ties).toEqual(ties)
       })
 
       it('splits a half', () => {

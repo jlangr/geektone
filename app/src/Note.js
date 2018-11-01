@@ -33,10 +33,7 @@ export default class Note {
 
   restToggle() {
     this.isNote = !this.isNote
-    if (this.isRepresentedAsTie()) {
-      this.startTies.forEach(t => t.restToggle())
-      this.endTies.forEach(t => t.restToggle())
-    }
+    this.ties.forEach(bar => bar.forEach(t => t.restToggle()))
   }
 
   isRest() {
@@ -48,17 +45,16 @@ export default class Note {
   }
 
   isRepresentedAsTie() {
-    return this.startTies !== undefined
+    return this.ties.length > 0
   }
 
-  setTies(startTies, endTies = []) {
-    this.startTies = startTies
-    this.endTies = endTies
+  // TODO setters in ES6?
+  setTies(ties) {
+    this.ties = ties
   }
 
   clearTie() {
-    this.startTies = undefined
-    this.endTies = undefined
+    this.ties = []
   }
 
   sixteenthsInTheDot() {
@@ -101,18 +97,12 @@ export default class Note {
   }
 
   select() {
-    if (this.isRepresentedAsTie()) {
-      this.startTies.forEach(t => t.isSelected = true)
-      this.endTies.forEach(t => t.isSelected = true)
-    }
+    this.ties.forEach(bar => bar.forEach(t => t.isSelected = true))
     this.isSelected = true
   }
 
   deselect() {
-    if (this.isRepresentedAsTie()) {
-      this.startTies.forEach(t => t.isSelected = false)
-      this.endTies.forEach(t => t.isSelected = false)
-    }
+    this.ties.forEach(bar => bar.forEach(t => t.isSelected = false))
     this.isSelected = false
   }
 
@@ -122,16 +112,10 @@ export default class Note {
   }
 
   updateTiePitch() {
-    if (this.isRepresentedAsTie()) {
-      this.startTies.forEach(t => { 
-        t.noteIndex = this.noteIndex
-        t.octave = this.octave
-      })
-      this.endTies.forEach(t => { 
-        t.noteIndex = this.noteIndex
-        t.octave = this.octave
-      })
-    }
+    this.ties.forEach(bar => bar.forEach(t => {
+      t.noteIndex = this.noteIndex
+      t.octave = this.octave
+    }))
   }
 
   isHighestNote() {
@@ -171,9 +155,8 @@ export default class Note {
 
   isHit(mousePosition) {
     if (this.isRepresentedAsTie())
-      return this.startTies.concat(this.endTies)
-        .some(t => this.isHitForElement(t, mousePosition))
-      
+      return this.ties.some(bar => 
+        bar.some(t => this.isHitForElement(t, mousePosition)))
     return this.isHitForElement(this, mousePosition)
   }
 

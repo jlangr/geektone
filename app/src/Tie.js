@@ -6,7 +6,6 @@ export default class Tie extends Note {
     super(noteName, duration, isNote, accidental)
     this.isSelected = isSelected
     this.tieIndex = index
-    console.log('<ctor> of Tie ', this.tieIndex)
   }
 
   // only applies to the Note being manipulated
