@@ -19,9 +19,9 @@ const quarterFill = 'black'
 const solidFill = 'black'
 
 const Accidentals = {
-  'b': Draw.flatSymbol,
-  '#': Draw.sharpSymbol,
-  'n': Draw.naturalSymbol
+  'b': { symbol: Draw.flatSymbol, yOffset: 0, xOffset: 0 },
+  '#': { symbol: Draw.sharpSymbol, yOffset: 0, xOffset: 6 },
+  'n': { symbol: Draw.naturalSymbol, yOffset: 4, xOffset: 0 }
 }
 
 export const restRectangle = x => {
@@ -47,9 +47,19 @@ export default class NoteWidget {
   position() { return this.note.position }
   startTie() { return this.note.startTie }
 
+  stemDirection() {
+    return this.y() < Draw.y(Constants.HighestUpStemNote) ? 1 : -1
+  }
+
+  stemHeightDelta() {
+    return this.stemDirection() * stemHeight
+  }
+
   drawAccidental() {
-    Draw.drawText(this.context, Accidentals[this.note.accidental], 
-      this.x() - (noteWidth * 4), this.y() + noteHeight, 
+    const accidental = Accidentals[this.note.accidental]
+    Draw.drawText(this.context, accidental.symbol, 
+      this.x() - Math.floor(noteWidth * 4) + accidental.xOffset, 
+      this.y() + noteHeight + accidental.yOffset, 
       Draw.lineHeight + 6)
   }
 
@@ -60,6 +70,8 @@ export default class NoteWidget {
       rotation, 0, 2 * Math.PI)
   }
 
+  // complete strokes:
+
   drawStaffLine() {
     this.context.strokeStyle = lineColor
     this.context.lineWidth = 1
@@ -69,28 +81,24 @@ export default class NoteWidget {
   }
 
   drawFilledNoteEllipse(color, extraRadius=0) {
+    this.context.beginPath()
     this.drawNoteEllipse(extraRadius)
     this.context.fillStyle = color
     this.context.fill()
-  }
-
-  stemDirection() {
-    return this.y() < Draw.y(Constants.HighestUpStemNote) ? 1 : -1
-  }
-
-  stemHeightDelta() {
-    return this.stemDirection() * stemHeight
+    this.context.stroke()
   }
 
   drawStem() {
-    this.context.moveTo(this.x() + noteWidth, this.y())
-    this.context.lineTo(this.x() + noteWidth, this.y() + this.stemHeightDelta())
+    Draw.drawLine(this.context, 
+      this.x() + noteWidth, this.y(),
+      this.x() + noteWidth, this.y() + this.stemHeightDelta(),)
   }
 
   drawFlagAt(y) {
-    this.context.moveTo(this.x() + noteWidth, y + this.stemHeightDelta())
-    this.context.lineTo(this.x() + noteWidth + 6,
-      y + this.stemHeightDelta() - (this.stemHeightDelta() / 2))
+    Draw.drawLine(this.context,
+      this.x() + noteWidth, y + this.stemHeightDelta(),
+      this.x() + noteWidth + 6,
+       y + this.stemHeightDelta() - (this.stemHeightDelta() / 2))
   }
 
   drawFlag() {
@@ -129,6 +137,7 @@ export default class NoteWidget {
   }
 
   drawDot(y) {
+    this.context.beginPath()
     const dotSize = 2
     const dotPad = 3
     const dotDescension = 5
@@ -136,6 +145,9 @@ export default class NoteWidget {
     y = y + dotDescension
     this.context.moveTo(x, y)
     this.context.ellipse(x, y, dotSize, dotSize, rotation, 0, 2 * Math.PI)
+    this.context.fillStyle = solidFill
+    this.context.fill()
+    this.context.stroke()
   }
 
   drawRestHighlight() {
@@ -154,6 +166,7 @@ export default class NoteWidget {
   }
 
   drawEighthRest() {
+    this.context.beginPath()
     let x = this.x() - noteWidth / 2
     const restY = Draw.y(Constants.EighthRestY) - 6
     let y = restY - 20
@@ -169,22 +182,28 @@ export default class NoteWidget {
     y -= 10
     this.context.moveTo(x, y)
     this.context.lineTo(x - 8, y + 30)
+    this.context.stroke()
   }
 
   r16ball(x, y, radius) {
+    this.context.beginPath()
     this.context.moveTo(x, y)
     this.context.ellipse(x, y, radius, radius, rotation, 0, 2 * Math.PI)
     this.context.fillStyle = quarterFill
     this.context.fill()
+    this.context.stroke()
   }
 
   r16swoop(x, y, radius) {
+    this.context.beginPath()
     y += radius - 2
     this.context.moveTo(x, y)
     this.context.bezierCurveTo(x, y + 6, x + 6, y, x + 16, y - 10)
+    this.context.stroke()
   }
 
   drawSixteenthRest() {
+    this.context.beginPath()
     const radius = 4
     let x = this.x() - noteWidth / 2
     let y = Draw.y(Constants.SixteenthsRestY) - 16
@@ -200,9 +219,11 @@ export default class NoteWidget {
     y -= 10
     this.context.moveTo(x, y)
     this.context.lineTo(x - 8, y + 30)
+    this.context.stroke()
   }
 
   drawWholeOrHalfRest(heightOffset=0) {
+    this.context.beginPath()
     const width = 20
     const height = 8
     let x = this.x()
@@ -212,6 +233,7 @@ export default class NoteWidget {
       width, height);
     this.context.fillStyle = solidFill
     this.context.fill()
+    this.context.stroke()
   }
 
   drawWholeRest() {
@@ -223,6 +245,7 @@ export default class NoteWidget {
   }
 
   drawQuarterRest() {
+    this.context.beginPath()
     let x = this.x()
     let y = Draw.y(Constants.QuarterRestY) - 6
     this.context.lineWidth = 4
@@ -232,6 +255,7 @@ export default class NoteWidget {
     y = y - 5
     this.context.moveTo(x, y)
     this.context.bezierCurveTo(x - 20, y - 18, x + 6, y - 16, x - 5, y - 22)
+    this.context.stroke()
   }
 //  experiment w/ beziers: http://jsfiddle.net/halfsoft/Gsz2a/
 

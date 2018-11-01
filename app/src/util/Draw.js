@@ -28,10 +28,12 @@ export const staffHeight = (countOfNotesOnStaff + 1) * lineHeight / 2
 export const staffWidthBetweenUpstrokes = sharpWidth / 4
 
 export const drawLine = (context, xStart, yStart, xEnd, yEnd, weight=defaultLineWeight, color='black') => {
+  context.beginPath()
   context.strokeStyle = color
   context.lineWidth = weight
   context.moveTo(xStart, yStart)
   context.lineTo(xEnd, yEnd)
+  context.stroke()
 }
 
 export const drawText = (context, text, x, y, px) => {

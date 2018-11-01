@@ -1,12 +1,15 @@
+BARS missing on bass cleff (?because of rests?)
 H individual accidental
     + help
     + note-level toggle
     + keyboard
     + command with undo / redo
-    - show on staff
+    + show on staff
     - save / load
     + alter playback (NoteUtil)
     - update saved songs to store accidental
+    - does not show in front of tie.
+      (show in front of first note only)
 H staff width way wider!
 
 H do multiple accidentals at once
