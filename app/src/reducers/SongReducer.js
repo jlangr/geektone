@@ -271,7 +271,7 @@ export default(state = INITIAL_STATE, action) => {
     {
       const newSong = action.payload
       newSong.tracks = newSong.tracks.map(track => {
-        const notes = track.notes.map(note => [note.name, note.duration, note.isNote])
+        const notes = track.notes.map(note => [note.name, note.duration, note.isNote, note.accidental])
         if (!track.volume) track.volume = defaultTrackVolume
         return { ...track, notes: new NoteSequence(notes) }
       })

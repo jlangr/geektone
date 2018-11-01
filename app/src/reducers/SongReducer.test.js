@@ -130,7 +130,7 @@ describe('a song', () => {
     const song = {name: 'new song', tracks: [
       {name: 'track1', notes: [
         {name: 'E4', duration: '4n', isNote: false}, 
-        {name: 'F4', duration: '8n'}]}
+        {name: 'F4', duration: '8n', isNote: true, accidental: '#'}]}
     ]}
 
     const state = SongReducer(undefined, actions.replaceSong(song))
@@ -146,6 +146,10 @@ describe('a song', () => {
 
     it('defaults missing values', () => {
       expect(state.song.tracks[0].volume).toEqual(defaultTrackVolume)
+    })
+
+    it('restores accidental', () => {
+      expect(noteSequence.note(1).accidental).toEqual('#')
     })
   })
 

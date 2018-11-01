@@ -11,10 +11,10 @@ describe('NoteSequence', () => {
       it('converts a notesequence to persistable JSON', () => {
         sequence = new NoteSequence([['E4', '4n'], ['F4', '8n'], ['G4', '16n']])
 
-        expect(sequence.toJSON()).toEqual([
-          { name: 'E4', duration: '4n', isNote: true },
-          { name: 'F4', duration: '8n', isNote: true },
-          { name: 'G4', duration: '16n', isNote: true }
+        expect(sequence.toJSON()).toMatchObject([
+          { name: 'E4', duration: '4n' },
+          { name: 'F4', duration: '8n' },
+          { name: 'G4', duration: '16n' }
         ])
       })
     })
@@ -37,6 +37,12 @@ describe('NoteSequence', () => {
         sequence = new NoteSequence([['E4', '4n', false]])
 
         expect(sequence.note(0).isNote).toBeFalsy()
+      })
+
+      it('restores accidental', () => {
+        sequence = new NoteSequence([['E4', '4n', true, 'b']])
+
+        expect(sequence.note(0).accidental).toEqual('b')
       })
     })
   })
@@ -192,8 +198,28 @@ describe('NoteSequence', () => {
 
         const bars = sequence.bars()
 
-        expect(bars[1].notes[0]).toEqual(new Tie('G3', Duration.half, false))
-        expect(bars[1].notes[1].toJSON()).toEqual(new Tie('G3', Duration.eighth, false).toJSON())
+        expect(bars[1].notes[0]).toEqual(new Tie('G3', Duration.half, true))
+        expect(bars[1].notes[1].toJSON()).toEqual(new Tie('G3', Duration.eighth, true).toJSON())
+    })
+
+    describe('createTiesForNote', () => {
+      let ties
+
+      beforeEach(() => {
+        const note = new Note('A2', '0:1:3')
+        ties = new NoteSequence().createTiesForNote(note)
+      })
+
+      it('splits using notes to fit duration', () => {
+        expect(ties[0].duration).toEqual(Duration.dottedQuarter)
+        expect(ties[1].duration).toEqual(Duration.sixteenth)
+      })
+
+      it('stores index in tie', () => {
+        expect(ties[0].tieIndex).toEqual(0)
+        expect(ties[1].tieIndex).toEqual(1)
+      })
+
     })
 
     describe('create ties for too-long note', () => {
@@ -203,6 +229,15 @@ describe('NoteSequence', () => {
 
       beforeEach(() => {
         sequence = new NoteSequence()
+      })
+
+      it('stores tie index', () => {
+        const sixteenthsAvailable = 4
+
+        const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
+
+        expect(startTies[0].tieIndex).toEqual(0)
+        expect(endTies[0].tieIndex).toEqual(1)
       })
 
       it('stores ties in note', () => {
@@ -219,8 +254,8 @@ describe('NoteSequence', () => {
 
         const [startTies, endTies] = sequence.createTies(halfE4, sixteenthsAvailable)
 
-        expect(startTies).toEqual([new Tie('E4', Duration.quarter, halfE4.isSelected)])
-        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.quarter, halfE4.isSelected).toJSON()])
+        expect(startTies).toEqual([new Tie('E4', Duration.quarter, true, '', halfE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.quarter, true, '', halfE4.isSelected).toJSON()])
       })
 
       it('splits to timeremaining plus new note', () => {
@@ -228,8 +263,8 @@ describe('NoteSequence', () => {
 
         const [startTies, endTies] = sequence.createTies(quarterE4, sixteenthsAvailable)
 
-        expect(startTies).toEqual([new Tie('E4', Duration.eighth, quarterE4.isSelected)])
-        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.eighth, quarterE4.isSelected).toJSON()])
+        expect(startTies).toEqual([new Tie('E4', Duration.eighth, true, '', quarterE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.eighth, true, '', quarterE4.isSelected).toJSON()])
       })
 
       it('creates ties for dotted notes too', () => {
@@ -237,8 +272,8 @@ describe('NoteSequence', () => {
 
         const [startTies, endTies] = sequence.createTies(quarterE4, sixteenthsAvailable)
 
-        expect(startTies).toEqual([new Tie('E4', Duration.dottedEighth, quarterE4.isSelected)])
-        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.sixteenth, quarterE4.isSelected).toJSON()])
+        expect(startTies).toEqual([new Tie('E4', Duration.dottedEighth, true, '', quarterE4.isSelected)])
+        expect(endTies.map(t => t.toJSON())).toEqual([new Tie('E4', Duration.sixteenth, true, '', quarterE4.isSelected).toJSON()])
       })
 
       it('stores start tie in end tie', () => {

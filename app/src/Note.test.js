@@ -92,7 +92,7 @@ describe('note', () => {
   describe('to JSON', () => {
     it('converts a basic note', () => {
       expect(new Note('F3', Duration.eighth).toJSON())
-        .toEqual({name: 'F3', duration: Duration.eighth, isNote: true})
+        .toMatchObject({name: 'F3', duration: Duration.eighth, isNote: true, accidental: ''})
     })
 
     it('includes whether or not it is a rest', () => {
@@ -101,7 +101,16 @@ describe('note', () => {
 
       const json = note.toJSON()
 
-      expect(json).toEqual({name: 'F3', duration: Duration.quarter, isNote: false})
+      expect(json).toMatchObject({name: 'F3', isNote: false})
+    })
+
+    it('includes whether or not it is a rest', () => {
+      const note = new Note('F3')
+      note.toggleAccidental('#')
+
+      const json = note.toJSON()
+
+      expect(json).toMatchObject({name: 'F3', accidental: '#'})
     })
   })
 

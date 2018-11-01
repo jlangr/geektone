@@ -267,6 +267,10 @@ export default class NoteWidget {
     else if (Duration.isSixteenthBase(this.duration())) this.drawSixteenthRest()
   }
 
+  shouldDrawAccidental() {
+    return this.note.accidental && this.note.accidental !== ''
+  }
+
   drawNote() {
     if (Duration.isWholeBase(this.duration())) this.drawWhole()
     else if (Duration.isHalfBase(this.duration())) this.drawHalf()
@@ -275,6 +279,12 @@ export default class NoteWidget {
     else if (Duration.isSixteenthBase(this.duration())) this.drawSixteenth()
     if (Constants.NotesToStrikeThrough.includes(this.note.name()))
       this.drawStaffLine()
+
+    if (this.isDotted())
+      this.drawDot(this.isRest() ? this.restDotLocation() : this.y())
+
+    if (this.shouldDrawAccidental())
+      this.drawAccidental()
   }
 
   restDotLocation() {
@@ -285,18 +295,10 @@ export default class NoteWidget {
     this.context.beginPath()
     this.context.lineWidth = noteStroke
     this.context.strokeStyle = lineColor
-
     if (this.isRest())
       this.drawRest()
-    else {
+    else
       this.drawNote()
-      if (this.note.accidental && this.note.accidental !== '')
-        this.drawAccidental()
-    }
-
-    if (this.isDotted())
-      this.drawDot(this.isRest() ? this.restDotLocation() : this.y())
-
     this.context.stroke()
   }
 

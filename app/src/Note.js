@@ -9,7 +9,7 @@ const noteWidth = 7
 export const noteHeight = 5
 
 export default class Note {
-  constructor(name, duration = Duration.quarter, isNote = true) {
+  constructor(name, duration = Duration.quarter, isNote = true, accidental = '') {
     this.octave = parseInt(name.slice(-1), 10)
     let note = Note.note(name)
     this.baseName = note
@@ -18,7 +18,7 @@ export default class Note {
     this.duration = duration
     this.isNote = isNote
     this.clearTie()
-    this.accidental = ''
+    this.accidental = accidental
   }
 
   static note(name) {
@@ -75,7 +75,7 @@ export default class Note {
   }
 
   toJSON() {
-    return { name: this.name(), duration: this.duration, isNote: this.isNote }
+    return { name: this.name(), duration: this.duration, isNote: this.isNote, accidental: this.accidental }
   }
 
   toString() {

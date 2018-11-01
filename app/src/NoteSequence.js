@@ -23,19 +23,19 @@ const nullNote = {
 }
 
 export default class NoteSequence {
-  constructor(noteNames = []) {
+  constructor(noteData = []) {
     this.notes = []
-    noteNames.forEach(n => {
+    noteData.forEach(n => {
       if (Array.isArray(n)) {
-        const [name, duration, isNote] = n
-        this.baseAdd(new Note(name, duration), isNote)
+        const [name, duration, isNote, accidental] = n
+        this.addWithNoRebar(new Note(name, duration, isNote, accidental))
       }
       else {
         const noteName = n
-        this.baseAdd(new Note(noteName))
+        this.addWithNoRebar(new Note(noteName))
       }
     })
-    if (noteNames.length > 0) this.rebar()
+    if (noteData.length > 0) this.rebar()
     this.currentNoteSequenceIndex = -1
 
     this.commander = new Commander(this)
@@ -50,12 +50,11 @@ export default class NoteSequence {
   }
 
   add(note) {
-    this.baseAdd(note, note.isNote)
+    this.addWithNoRebar(note)
     this.rebar()
   }
   
-  baseAdd(note, isNote=true) {
-    note.isNote = isNote
+  addWithNoRebar(note) {
     this.notes.push(note)
   }
 
@@ -229,31 +228,24 @@ export default class NoteSequence {
     this.commander.execute(new ToggleRestCommand())
   }
 
+  createTiesToFit(note, time, tieIndexOffset=0) {
+    return Duration.notesForSixteenths(time).map((duration, tieIndex) =>
+      new Tie(note.name(), duration, !note.isRest(), note.accidental, note.isSelected, tieIndex + tieIndexOffset))
+  }
+
   createTiesForNote(note) {
-    const time = note.sixteenths()
-    const durations = Duration.notesForSixteenths(time)
-    const ties = durations.map(duration => 
-      new Tie(note.name(), duration, note.isSelected))
+    const ties = this.createTiesToFit(note, note.sixteenths())
     ties[ties.length - 1].startTie = ties[0]
     note.setTies(ties)
     return ties
   }
 
   createTies(note, timeRemaining) {
+    const startTies = this.createTiesToFit(note, timeRemaining)
     const excessTime = note.sixteenths() - timeRemaining
-
-    const startDurations = Duration.notesForSixteenths(timeRemaining)
-    const startTies = startDurations.map(duration => 
-      new Tie(note.name(), duration, note.isSelected, note.isRest()))
-
-    const endDurations = Duration.notesForSixteenths(excessTime)
-    const endTies = endDurations.map(duration => 
-      new Tie(note.name(), duration, note.isSelected, note.isRest()))
-
+    const endTies = this.createTiesToFit(note, excessTime, startTies.length)
     endTies[endTies.length - 1].startTie = startTies[0]
-
     note.setTies(startTies, endTies)
-
     return [startTies, endTies]
   }
 

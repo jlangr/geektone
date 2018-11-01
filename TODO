@@ -1,22 +1,14 @@
 BARS missing on bass cleff (?because of rests?)
-H individual accidental
-    + help
-    + note-level toggle
-    + keyboard
-    + command with undo / redo
-    + show on staff
-    - save / load
-    + alter playback (NoteUtil)
-    - update saved songs to store accidental
-    - does not show in front of tie.
-      (show in front of first note only)
+
+H draw tie does not work over certain length
+  - two whole notes plus one quarter?
+
 H staff width way wider!
 
-H do multiple accidentals at once
+M do multiple accidentals at once
 ===
 
 M adding new track doesn't count as dirty?  DIRTY state questionable. (on new song only?)
-M individual accidental
 M repeat section
 M play-along marker
 M adjust volume / mute while running
@@ -36,6 +28,8 @@ L flats / sharps in proper order on accidentals area
 L move from track-to-track using ctrl-keys (shift arrow up down)
 L other time signatures
 L optimization: rebar from changed location only
+
+crescendo / decrescendo
 
 Regularly:
 =========
