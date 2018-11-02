@@ -230,8 +230,9 @@ export default class NoteSequence {
 
   createTiesToFit(note, time, tieIndexOffset=0) {
     return Duration.notesForSixteenths(time).map((duration, tieIndex) =>
-      new Tie(note.name(), duration, !note.isRest(), note.accidental, note.isSelected, tieIndex + tieIndexOffset))
-  }
+      new Tie(note.name(), duration, !note.isRest(), note.accidental, note.isSelected, 
+        tieIndex + tieIndexOffset)
+  )}
 
   createTiesForNote(note) {
     const ties = this.createTiesToFit(note, note.sixteenths())
@@ -258,7 +259,8 @@ export default class NoteSequence {
     } while (noteTime > 0)
 
     const lastTies = noteTies[noteTies.length - 1]
-    lastTies[lastTies.length - 1].startTie = startTies[0]
+    const lastTie = lastTies[lastTies.length - 1]
+    lastTie.startTie = startTies[0]
 
     note.setTies(noteTies)
 

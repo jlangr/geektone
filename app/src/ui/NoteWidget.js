@@ -45,7 +45,7 @@ export default class NoteWidget {
   isRepresentedAsTie() { return this.note.isRepresentedAsTie() }
   isSelected() { return this.note.isSelected }
   position() { return this.note.position }
-  startTie() { return this.note.startTie }
+  ties() { return this.note.ties }
 
   stemDirection() {
     return this.y() < Draw.y(Constants.HighestUpStemNote) ? 1 : -1
