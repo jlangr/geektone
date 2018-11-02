@@ -6,11 +6,17 @@ import { connect } from 'react-redux'
 import Staff from './Staff'
 import { changeTrackInstrument, deleteTrack, setVolume, toggleMute, toggleFlatsMode, toggleSharpsMode } from './actions'
 import { trackData } from './reducers/SongReducer'
+import { sampleNotes } from './actions/SynthActions'
 import Slider from 'rc-slider'
 
 export class Track extends Component {
   instrumentChange(e) {
     this.props.changeTrackInstrument(e.target.value, this.props.id)
+  }
+
+  instrumentOptions() {
+    return Object.keys(sampleNotes).sort().map(instrument => 
+      <option value={instrument} key={instrument}>{sampleNotes[instrument].description}</option>)
   }
 
   render() {
@@ -19,15 +25,7 @@ export class Track extends Component {
           <Row>
             <Col xs={6}>
               <select value={this.props.trackData.instrument} onChange={this.instrumentChange.bind(this)}>
-                <option value='bass-electric'>Bass (electric)</option>
-                <option value='bassoon'>Bassoon</option>
-                <option value='cello'>Cello</option>
-                <option value='electric-guitar'>Electric guitar</option>
-                <option value='french-horn'>French horn</option>
-                <option value='organ'>Organ</option>
-                <option value='piano'>Piano</option>
-                <option value='trumpet'>Trumpet</option>
-                <option value='violin'>Violin</option>
+                {this.instrumentOptions()}
               </select>
               <Button className='btn-song' onClick={() => this.props.toggleSharpsMode(this.props.id)}>#</Button>
               <Button className='btn-song' onClick={() => this.props.toggleFlatsMode(this.props.id)}>{ '\u266D' }</Button>
