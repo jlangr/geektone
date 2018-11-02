@@ -94,6 +94,8 @@ export default class Note {
 
   toggleAccidental(accidental) {
     this.accidental = (this.accidental === accidental) ? '' : accidental 
+    // TODO test
+    this.ties.forEach(bar => bar.forEach(t => t.toggleAccidental(accidental)))
   }
 
   select() {

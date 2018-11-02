@@ -16,8 +16,7 @@ export default class TieWidget extends NoteWidget {
   }
 
   shouldDrawAccidental() {
-    return super.shouldDrawAccidental() && 
-      this.note.tieIndex === 0
+    return super.shouldDrawAccidental() && this.note.tieIndex === 0
   }
 
   hasStartTie() {
