@@ -260,14 +260,6 @@ describe('key signature sharps and flats', () => {
 
         expect(newState.song.tracks[1].sharpsMode).toBeTruthy()
       })
-
-      it('toggles off when on', () => {
-        const state = { song: { name: 'x', tracks: [{name: 'x', sharpsMode: true}, {name: 'y', sharpsMode: false}]}}
-
-        const newState = SongReducer(state, actions.toggleSharpsMode(0))
-
-        expect(newState.song.tracks[0].sharpsMode).toBeFalsy()
-      })
     })
 
     describe('toggle flats mode', () => {
@@ -277,14 +269,6 @@ describe('key signature sharps and flats', () => {
         const newState = SongReducer(state, actions.toggleFlatsMode(1))
 
         expect(newState.song.tracks[1].flatsMode).toBeTruthy()
-      })
-
-      it('toggles off when on', () => {
-        const state = { song: { name: 'x', tracks: [{name: 'x', flatsMode: true}, {name: 'y', flatsMode: false}]}}
-
-        const newState = SongReducer(state, actions.toggleFlatsMode(0))
-
-        expect(newState.song.tracks[0].flatsMode).toBeFalsy()
       })
     })
   })

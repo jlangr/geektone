@@ -1,9 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as KeyHandler from './KeyHandler'
-import { addFlat, addSharp, keyFocusUpdate, markDirty, setSelectionStart, updateTrack } from './actions'
-import { hasBassNotes, hasTrebleNotes, isInFlatsMode, isInSharpsMode, barsAndNotes, trackData } from './reducers/SongReducer'
-import { isClickInAccidentals, isNewEvent, nearestNote, staffHeight } from './reducers/UIReducer'
+import {
+  addFlat,
+  addSharp,
+  keyFocusUpdate,
+  markDirty,
+  setSelectionStart,
+  updateTrack } from './actions'
+import {
+  hasBassNotes, 
+  hasTrebleNotes, 
+  isInFlatsMode, 
+  isInSharpsMode,
+  barsAndNotes,
+  trackData } from './reducers/SongReducer'
+import {
+  isClickInAccidentals,
+  isNewEvent,
+  nearestNote,
+  staffHeight } from './reducers/UIReducer'
 import * as UI from './util/UI'
 import * as Constants from './Constants'
 import * as Draw from './util/Draw'
@@ -143,17 +159,13 @@ export class Staff extends Component {
     }
 
     if (this.props.trackData.sharps)
-      this.props.trackData.sharps.forEach((note, i) => {
-        this.drawSharp(note, i)
-      })
+      this.props.trackData.sharps.forEach((note, i) => this.drawSharp(note, i))
 
     if (this.props.trackData.flats) {
       const drawOffset = this.props.trackData.sharps 
         ? this.props.trackData.sharps.length
         : 0
-      this.props.trackData.flats.forEach((note, i) => {
-        this.drawFlat(note, i + drawOffset)
-      })
+      this.props.trackData.flats.forEach((note, i) => this.drawFlat(note, i + drawOffset))
     }
   }
 }

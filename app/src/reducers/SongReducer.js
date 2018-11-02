@@ -144,14 +144,12 @@ const updateTrack = (state, trackIndex, updatedTrack) => {
 
 const updateState_addFlat = (state, trackIndex, note) => {
   const updatedTrack = state.song.tracks[trackIndex]
-  updatedTrack.flatsMode = false
   updateState_addAccidental(state, note, updatedTrack.flats, updatedTrack.sharps)
   return updateTrack(state, trackIndex, updatedTrack)
 }
 
 const updateState_addSharp = (state, trackIndex, note) => {
   const updatedTrack = state.song.tracks[trackIndex]
-  updatedTrack.sharpsMode = false
   updateState_addAccidental(state, note, updatedTrack.sharps, updatedTrack.flats)
   return updateTrack(state, trackIndex, updatedTrack)
 }
