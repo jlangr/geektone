@@ -34,7 +34,7 @@ export class Staff extends Component {
   }
 
   staffWidth() {
-    const lastNotePosition = Draw.accidentalsLeft + this.props.barsAndNotes[this.props.barsAndNotes.length - 1].position
+    const lastNotePosition = this.props.barsAndNotes[this.props.barsAndNotes.length - 1].position
     return Draw.x(2 + lastNotePosition)
   }
 

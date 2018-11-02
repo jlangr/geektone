@@ -68,9 +68,9 @@ export const decrementDuration = duration => {
 
 export const halveDuration = duration => {
   const sixteenths = toSixteenths(duration)
-  if (sixteenths === 1 || sixteenths % 2) return duration
+  if (sixteenths === 1) return duration
 
-  return transportTime(sixteenths / 2)
+  return transportTime(Math.floor(sixteenths / 2))
 }
 
 export const doubleDuration = duration => {
@@ -113,9 +113,6 @@ export const notesForSixteenths = sixteenths => {
     default: return [quarter]
   }
 }
-
-// 0:2:2
-//   8 + 2 => ten
 
 export const requiresTie = duration => {
   const sixteenths = toSixteenths(duration)

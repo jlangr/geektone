@@ -81,8 +81,8 @@ it ('does not halve the smallest duration', () => {
   expect(Duration.halveDuration('0:0:1')).toEqual('0:0:1')
 })
 
-it ('does not halve dotted durations or odd sixteenths', () => {
-  expect(Duration.halveDuration('0:1:3')).toEqual('0:1:3')
+it ('rounds down halved odd sixteenths', () => {
+  expect(Duration.halveDuration('0:1:3')).toEqual('0:0:3')
 })
 
 it ('doubles durations', () => {
