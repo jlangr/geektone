@@ -19,10 +19,6 @@ export default class TieWidget extends NoteWidget {
     return super.shouldDrawAccidental() && this.note.tieIndex === 0
   }
 
-  hasStartTie() {
-    return this.ties().length > 0
-  }
-
   drawNote() {
     super.drawNote()
     if (this.note.startTie)

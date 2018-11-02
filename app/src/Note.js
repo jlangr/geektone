@@ -48,6 +48,10 @@ export default class Note {
     return this.ties.length > 0
   }
 
+  firstTie() {
+    return this.ties[0][0]
+  }
+
   // TODO setters in ES6?
   setTies(ties) {
     this.ties = ties
@@ -94,8 +98,8 @@ export default class Note {
 
   toggleAccidental(accidental) {
     this.accidental = (this.accidental === accidental) ? '' : accidental 
-    // TODO test
-    this.ties.forEach(bar => bar.forEach(t => t.toggleAccidental(accidental)))
+    if (this.isRepresentedAsTie())
+      this.firstTie().toggleAccidental(accidental)
   }
 
   select() {
