@@ -237,7 +237,7 @@ export default class NoteSequence {
   createTiesForNote(note) {
     const ties = this.createTiesToFit(note, note.sixteenths())
     ties[ties.length - 1].startTie = ties[0]
-    note.setTies(ties)
+    note.setTies([ties]) // TODO test
     return ties
   }
 

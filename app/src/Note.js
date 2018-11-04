@@ -108,7 +108,11 @@ export default class Note {
   }
 
   deselect() {
-    this.ties.forEach(bar => bar.forEach(t => t.isSelected = false))
+    console.log('deselect: ', this)
+    this.ties.forEach(bar => { 
+      console.log('bar: ', bar)
+      bar.forEach(t => t.isSelected = false)
+    })
     this.isSelected = false
   }
 
@@ -160,9 +164,13 @@ export default class Note {
   }
 
   isHit(mousePosition) {
-    if (this.isRepresentedAsTie())
-      return this.ties.some(bar => 
-        bar.some(t => this.isHitForElement(t, mousePosition)))
+    console.log('isHit mousePosition', this)
+    if (this.isRepresentedAsTie()) {
+      return this.ties.some(bar => {
+        console.log('bar: ', bar)
+        return bar.some(t => this.isHitForElement(t, mousePosition))
+      })
+    }
     return this.isHitForElement(this, mousePosition)
   }
 
