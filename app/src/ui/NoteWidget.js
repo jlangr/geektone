@@ -136,7 +136,9 @@ export default class NoteWidget {
     this.drawLowerFlag()
   }
 
-  drawDot(y) {
+  drawAnyDot(y) {
+    if (!this.isDotted()) return
+
     this.context.beginPath()
     const dotSize = 2
     const dotPad = 3
@@ -265,6 +267,12 @@ export default class NoteWidget {
     else if (Duration.isHalfBase(this.duration())) this.drawHalfRest()
     else if (Duration.isWholeBase(this.duration())) this.drawWholeRest()
     else if (Duration.isSixteenthBase(this.duration())) this.drawSixteenthRest()
+
+    this.drawAnyDot(this.restDotLocation())
+  }
+
+  restDotLocation() {
+    return Duration.isHalfBase(this.duration()) ? Draw.y(Constants.wholeOrHalfRestY) : Draw.y(Constants.restRectangleBottom) - 12 
   }
 
   shouldDrawAccidental() {
@@ -280,15 +288,10 @@ export default class NoteWidget {
     if (Constants.NotesToStrikeThrough.includes(this.note.name()))
       this.drawStaffLine()
 
-    if (this.isDotted())
-      this.drawDot(this.isRest() ? this.restDotLocation() : this.y())
+    this.drawAnyDot(this.y())
 
     if (this.shouldDrawAccidental())
       this.drawAccidental()
-  }
-
-  restDotLocation() {
-    return Duration.isHalfBase(this.duration()) ? Draw.y(Constants.wholeOrHalfRestY) : Draw.y(Constants.restRectangleBottom) - 12 
   }
 
   drawElementOn() {
