@@ -19,12 +19,11 @@ git clone http://github.com/jlangr/geektone
 
 Geektone supports the keyboard for many actions.
 
-## Deficiencies
+## Deficiencies / limitations
 
-Notes longer than one measure not yet supported.
-Sharps / flats in key signature are not ordered appropriately.
-No bass clef
-Doubling / halving of dotted notes not supported (no arbitrary ties)
+* Sharps / flats in key signature are not ordered appropriately.
+* What's up with the B note on the violin?
+* Supports only 4/4 time currently
 
 ## Samples
 
