@@ -2,9 +2,17 @@ import 'rc-slider/assets/index.css'
 import 'rc-tooltip/assets/bootstrap.css'
 import React, { Component } from 'react'
 import { Col, Button, Grid, Row } from 'react-bootstrap'
+import ToggleButton from '@material-ui/lab/ToggleButton'
 import { connect } from 'react-redux'
 import Staff from './Staff'
-import { changeTrackInstrument, deleteTrack, setVolume, toggleMute, toggleFlatsMode, toggleSharpsMode } from './actions'
+import { 
+  changeTrackInstrument,
+  deleteTrack,
+  setVolume,
+  toggleClickInsertMode,
+  toggleMute,
+  toggleFlatsMode,
+  toggleSharpsMode } from './actions'
 import { trackData } from './reducers/SongReducer'
 import { sampleNotes } from './actions/SynthActions'
 import Slider from 'rc-slider'
@@ -29,6 +37,7 @@ export class Track extends Component {
               </select>
               <Button className='btn-song' onClick={() => this.props.toggleSharpsMode(this.props.id)}>#</Button>
               <Button className='btn-song' onClick={() => this.props.toggleFlatsMode(this.props.id)}>{ '\u266D' }</Button>
+              <ToggleButton className='btn-song' onClick={() => this.props.toggleClickInsertMode(this.props.id)}>!</ToggleButton>
               <Button className='btn-song' onClick={() => this.props.deleteTrack(this.props.id)}>x</Button>
               <label htmlFor='isMuted'>Mute</label>
               <input id='isMuted' type='checkbox'
@@ -55,5 +64,5 @@ const mapStateToProps = ({composition, ui}, ownProps) => (
   }
 )
 
-const mapDispatchToProps = { changeTrackInstrument, deleteTrack, setVolume, toggleMute, toggleFlatsMode, toggleSharpsMode }
+const mapDispatchToProps = { changeTrackInstrument, deleteTrack, setVolume, toggleClickInsertMode, toggleMute, toggleFlatsMode, toggleSharpsMode }
 export default connect(mapStateToProps, mapDispatchToProps)(Track)

@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "mocha": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "mocha"
+  ],
+  "rules": {
+    "no-unused-vars": ["error", { "vars": "local", "args": "after-used", "argsIgnorePattern": "_" }],
+    "indent": [
+      "error",
+        2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ]
+  }
+}

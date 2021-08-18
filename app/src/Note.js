@@ -12,7 +12,6 @@ export default class Note {
   constructor(name, duration = Duration.quarter, isNote = true, accidental = '') {
     this.octave = parseInt(name.slice(-1), 10)
     let note = Note.note(name)
-    this.baseName = note
     this.noteIndex = Constants.AscendingWholeNoteScale.indexOf(note)
     this.isSelected = false
     this.duration = duration
@@ -52,7 +51,6 @@ export default class Note {
     return this.ties[0][0]
   }
 
-  // TODO setters in ES6?
   setTies(ties) {
     this.ties = ties
   }
@@ -108,11 +106,7 @@ export default class Note {
   }
 
   deselect() {
-    console.log('deselect: ', this)
-    this.ties.forEach(bar => { 
-      console.log('bar: ', bar)
-      bar.forEach(t => t.isSelected = false)
-    })
+    this.ties.forEach(bar => bar.forEach(t => t.isSelected = false))
     this.isSelected = false
   }
 
@@ -164,13 +158,8 @@ export default class Note {
   }
 
   isHit(mousePosition) {
-    console.log('isHit mousePosition', this)
-    if (this.isRepresentedAsTie()) {
-      return this.ties.some(bar => {
-        console.log('bar: ', bar)
-        return bar.some(t => this.isHitForElement(t, mousePosition))
-      })
-    }
+    if (this.isRepresentedAsTie())
+      return this.ties.some(bar => bar.some(t => this.isHitForElement(t, mousePosition)))
     return this.isHitForElement(this, mousePosition)
   }
 

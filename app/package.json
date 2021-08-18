@@ -25,9 +25,13 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "@material-ui/core": "^3.6.0",
+    "@material-ui/icons": "^3.0.1",
+    "@material-ui/lab": "^3.0.0-alpha.24",
     "axios-mock-adapter": "^1.15.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "file-saver": "^2.0.2",
     "react-numeric-input": "^2.2.3",
     "react-select": "^2.1.0",
     "redux-mock-store": "^1.5.1",

@@ -7,3 +7,7 @@ body {
 canvas {
   outline: none;
 }
+
+.note-cursor {
+  cursor: crosshair;
+}

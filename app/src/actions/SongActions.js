@@ -22,7 +22,11 @@ export const createSong = (id, songList, message) => ({ type: type.CREATE_SONG, 
 
 export const deleteTrack = trackIndex => ({ type: type.DELETE_TRACK, payload: trackIndex })
 
+export const downloadSong = () => ({ type: type.DOWNLOAD_SONG })
+
 export const errorMessage = message => ({ type: type.ERROR, payload: message })
+
+export const insertNote = (trackIndex, clickPoint, uiReducerState) => ({ type: type.INSERT_NOTE, payload: { trackIndex, clickPoint, uiReducerState }})
 
 export const markClean = message => ({ type: type.MARK_CLEAN, payload: message })
 
@@ -40,11 +44,13 @@ export const setVolume = (trackIndex, volume) => ({ type: type.SET_VOLUME, paylo
 
 export const songList = songs => ({ type: type.SONG_LIST, payload: songs })
 
-export const toggleSharpsMode = trackIndex => ({ type: type.TOGGLE_SHARPS_MODE, payload: trackIndex })
+export const toggleClickInsertMode = trackIndex => ({ type: type.TOGGLE_CLICK_INSERT_MODE, payload: trackIndex })
 
 export const toggleFlatsMode = trackIndex => ({ type: type.TOGGLE_FLATS_MODE, payload: trackIndex })
 
 export const toggleMute = trackIndex => ({ type: type.TOGGLE_MUTE, payload: trackIndex })
+
+export const toggleSharpsMode = trackIndex => ({ type: type.TOGGLE_SHARPS_MODE, payload: trackIndex })
 
 export const deleteSong = song =>
   dispatch => {

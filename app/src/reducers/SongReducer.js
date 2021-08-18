@@ -5,6 +5,8 @@ import Note from '../Note'
 import * as Draw from '../util/Draw'
 import * as Constants from '../Constants'
 import { isValidCrossOSFilename } from '../util/Validations'
+import { nearestNote } from './UIReducer'
+const FileSaver = require('file-saver')
 
 const MiddleCNote = new Note(Constants.MiddleC)
 
@@ -19,6 +21,9 @@ export const INITIAL_STATE = {
   },
   songList: []
 }
+
+export const indexOfNoteAfter = (track, x) =>
+  track.notes.allNotes().findIndex(n => n.x() > x)
 
 export const defaultTrackVolume = 7
 
@@ -100,6 +105,13 @@ const updateState_setVolume = (state, trackIndex, rawVolume) => {
   })
 }
 
+const updateState_toggleClickInsertMode = (state, trackIndex) => {
+  return updateStateForTrack(state, trackIndex, (changedTrack) => {
+    changedTrack.isInClickInsertMode = !changedTrack.isInClickInsertMode
+    return true
+  })
+}
+
 const updateState_toggleMute = (state, trackIndex) => {
   return updateStateForTrack(state, trackIndex, (changedTrack) => {
     changedTrack.isMuted = !changedTrack.isMuted
@@ -151,6 +163,12 @@ const updateState_addFlat = (state, trackIndex, note) => {
 const updateState_addSharp = (state, trackIndex, note) => {
   const updatedTrack = state.song.tracks[trackIndex]
   updateState_addAccidental(state, note, updatedTrack.sharps, updatedTrack.flats)
+  return updateTrack(state, trackIndex, updatedTrack)
+}
+
+const updateState_insertNote = (state, trackIndex, note, index) => {
+  const updatedTrack = state.song.tracks[trackIndex]
+  updatedTrack.notes.insert(note, index)
   return updateTrack(state, trackIndex, updatedTrack)
 }
 
@@ -226,6 +244,18 @@ export default(state = INITIAL_STATE, action) => {
       return { ...state, errorMessage: action.payload }
     }
 
+    // TODO test
+    case type.INSERT_NOTE:
+    {
+      const { trackIndex, clickPoint, uiReducerState } = action.payload
+      const track = state.song.tracks[trackIndex]
+      const index = indexOfNoteAfter(track, clickPoint.x)
+      // Ugh--passing around uiReducerState
+      const note = nearestNote(uiReducerState, clickPoint)
+
+      return updateState_insertNote(state, trackIndex, new Note(note), index)
+    }
+
     case type.MARK_CLEAN:
     {
       return { ...state, message: action.payload, song: { ...state.song, isDirty: false } }
@@ -280,12 +310,18 @@ export default(state = INITIAL_STATE, action) => {
     case type.SET_VOLUME:
     {
       const { trackIndex, volume } = action.payload
-      return  updateState_setVolume(state, trackIndex, volume)
+      return updateState_setVolume(state, trackIndex, volume)
     }
 
     case type.SONG_LIST:
     {
       return { ...state, songList: convertToSongSelectionList(action.payload) }
+    }
+
+    case type.TOGGLE_CLICK_INSERT_MODE: 
+    {
+      const trackIndex = action.payload
+      return updateState_toggleClickInsertMode(state, trackIndex)
     }
 
     case type.TOGGLE_SHARPS_MODE: 
@@ -312,6 +348,21 @@ export default(state = INITIAL_STATE, action) => {
       return updateState_rebar(state, trackIndex)
     }
 
+    case type.DOWNLOAD_SONG:
+    {
+      const contents = state.song.tracks.reduce((tracks, track) => {
+        tracks.push(`${track.name}\n`)
+        const trackNotes = track.notes.notes.map(note => {
+          if (note.isNote)
+            return `${note.name()}:${note.duration}\n`
+          else
+            return `rest:${note.duration}\n`
+        })
+        return tracks.concat(trackNotes)
+      }, [])
+      const blob = new Blob(contents, {type: "text/plain;charset=utf-8"})
+      FileSaver.saveAs(blob, "sample.txt")
+    }
     default:
       state.song.isDirty = false
       return state

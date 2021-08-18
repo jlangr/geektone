@@ -76,6 +76,12 @@ app.get('/songs', (request, response) => {
   response.send(sortedSongList())
 })
 
+app.post('/upload', (request, response) => {
+  console.log('uploaded', request.files)
+  console.log('file', request.files.fileToUpload)
+  response.status(200)
+})
+
 app.delete('/song/:id', (request, response) => {
   const id = request.params.id
   deleteSong(id)

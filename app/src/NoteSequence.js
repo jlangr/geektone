@@ -202,6 +202,12 @@ export default class NoteSequence {
     this.commander.execute(new DuplicateNoteCommand())
   }
 
+  // TODO do as command! and TEST
+  insert(note, index) {
+    this.notes.splice(index, 0, note)
+    this.rebar()
+  }
+
   toggleDotForSelected() {
     this.commander.execute(new ToggleDotCommand())
   }

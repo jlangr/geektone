@@ -1,6 +1,7 @@
 import { ADD_SYNTH, PLAY_SONG, STOP_SONG } from '../actions/types'
 import { play, stop } from '../ToneUtils'
 import { sampleNotes } from '../actions/SynthActions'
+import { indexOfNoteAfter } from './SongReducer'
 
 export const showPlayButton = synth => 
   Object.keys(synth.synths).length === synth.expectedSynthCount &&
@@ -10,8 +11,7 @@ export const startNoteIndices = (song, selectionStartLine) => {
   if (!selectionStartLine.start)
     return song.tracks.map(_ => 0)
 
-  return song.tracks.map(track => 
-    track.notes.allNotes().findIndex(n => n.x() > selectionStartLine.start.x))
+  return song.tracks.map(track => indexOfNoteAfter(track, selectionStartLine.start.x))
 }
 
 export const INITIAL_STATE = {

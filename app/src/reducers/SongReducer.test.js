@@ -1,6 +1,16 @@
 import * as actions from '../actions/SongActions'
 import * as type from '../actions/types'
-import SongReducer, { INITIAL_STATE, defaultTrackVolume, hasTrebleNotes, hasBassNotes, isInFlatsMode, isInSharpsMode, isUniqueName, trackData } from './SongReducer'
+import SongReducer, {
+  defaultTrackVolume,
+  hasBassNotes,
+  hasTrebleNotes,
+  indexOfNoteAfter,
+  INITIAL_STATE,
+  isInFlatsMode,
+  isInSharpsMode,
+  isUniqueName,
+  trackData
+} from './SongReducer'
 import NoteSequence from '../NoteSequence'
 import Note from '../Note'
 import * as Constants from '../Constants'
@@ -232,6 +242,24 @@ describe('a song', () => {
   })
 })
 
+describe('toggle click insert mode', () => {
+  it('turns on with first toggle', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', isInClickInsertMode: false}]}}
+
+    const newState = SongReducer(state, actions.toggleClickInsertMode(0))
+
+    expect(newState.song.tracks[0].isInClickInsertMode).toBeTruthy()
+  })
+
+  it('toggles off when on', () => {
+    const state = { song: { name: 'x', tracks: [{name: 'x', isInClickInsertMode: true}]}}
+
+    const newState = SongReducer(state, actions.toggleClickInsertMode(0))
+
+    expect(newState.song.tracks[0].isInClickInsertMode).toBeFalsy()
+  })
+})
+
 describe('toggle mute', () => {
   it('turns on with first toggle', () => {
     const state = { song: { name: 'x', tracks: [{name: 'x', isMuted: false}]}}
@@ -434,5 +462,36 @@ describe('isUniqueName', () => {
 
   it('is false when another song has same name', () => {
     expect(isUniqueName(songList, 'alpha', 'x')).toBeFalsy()
+  })
+})
+
+describe('index of note after', () => {
+  const firstNote = new Note('E1')
+  const secondNote = new Note('F1')
+  const thirdNote = new Note('G1')
+  let track
+  let notes
+
+  beforeEach(() => {
+    notes = new NoteSequence()
+    track = { notes }
+    notes.add(firstNote)
+    firstNote.setPosition(0)
+    notes.add(secondNote)
+    secondNote.setPosition(1)
+    notes.add(thirdNote)
+    thirdNote.setPosition(2)
+  })
+
+  it('returns 0 if clicked before first note', () => {
+    expect(indexOfNoteAfter(track, 0)).toEqual(0)
+  })
+
+  it('returns last index if clicked before last note', () => {
+    expect(indexOfNoteAfter(track, thirdNote.x() - 1)).toEqual(notes.length() - 1)
+  })
+
+  it('returns -1 if clicked after last note', () => {
+    expect(indexOfNoteAfter(track, thirdNote.x() + 1)).toEqual(-1)
   })
 })

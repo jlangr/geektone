@@ -8,7 +8,8 @@ import Track from './Track'
 import HelpPanel from './components/HelpPanel'
 import { 
   changeBpm, 
-  deleteSong, 
+  deleteSong,
+  downloadSong,
   errorMessage, 
   loadSong, loadSongList, loadSynths, 
   newSong, newTrack, 
@@ -41,10 +42,14 @@ export class App extends Component {
   render() {
     let onBeforeUnload
     if (this.props.song.isDirty)
-      onBeforeUnload = <Beforeunload onBeforeunload={() => 'You have unsaved changeds. Are you sure you want to navigate away from this page?'} />
+      onBeforeUnload = <Beforeunload onBeforeunload={() => 'You have unsaved changes. Are you sure you want to navigate away from this page?'} />
     return (
       <div>
        {onBeforeUnload}
+        <form encType="multipart/form-data" action="http:/localhost:3001/upload" method="post">
+          <input id="fileToUpload" type="file"/>
+          <input type="submit" value="Upload"/>
+        </form>
         <Grid className='tracks-grid'>
           <Row className='show-grid'>
             <Col xs={6}>
@@ -128,6 +133,12 @@ export class App extends Component {
                     onChange={selectedOption => this.setState({selectedSongId: selectedOption.value })}
                     options={this.props.songList} />
                 </Col>
+                <Col xs={4} className="track-select-padding">
+                  <Button className='btn-song' onClick={() => this.props.downloadSong()}
+                          { ...this.state.selectedSongId ? {} : { disabled: true}}>
+                    Download As...
+                  </Button>
+                </Col>
               </Row>
             </Col>
             <Col xs={6}>
@@ -166,7 +177,7 @@ const mapStateToProps = (state, _ownProps) => {
 }
 
 const mapDispatchToProps = { 
-  changeBpm, deleteSong, errorMessage, putSongName, loadSong, loadSongList, loadSynths, newSong, newTrack, saveSong, playSong, stopSong
+  changeBpm, deleteSong, downloadSong, errorMessage, putSongName, loadSong, loadSongList, loadSynths, newSong, newTrack, saveSong, playSong, stopSong
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

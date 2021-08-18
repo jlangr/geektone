@@ -1,5 +1,12 @@
 import * as Draw from '../util/Draw'
-import UIReducer, { SelectGap, INITIAL_STATE, isClickInAccidentals, isNewEvent, lineClickTolerance, nearestNote, staffHeight } from './UIReducer'
+import UIReducer, { 
+  SelectGap,
+  INITIAL_STATE,
+  isClickInAccidentals,
+  isNewEvent,
+  lineClickTolerance,
+  nearestNote,
+  staffHeight } from './UIReducer'
 import Rect from '../Rect'
 import * as Constants from '../Constants'
 import * as actions from '../actions/UIActions'

@@ -4,6 +4,7 @@ import * as KeyHandler from './KeyHandler'
 import {
   addFlat,
   addSharp,
+  insertNote,
   keyFocusUpdate,
   markDirty,
   setSelectionStart,
@@ -41,6 +42,7 @@ export class Staff extends Component {
     return (
       <div>
         <canvas ref='canvas' id={this.props.id}
+          className={this.props.trackData.isInClickInsertMode ? 'note-cursor' : '' }
           tabIndex={this.props.id}
           border='0' width={this.staffWidth()} 
           height={this.props.staffHeight()}
@@ -91,7 +93,9 @@ export class Staff extends Component {
         this.props.addFlat(this.props.id, this.props.nearestNote(clickPoint))
     }
     else if (this.props.trackData.notes.clickHitNote(clickPoint)) 
-        this.props.updateTrack(this.props.id)
+      this.props.updateTrack(this.props.id)
+    else if (this.props.trackData.isInClickInsertMode)
+      this.props.insertNote(this.props.id, clickPoint, this.props.ui)
     else
       this.props.setSelectionStart(clickPoint, this.canvas().height)
   }
@@ -187,6 +191,6 @@ const mapStateToProps = ({ ui, composition }, ownProps) => {
     song }
 }
 
-const mapDispatchToProps = { addSharp, addFlat, keyFocusUpdate, markDirty, updateTrack, setSelectionStart }
+const mapDispatchToProps = { addSharp, addFlat, insertNote, keyFocusUpdate, markDirty, updateTrack, setSelectionStart }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Staff)
