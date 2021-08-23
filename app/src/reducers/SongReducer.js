@@ -362,7 +362,9 @@ export default(state = INITIAL_STATE, action) => {
       }, [])
       const blob = new Blob(contents, {type: "text/plain;charset=utf-8"})
       FileSaver.saveAs(blob, "sample.txt")
+      return;
     }
+
     default:
       state.song.isDirty = false
       return state
