@@ -13,8 +13,7 @@
     "sourceType": "module"
   },
   "plugins": [
-    "react",
-    "mocha"
+    "react"
   ],
   "rules": {
     "no-unused-vars": ["error", { "vars": "local", "args": "after-used", "argsIgnorePattern": "_" }],
