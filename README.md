@@ -24,6 +24,7 @@ Geektone supports the keyboard for many actions.
 * Sharps / flats in key signature are not ordered appropriately.
 * What's up with the B note on the violin?
 * Supports only 4/4 time currently
+* Does not track the current node when playing
 
 ## Samples
 

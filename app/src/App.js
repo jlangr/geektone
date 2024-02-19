@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Col, Button, Grid, Glyphicon, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import NumericInput from 'react-numeric-input'
-import Beforeunload from 'react-beforeunload'
+import { Beforeunload } from 'react-beforeunload'
 import './App.css'
 import Track from './Track'
 import HelpPanel from './components/HelpPanel'
@@ -16,9 +16,9 @@ import {
   playSong, putSongName, 
   saveSong, stopSong } from './actions'
 import { showPlayButton } from './reducers/SynthReducer'
-import { isValidSongName } from './reducers/SongReducer'
+// import { isValidSongName } from './reducers/SongReducer'
 import Select from 'react-select'
-import InlineEdit from 'react-edit-inline2'
+//import InlineEdit from 'react-edit-inline'
 
 export class App extends Component {
   constructor() {
@@ -39,21 +39,7 @@ export class App extends Component {
     })
   }
 
-  render() {
-    let onBeforeUnload
-    if (this.props.song.isDirty)
-      onBeforeUnload = <Beforeunload onBeforeunload={() => 'You have unsaved changes. Are you sure you want to navigate away from this page?'} />
-    return (
-      <div>
-       {onBeforeUnload}
-        <form encType="multipart/form-data" action="http:/localhost:3001/upload" method="post">
-          <input id="fileToUpload" type="file"/>
-          <input type="submit" value="Upload"/>
-        </form>
-        <Grid className='tracks-grid'>
-          <Row className='show-grid'>
-            <Col xs={6}>
-              <h2>
+  /* JJL TODO
                 <InlineEdit
                   validate={name => { 
                     const result = isValidSongName(this.props.songList, name, this.props.song.name)
@@ -65,6 +51,24 @@ export class App extends Component {
                   change={({ newTitle }) =>  {
                     this.props.putSongName(this.props.song.id, newTitle) 
                   }}/>
+                  */
+
+  render() {
+    let onBeforeUnload
+    if (this.props.song.isDirty)
+      onBeforeUnload = <Beforeunload onBeforeunload={() => 'You have unsaved changes. Are you sure you want to navigate away from this page?'} />
+    return (
+      <div>
+        {onBeforeUnload}
+        <form encType="multipart/form-data" action="http:/localhost:3001/upload" method="post">
+          <input id="fileToUpload" type="file"/>
+          <input type="submit" value="Upload"/>
+        </form>
+        <Grid className='tracks-grid'>
+          <Row className='show-grid'>
+            <Col xs={6}>
+              <h2>
+                SONG NAME EDIT GOES HERE
               </h2>
               {this.props.message}<br />
               <div className='text-danger'>{this.props.errorMessageText}</div>
@@ -83,10 +87,10 @@ export class App extends Component {
                 <Col xs={1} className="track-select-padding">
                   <Button className='btn-song' 
                     onClick={() => this.props.playSong(
-                        this.props.song, 
-                        () => this.props.stopSong(),
-                        this.props.ui.staff.selectionStartLine
-                      )} 
+                      this.props.song, 
+                      () => this.props.stopSong(),
+                      this.props.ui.staff.selectionStartLine
+                    )} 
                     { ...showPlayButton(this.props.synth) ? {} : { disabled: true }}>
                     <Glyphicon glyph='play' title='Play' />
                   </Button>
@@ -135,7 +139,7 @@ export class App extends Component {
                 </Col>
                 <Col xs={4} className="track-select-padding">
                   <Button className='btn-song' onClick={() => this.props.downloadSong()}
-                          { ...this.state.selectedSongId ? {} : { disabled: true}}>
+                    { ...this.state.selectedSongId ? {} : { disabled: true}}>
                     Download As...
                   </Button>
                 </Col>
@@ -154,11 +158,11 @@ export class App extends Component {
             </Col>
           </Row>
           { this.props.song.tracks.map((_track, i) => 
-          <Row className='tracks-row' key={i}>
-            <Col xs={12}>
-              <Track id={i} />
-            </Col>
-          </Row>) }
+            <Row className='tracks-row' key={i}>
+              <Col xs={12}>
+                <Track id={i} />
+              </Col>
+            </Row>) }
         </Grid>
       </div>
     )
