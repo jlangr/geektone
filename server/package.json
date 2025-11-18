@@ -6,7 +6,7 @@
     "body-parser": "^1.20.1",
     "express": "^4.21.2",
     "express-fileupload": "^1.1.10",
-    "npm": "^9.9.4"
+    "npm": "^11.6.2"
   },
   "scripts": {},
   "devDependencies": {}
