@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "body-parser": "^1.20.1",
-    "express": "^4.21.2",
+    "body-parser": "^1.20.4",
+    "express": "^4.22.1",
     "express-fileupload": "^1.1.10",
     "npm": "^11.6.2"
   },
