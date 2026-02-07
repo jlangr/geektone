@@ -8,7 +8,7 @@
     "@mui/material": "^5.15.10",
     "axios": "^1.12.1",
     "filesaver.js-npm": "^1.0.1",
-    "npm": "11.8.0",
+    "npm": "11.9.0",
     "rc-slider": "10.5.0",
     "react": "18.2.0",
     "react-beforeunload": "2.6.0",
